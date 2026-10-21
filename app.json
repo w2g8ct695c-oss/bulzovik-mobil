@@ -1,0 +1,16 @@
+{
+“expo”: {
+“name”: “BULZOVİK”,
+“slug”: “bulzovik-app-2026”,
+“version”: “1.0.0”,
+“orientation”: “portrait”,
+“userInterfaceStyle”: “light”,
+“ios”: {
+“supportsTablet”: true,
+“bundleIdentifier”: “com.bulzovik.app”
+},
+“android”: {
+“package”: “com.bulzovik.app”
+}
+}
+}
