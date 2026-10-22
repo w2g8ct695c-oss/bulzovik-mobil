@@ -275,7 +275,7 @@
       </div>
     </section>
 
-    <!-- Adres & İddialı Ödeme Tamamlama Sayfası -->
+    <!-- Adres & Ödeme Tamamlama Sayfası -->
     <section id="checkoutView" hidden>
       <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> Güvenli Sipariş ve Ödeme</h2>
       <div class="cart-container">
@@ -377,7 +377,7 @@
 
           <div class="checkout-nav">
             <button type="button" class="action-btn btn-secondary" onclick="showCartView()">← Sepete Dön</button>
-            <button type="submit" class="action-btn btn-primary"><i class="fa-solid fa-lock"></i> Siparişi Onayla ve Bitir</button>
+            <button type="submit" class="action-btn btn-primary" id="submitOrderBtn"><i class="fa-solid fa-lock"></i> Siparişi Onayla ve Bitir</button>
           </div>
         </form>
       </div>
@@ -388,7 +388,7 @@
       <div class="cart-container" style="text-align:center;">
         <i class="fa-solid fa-circle-check" style="font-size:55px; color:var(--green); margin-bottom:10px;"></i>
         <h2 style="color:var(--turquoise-dark); font-weight:900;">Siparişiniz Başarıyla Alındı! 🎉</h2>
-        <p style="font-size:12px; color:#64748b; margin-top:4px;">Siparişiniz hazırlanıyor. Detaylar ve fatura özetiniz aşağıdadır:</p>
+        <p style="font-size:12px; color:#64748b; margin-top:4px;">Siparişiniz Supabase veri tabanına kaydedildi. Detaylar aşağıdadır:</p>
 
         <div id="orderReceipt" style="background:var(--bg); border:1px solid var(--turquoise-light); border-radius:12px; padding:15px; margin:15px 0; text-align:left; font-size:12px;">
           <!-- JS Dinamik Dekont Dolduracak -->
@@ -593,7 +593,6 @@
       renderCart();
     }
 
-    /* Ödeme Yöntemi Değiştirme */
     function setPaymentMethod(method, element) {
       currentPaymentMethod = method;
       document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
@@ -602,12 +601,10 @@
       $('cardPaymentArea').hidden = method !== 'card';
       $('eftPaymentArea').hidden = method !== 'eft';$('doorPaymentArea').hidden = method !== 'door';
 
-      // Zorunluluk Kontrollerini Güncelle
       $('cardNum').required = method === 'card';$('cardName').required = method === 'card';
       $('cardExp').required = method === 'card';$('cardCvc').required = method === 'card';
     }
 
-    /* Görsel Kart Canlı Güncelleme */
     function updateVirtualCard() {
       let num = $('cardNum').value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();$('cardNum').value = num;
       $('vCardNum').textContent = num || '**** **** **** ****';
@@ -615,7 +612,6 @@
       $('vCardExp').textContent =$('cardExp').value || 'MM/YY';
     }
 
-    /* Ekran Geçişleri */
     function hideAllViews() {
       $('storeView').hidden = true;
       $('categories').hidden = true;
@@ -639,38 +635,73 @@
       $('checkoutView').hidden = false;
     }
 
-    function handleOrderSubmit(e) {
+    // SUPABASE'E SİPARİŞ KAYDETME FONKSİYONU
+    async function handleOrderSubmit(e) {
       e.preventDefault();
+
+      const submitBtn = $('submitOrderBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sipariş Kaydediliyor...';
 
       const orderNo = 'BZ-' + Math.floor(100000 + Math.random() * 900000);
       const name = $('custName').value;
+      const phone = $('custPhone').value;
       const city = $('custCity').value;
       const addr = $('custAddress').value;
-      const totalFormatted = $('finalCheckoutTotalText').textContent;
+      
+      const subtotal = cart.reduce((sum, p) => sum + (Number(p.price) * p.quantity), 0);
+      const shipping = subtotal >= 150 ? 0 : 29.90;
+      const grandTotal = subtotal + shipping;
 
       let methodTitle = 'Kredi/Banka Kartı';
       if (currentPaymentMethod === 'eft') methodTitle = 'Havale / EFT';
       if (currentPaymentMethod === 'door') methodTitle = 'Kapıda Ödeme';
 
-      // Dekont Oluşturma
-      $('orderReceipt').innerHTML = `
-        <div style="font-weight:900; color:var(--turquoise-dark); font-size:14px; margin-bottom:8px;">Sipariş Kodu: #${orderNo}</div>
-        <div><strong>Müşteri:</strong> ${escapeHtml(name)}</div>
-        <div><strong>Teslimat Adresi:</strong> ${escapeHtml(addr)} - ${escapeHtml(city)}</div>
-        <div><strong>Ödeme Yöntemi:</strong> ${methodTitle}</div>
-        <div><strong>Ödenen Tutar:</strong> <span style="color:var(--turquoise); font-weight:800;">${totalFormatted}</span></div>
-        <hr style="margin:10px 0; border:0; border-top:1px dashed var(--turquoise-light);">
-        <div style="font-weight:800; margin-bottom:4px;">Satın Alınan Ürünler:</div>
-        ${cart.map(i => `<div>• ${escapeHtml(i.name)} (${i.quantity} Adet)</div>`).join('')}
-      `;
+      try {
+        // Siparişi Supabase 'orders' tablosuna ekle
+        const { error } = await supabaseClient.from('orders').insert([
+          {
+            order_no: orderNo,
+            customer_name: name,
+            phone: phone,
+            city: city,
+            address: addr,
+            payment_method: methodTitle,
+            total_amount: grandTotal,
+            items: cart
+          }
+        ]);
 
-      // Temizlik
-      cart = [];
-      updateCartUI();
-      document.querySelectorAll('.added-badge').forEach(b => b.style.display = 'none');
+        if (error) throw error;
 
-      hideAllViews();
-      $('orderSuccessView').hidden = false;
+        // Başarılı Dekont Gösterimi
+        const totalFormatted = grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
+        $('orderReceipt').innerHTML = `
+          <div style="font-weight:900; color:var(--turquoise-dark); font-size:14px; margin-bottom:8px;">Sipariş Kodu: #${orderNo}</div>
+          <div><strong>Müşteri:</strong> ${escapeHtml(name)}</div>
+          <div><strong>Telefon:</strong> ${escapeHtml(phone)}</div>
+          <div><strong>Teslimat Adresi:</strong> ${escapeHtml(addr)} - ${escapeHtml(city)}</div>
+          <div><strong>Ödeme Yöntemi:</strong> ${methodTitle}</div>
+          <div><strong>Ödenen Tutar:</strong> <span style="color:var(--turquoise); font-weight:800;">${totalFormatted}</span></div>
+          <hr style="margin:10px 0; border:0; border-top:1px dashed var(--turquoise-light);">
+          <div style="font-weight:800; margin-bottom:4px;">Satın Alınan Ürünler:</div>
+          ${cart.map(i => `<div>• ${escapeHtml(i.name)} (${i.quantity} Adet)</div>`).join('')}
+        `;
+
+        cart = [];
+        updateCartUI();
+        document.querySelectorAll('.added-badge').forEach(b => b.style.display = 'none');
+
+        hideAllViews();
+        $('orderSuccessView').hidden = false;
+
+      } catch (err) {
+        console.error('Sipariş kaydetme hatası:', err);
+        alert('Sipariş kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Siparişi Onayla ve Bitir';
+      }
     }
 
     function goHome() {
