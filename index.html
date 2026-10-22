@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#14b8a6">
   <title>BULZOVİK | İstediğin Burada!</title>
   <!-- Supabase JS Client -->
@@ -24,16 +24,16 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-    body { background: var(--bg); color: var(--dark); line-height: 1.5; }
+    body { background: var(--bg); color: var(--dark); line-height: 1.5; -webkit-tap-highlight-color: transparent; }
     button, input { font: inherit; }
     button { cursor: pointer; border: 0; background: none; }
 
-    /* Üst Mini Bant / Marka ve O.K İmzası */
+    /* Üst Mini Bant */
     .mini-top-bar {
       background: var(--turquoise-dark);
       color: var(--white);
       font-size: 11px;
-      padding: 5px 5%;
+      padding: 6px 5%;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -41,7 +41,7 @@
     }
     .brand-ok-signature { letter-spacing: 0.5px; }
     .brand-ok-signature span.ok-tag {
-      font-weight: 200;
+      font-weight: 300;
       opacity: 0.85;
       font-size: 10px;
       margin-left: 4px;
@@ -52,11 +52,11 @@
     /* Header */
     header {
       background: var(--white);
-      padding: 16px 5%;
+      padding: 14px 5%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 15px;
+      gap: 12px;
       border-bottom: 2px solid var(--turquoise-light);
       position: sticky;
       top: 0;
@@ -64,10 +64,10 @@
       box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.05);
     }
     .logo-area { display: flex; flex-direction: column; cursor: pointer; }
-    .logo { font-size: 26px; font-weight: 900; color: var(--turquoise-dark); letter-spacing: 0.5px; }
-    .tagline { font-size: 11px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
+    .logo { font-size: 24px; font-weight: 900; color: var(--turquoise-dark); letter-spacing: 0.5px; }
+    .tagline { font-size: 10px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
 
-    /* Search Bar */
+    /* Search Bar (Tamamen Düzeltildi) */
     .search-box {
       flex: 1;
       max-width: 550px;
@@ -75,42 +75,46 @@
     }
     .search-box input {
       width: 100%;
-      padding: 12px 15px 12px 42px;
+      padding: 10px 15px 10px 40px;
       border-radius: 12px;
-      border: 2px solid var(--turquoise-light);
-      background: var(--turquoise-light);
-      font-size: 14px;
-      outline: none;
-      transition: all 0.3s;
-      color: var(--dark);
-    }
-    .search-box input:focus {
+      border: 2px solid var(--turquoise);
       background: var(--white);
-      border-color: var(--turquoise);
-      box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
+      font-size: 14px;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.2s;
+      color: #000000 !important;
+    }
+    .search-box input::placeholder { color: #64748b; font-weight: 400; }
+    .search-box input:focus {
+      border-color: var(--turquoise-dark);
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
     }
     .search-box i {
       position: absolute;
-      left: 15px;
+      left: 14px;
       top: 50%;
       transform: translateY(-50%);
-      color: var(--turquoise);
+      color: var(--turquoise-dark);
+      font-size: 15px;
+      pointer-events: none;
     }
 
     /* Cart Button */
     .cart-btn {
       background: var(--yellow);
       color: var(--dark);
-      padding: 10px 18px;
+      padding: 9px 16px;
       border-radius: 12px;
       font-weight: 800;
       display: flex;
       align-items: center;
       gap: 8px;
       box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
-      transition: transform 0.2s, background 0.2s;
+      transition: transform 0.2s;
+      white-space: nowrap;
     }
-    .cart-btn:hover { background: #ca8a04; color: white; transform: translateY(-1px); }
+    .cart-btn:active { transform: scale(0.96); }
     .cart-badge {
       background: var(--dark);
       color: white;
@@ -123,36 +127,36 @@
     /* Hero Banner */
     .hero {
       max-width: 1280px;
-      margin: 20px auto;
+      margin: 16px auto;
       padding: 0 5%;
     }
     .hero-banner {
       background: linear-gradient(135deg, var(--turquoise), var(--turquoise-dark));
       border-radius: 20px;
       color: white;
-      padding: 35px 40px;
+      padding: 28px 32px;
       box-shadow: 0 10px 25px rgba(13, 148, 136, 0.15);
     }
-    .hero-banner h1 { font-size: clamp(22px, 3.5vw, 34px); font-weight: 900; margin-bottom: 8px; }
-    .hero-banner p { font-size: 14px; opacity: 0.9; }
+    .hero-banner h1 { font-size: clamp(20px, 3.5vw, 32px); font-weight: 900; margin-bottom: 6px; }
+    .hero-banner p { font-size: 13px; opacity: 0.9; }
     .hero-badge {
       display: inline-block;
       background: var(--yellow-light);
       color: var(--dark);
-      padding: 4px 12px;
+      padding: 3px 10px;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 800;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     /* Categories */
     .categories-container {
       max-width: 1280px;
-      margin: 0 auto 20px;
+      margin: 0 auto 16px;
       padding: 0 5%;
       display: flex;
-      gap: 10px;
+      gap: 8px;
       overflow-x: auto;
       scrollbar-width: none;
     }
@@ -161,35 +165,34 @@
       background: var(--white);
       border: 2px solid var(--turquoise-light);
       color: var(--dark);
-      padding: 8px 18px;
+      padding: 8px 16px;
       border-radius: 25px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       white-space: nowrap;
       transition: all 0.2s;
     }
-    .cat-pill:hover, .cat-pill.active {
+    .cat-pill.active {
       background: var(--turquoise);
       color: white;
       border-color: var(--turquoise);
       box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
     }
 
-    /* Main Grid (3 Sütunlu Yapı) */
+    /* Main Grid (3 Sütun Yapısı) */
     main {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 0 5% 50px;
+      padding: 0 5% 40px;
     }
-    .section-title { font-size: 20px; font-weight: 900; margin-bottom: 20px; color: var(--turquoise-dark); display: flex; align-items: center; gap: 8px; }
+    .section-title { font-size: 18px; font-weight: 900; margin-bottom: 16px; color: var(--turquoise-dark); display: flex; align-items: center; gap: 8px; }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: 14px;
     }
-    @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (min-width: 950px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (min-width: 850px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; } }
 
     /* Product Card */
     .card {
@@ -200,16 +203,15 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: all 0.25s ease;
+      transition: transform 0.2s, border-color 0.2s;
       position: relative;
     }
     .card:hover {
-      box-shadow: 0 10px 25px rgba(13, 148, 136, 0.1);
-      transform: translateY(-4px);
       border-color: var(--turquoise);
+      transform: translateY(-2px);
     }
 
-    /* Kırmızı Kalıcı Ok / Eklendi Rozeti */
+    /* Kırmızı Kalıcı Ok Rozeti */
     .added-badge {
       position: absolute;
       top: 10px;
@@ -225,17 +227,11 @@
       gap: 4px;
       box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
       z-index: 10;
-      animation: bounceIn 0.3s ease;
-    }
-    @keyframes bounceIn {
-      0% { transform: scale(0); opacity: 0; }
-      70% { transform: scale(1.1); }
-      100% { transform: scale(1); opacity: 1; }
     }
 
     .photo-wrapper {
       width: 100%;
-      height: 190px;
+      height: 180px;
       background: var(--turquoise-light);
       position: relative;
       overflow: hidden;
@@ -244,22 +240,19 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s;
     }
-    .card:hover .photo-wrapper img { transform: scale(1.05); }
 
-    .card-body { padding: 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: space-between; }
-    .product-name { font-size: 14px; font-weight: 700; color: var(--dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-body { padding: 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; justify-content: space-between; }
+    .product-name { font-size: 13px; font-weight: 700; color: var(--dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .product-desc { font-size: 11px; color: #64748b; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-    
-    .price { font-size: 17px; font-weight: 900; color: var(--turquoise); }
+    .price { font-size: 16px; font-weight: 900; color: var(--turquoise); }
 
     .add-btn {
       width: 100%;
       background: var(--yellow-light);
       color: var(--dark);
       border: 2px solid var(--yellow);
-      padding: 10px;
+      padding: 9px;
       border-radius: 10px;
       font-weight: 800;
       font-size: 12px;
@@ -267,19 +260,16 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      transition: all 0.2s;
+      transition: background 0.2s;
     }
-    .add-btn:hover {
-      background: var(--yellow);
-      transform: scale(1.02);
-    }
+    .add-btn:active { background: var(--yellow); }
 
-    /* Derli Toplu Sepet Ekranı ve Fotoğraflı Görünüm */
+    /* Sepet Sayfası Tasarımı */
     .cart-container {
       background: var(--white);
       border-radius: 20px;
       border: 2px solid var(--turquoise-light);
-      padding: 30px;
+      padding: 24px;
       box-shadow: 0 10px 30px rgba(13, 148, 136, 0.05);
       max-width: 800px;
       margin: 0 auto;
@@ -288,41 +278,36 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 15px 0;
+      padding: 14px 0;
       border-bottom: 1px solid var(--turquoise-light);
-      gap: 15px;
+      gap: 12px;
     }
     .cart-item-left {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
       flex: 1;
     }
     .cart-item-thumb {
-      width: 55px;
-      height: 55px;
-      border-radius: 10px;
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
       object-fit: cover;
       background: var(--turquoise-light);
       border: 1px solid var(--turquoise-light);
       flex-shrink: 0;
     }
-    .cart-item-info { flex: 1; }
-    .cart-item-title { font-weight: 800; font-size: 14px; color: var(--dark); }
-    .cart-item-price { font-size: 13px; color: var(--turquoise); font-weight: 700; margin-top: 2px; }
+    .cart-item-title { font-weight: 800; font-size: 13px; color: var(--dark); }
+    .cart-item-price { font-size: 12px; color: var(--turquoise); font-weight: 700; margin-top: 2px; }
 
-    .cart-item-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+    .cart-item-right { display: flex; align-items: center; gap: 12px; }
     .qty-box {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       background: var(--turquoise-light);
-      padding: 5px 10px;
-      border-radius: 10px;
+      padding: 4px 8px;
+      border-radius: 8px;
     }
     .qty-btn {
       background: var(--white);
@@ -335,59 +320,47 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: background 0.2s;
     }
-    .qty-btn:hover { background: var(--turquoise); color: white; }
-
-    /* Çöp Kutusu Silme Butonu */
     .delete-btn {
       background: #fee2e2;
       color: var(--red);
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-    .delete-btn:hover {
-      background: var(--red);
-      color: white;
-      transform: scale(1.05);
+      font-size: 13px;
     }
 
     .cart-summary {
-      margin-top: 25px;
-      padding-top: 20px;
+      margin-top: 20px;
+      padding-top: 16px;
       border-top: 2px solid var(--turquoise-light);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 12px;
     }
-    .total-price { font-size: 20px; font-weight: 900; color: var(--turquoise-dark); }
-    
+    .total-price { font-size: 18px; font-weight: 900; color: var(--turquoise-dark); }
+
     .action-btn {
-      padding: 12px 24px;
-      border-radius: 12px;
+      padding: 10px 20px;
+      border-radius: 10px;
       font-weight: 800;
-      font-size: 14px;
-      transition: transform 0.2s;
+      font-size: 13px;
     }
-    .action-btn:hover { transform: translateY(-2px); }
-    .btn-primary { background: var(--turquoise); color: white; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2); }
+    .btn-primary { background: var(--turquoise); color: white; }
     .btn-secondary { background: var(--turquoise-light); color: var(--turquoise-dark); }
 
-    .empty-state { text-align: center; padding: 50px; color: #64748b; font-weight: 600; grid-column: 1 / -1; }
+    .empty-state { text-align: center; padding: 40px; color: #64748b; font-weight: 600; grid-column: 1 / -1; }
     [hidden] { display: none !important; }
   </style>
 </head>
 <body>
 
-  <!-- En Üst Mini Bant / Marka ve İncecik O.K İmzası -->
+  <!-- Top Bar -->
   <div class="mini-top-bar">
     <span>✨ Güvenli Alışveriş ve Hızlı Teslimat</span>
     <div class="brand-ok-signature">BULZOVİK <span class="ok-tag">O.K</span></div>
@@ -402,7 +375,7 @@
 
     <div class="search-box">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" placeholder="Aradığınız ürünü veya kategoriyi yazın...">
+      <input type="text" id="searchInput" placeholder="Ürün veya kategori ara...">
     </div>
 
     <button class="cart-btn" id="cartButton">
@@ -433,7 +406,6 @@
 
   <!-- Main Content -->
   <main>
-    <!-- Store View -->
     <section id="storeView">
       <h2 class="section-title"><i class="fa-solid fa-fire" style="color: var(--yellow);"></i> Öne Çıkan Ürünler</h2>
       <div id="productsGrid" class="grid">
@@ -441,7 +413,6 @@
       </div>
     </section>
 
-    <!-- Cart View -->
     <section id="cartView" hidden>
       <h2 class="section-title"><i class="fa-solid fa-shopping-cart"></i> Sepetim</h2>
       <div class="cart-container">
@@ -455,17 +426,15 @@
     </section>
   </main>
 
-  <footer style="text-align: center; padding: 35px; background: white; border-top: 2px solid var(--turquoise-light); margin-top: 40px; font-size: 12px; color: var(--turquoise-dark); font-weight: 700;">
+  <footer style="text-align: center; padding: 25px; background: white; border-top: 2px solid var(--turquoise-light); margin-top: 30px; font-size: 12px; color: var(--turquoise-dark); font-weight: 700;">
     © 2026 BULZOVİK · İstediğin Burada!
   </footer>
 
-  <!-- Script & Supabase Logic -->
   <script>
     const SUPABASE_URL = 'https://nkczfvapwgmpmumfwses.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_YgTYxkXdPDTqnPnbPjMwJQ_5JULfgZL';
 
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+    let supabaseClient = null;
     let products = [];
     let cart = [];
     let selectedCategory = 'Tümü';
@@ -479,9 +448,15 @@
       })[c]);
     }
 
-    // Ürünleri Supabase'den Çek (Fotoğrafı olmayanlar filtrelenir)
     async function loadProducts() {
       try {
+        if (typeof supabase !== 'undefined') {
+          supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } else {
+          setTimeout(loadProducts, 500);
+          return;
+        }
+
         const { data, error } = await supabaseClient
           .from('products')
           .select('id, name, description, price, category, image_url, stock');
@@ -492,13 +467,13 @@
         renderProducts();
       } catch (err) {
         console.error('Veri çekme hatası:', err);
-        $('productsGrid').innerHTML = '<div class="empty-state">Ürünler yüklenemedi. Lütfen Supabase bağlantısını kontrol edin.</div>';
+        $('productsGrid').innerHTML = '<div class="empty-state">Ürünler yüklenemedi. Lütfen bağlantıyı kontrol edin.</div>';
       }
     }
 
-    // Ürünleri Ekrana Bas
     function renderProducts() {
       const term = $('searchInput').value.trim().toLocaleLowerCase('tr-TR');
+      
       const filtered = products.filter(p => {
         const name = (p.name || '').toLocaleLowerCase('tr-TR');
         const cat = (p.category || '').toLocaleLowerCase('tr-TR');
@@ -538,7 +513,7 @@
                 </div>
               </div>
             </div>
-            <div style="padding: 14px; border-top: 1px solid var(--turquoise-light);">
+            <div style="padding: 12px; border-top: 1px solid var(--turquoise-light);">
               <div class="price" style="margin-bottom: 8px;">${priceFormatted} TL</div>
               <button class="add-btn" onclick="addToCart('${p.id}')">
                 <i class="fa-solid fa-basket-shopping"></i> Sepete Ekle
@@ -549,7 +524,6 @@
       }).join('');
     }
 
-    // Sepete Ekleme Fonksiyonu
     function addToCart(id) {
       const product = products.find(p => String(p.id) === String(id));
       if (!product) return;
@@ -567,18 +541,19 @@
         cart.push({ ...product, quantity: 1 });
       }
 
-      updateCartCount();
+      updateCartUI();
       
       const badge = $(`badge-${id}`);
       if (badge) badge.style.display = 'flex';
     }
 
-    function updateCartCount() {
+    // Sepet Sayısını ve Butonları Anında Güncelleyen Fonksiyon
+    function updateCartUI() {
       const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-      $('count').textContent = totalCount;
+      const badgeEl = $('count');
+      if (badgeEl) badgeEl.textContent = totalCount;
     }
 
-    // Sepet Görünümü (Minik fotoğraflı ve çöp kutulu yapı)
     function renderCart() {
       const list = $('cartItemsList');
       if (!cart.length) {
@@ -591,7 +566,7 @@
         <div class="cart-item">
           <div class="cart-item-left">
             <img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}" class="cart-item-thumb">
-            <div class="cart-item-info">
+            <div>
               <div class="cart-item-title">${escapeHtml(p.name)}</div>
               <div class="cart-item-price">${(Number(p.price) * p.quantity).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL</div>
             </div>
@@ -599,10 +574,10 @@
           <div class="cart-item-right">
             <div class="qty-box">
               <button class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button>
-              <span style="font-weight: 900; font-size: 14px; min-width: 15px; text-align: center;">${p.quantity}</span>
+              <span style="font-weight: 900; font-size: 13px; min-width: 14px; text-align: center;">${p.quantity}</span>
               <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
             </div>
-            <button class="delete-btn" onclick="removeItem('${p.id}')" title="Ürünü Sil">
+            <button class="delete-btn" onclick="removeItem('${p.id}')" title="Sil">
               <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
@@ -613,7 +588,7 @@
       $('cartTotalText').textContent = 'Toplam: ' + total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
     }
 
-    // Miktar Değiştirme
+    // Anlık Miktar Artırma / Azaltma
     function changeQty(id, delta) {
       const item = cart.find(p => String(p.id) === String(id));
       if (!item) return;
@@ -625,18 +600,17 @@
         return;
       }
 
-      updateCartCount();
+      updateCartUI();
       renderCart();
     }
 
-    // Ürünü Sepetten Tamamen Silme (Çöp Kutusu)
     function removeItem(id) {
       cart = cart.filter(p => String(p.id) !== String(id));
       
       const badge = $(`badge-${id}`);
       if (badge) badge.style.display = 'none';
 
-      updateCartCount();
+      updateCartUI();
       renderCart();
     }
 
@@ -652,7 +626,8 @@
         renderCart();
         $('cartButton').innerHTML = '<i class="fa-solid fa-store"></i> Mağaza';
       } else {
-        $('cartButton').innerHTML = `<i class="fa-solid fa-basket-shopping"></i> Sepet <span class="cart-badge" id="count">${cart.reduce((s, p) => s + p.quantity, 0)}</span>`;
+        const totalCount = cart.reduce((s, p) => s + p.quantity, 0);
+        $('cartButton').innerHTML = `<i class="fa-solid fa-basket-shopping"></i> Sepet <span class="cart-badge" id="count">${totalCount}</span>`;
       }
     }
 
@@ -664,7 +639,7 @@
       renderProducts();
     }
 
-    // Olay Dinleyicileri
+    // Arama Kutusu Event Listener (Karakter kaymalarını engeller)
     $('searchInput').addEventListener('input', renderProducts);
 
     $('categories').addEventListener('click', e => {
@@ -675,9 +650,10 @@
       renderProducts();
     });
 
-    $('cartButton').addEventListener('click', toggleCartView);$('backButton').addEventListener('click', toggleCartView);
+    $('cartButton').addEventListener('click', toggleCartView);
+    $('backButton').addEventListener('click', toggleCartView);
 
-    // İlk Çalıştırma
+    // Başlat
     loadProducts();
   </script>
 </body>
