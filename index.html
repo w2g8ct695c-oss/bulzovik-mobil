@@ -39,9 +39,7 @@
       align-items: center;
       font-weight: 600;
     }
-    .brand-ok-signature {
-      letter-spacing: 0.5px;
-    }
+    .brand-ok-signature { letter-spacing: 0.5px; }
     .brand-ok-signature span.ok-tag {
       font-weight: 200;
       opacity: 0.85;
@@ -276,7 +274,7 @@
       transform: scale(1.02);
     }
 
-    /* Derli Toplu Sepet Ekranı */
+    /* Derli Toplu Sepet Ekranı ve Fotoğraflı Görünüm */
     .cart-container {
       background: var(--white);
       border-radius: 20px;
@@ -288,30 +286,50 @@
     }
     .cart-item {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       padding: 15px 0;
       border-bottom: 1px solid var(--turquoise-light);
       gap: 15px;
+    }
+    .cart-item-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex: 1;
+    }
+    .cart-item-thumb {
+      width: 55px;
+      height: 55px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: var(--turquoise-light);
+      border: 1px solid var(--turquoise-light);
+      flex-shrink: 0;
     }
     .cart-item-info { flex: 1; }
     .cart-item-title { font-weight: 800; font-size: 14px; color: var(--dark); }
     .cart-item-price { font-size: 13px; color: var(--turquoise); font-weight: 700; margin-top: 2px; }
 
+    .cart-item-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
     .qty-box {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       background: var(--turquoise-light);
-      padding: 6px 12px;
-      border-radius: 12px;
+      padding: 5px 10px;
+      border-radius: 10px;
     }
     .qty-btn {
       background: var(--white);
       color: var(--turquoise-dark);
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
       font-weight: 900;
       display: flex;
       align-items: center;
@@ -320,6 +338,25 @@
       transition: background 0.2s;
     }
     .qty-btn:hover { background: var(--turquoise); color: white; }
+
+    /* Çöp Kutusu Silme Butonu */
+    .delete-btn {
+      background: #fee2e2;
+      color: var(--red);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .delete-btn:hover {
+      background: var(--red);
+      color: white;
+      transform: scale(1.05);
+    }
 
     .cart-summary {
       margin-top: 25px;
@@ -485,12 +522,14 @@
         const priceFormatted = Number(p.price || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 });
 
         const cartItem = cart.find(item => String(item.id) === String(p.id));
-        const badgeHTML = cartItem ? `<div class="added-badge" id="badge-${p.id}"><i class="fa-solid fa-arrow-down"></i> Eklendi! ▾</div>` : `<div class="added-badge" id="badge-${p.id}" style="display:none;"><i class="fa-solid fa-arrow-down"></i> Eklendi! ▾</div>`;
+        const badgeStyle = cartItem ? 'display: flex;' : 'display: none;';
 
         return `
           <article class="card" id="card-${p.id}">
             <div>
-              ${badgeHTML}
+              <div class="added-badge" id="badge-${p.id}" style="${badgeStyle}">
+                <i class="fa-solid fa-arrow-down"></i> Eklendi! ▾
+              </div>
               <div class="photo-wrapper">${img}</div>
               <div class="card-body">
                 <div>
@@ -510,7 +549,7 @@
       }).join('');
     }
 
-    // Sepete Ekleme Fonksiyonu (Fotoğrafların gidip gelmesini önleyen optimize yapı)
+    // Sepete Ekleme Fonksiyonu
     function addToCart(id) {
       const product = products.find(p => String(p.id) === String(id));
       if (!product) return;
@@ -530,7 +569,6 @@
 
       updateCartCount();
       
-      // Tüm sayfayı yeniden render etmek yerine sadece ilgili kartın rozetini açıyoruz (Gidip gelme sorunu tamamen biter)
       const badge = $(`badge-${id}`);
       if (badge) badge.style.display = 'flex';
     }
@@ -540,7 +578,7 @@
       $('count').textContent = totalCount;
     }
 
-    // Sepet Görünümü
+    // Sepet Görünümü (Minik fotoğraflı ve çöp kutulu yapı)
     function renderCart() {
       const list = $('cartItemsList');
       if (!cart.length) {
@@ -551,14 +589,22 @@
 
       list.innerHTML = cart.map(p => `
         <div class="cart-item">
-          <div class="cart-item-info">
-            <div class="cart-item-title">${escapeHtml(p.name)}</div>
-            <div class="cart-item-price">${(Number(p.price) * p.quantity).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL</div>
+          <div class="cart-item-left">
+            <img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}" class="cart-item-thumb">
+            <div class="cart-item-info">
+              <div class="cart-item-title">${escapeHtml(p.name)}</div>
+              <div class="cart-item-price">${(Number(p.price) * p.quantity).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL</div>
+            </div>
           </div>
-          <div class="qty-box">
-            <button class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button>
-            <span style="font-weight: 900; font-size: 14px;">${p.quantity}</span>
-            <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
+          <div class="cart-item-right">
+            <div class="qty-box">
+              <button class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button>
+              <span style="font-weight: 900; font-size: 14px; min-width: 15px; text-align: center;">${p.quantity}</span>
+              <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
+            </div>
+            <button class="delete-btn" onclick="removeItem('${p.id}')" title="Ürünü Sil">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
           </div>
         </div>
       `).join('');
@@ -567,6 +613,7 @@
       $('cartTotalText').textContent = 'Toplam: ' + total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
     }
 
+    // Miktar Değiştirme
     function changeQty(id, delta) {
       const item = cart.find(p => String(p.id) === String(id));
       if (!item) return;
@@ -574,11 +621,20 @@
       item.quantity += delta;
       
       if (item.quantity <= 0) {
-        cart = cart.filter(p => String(p.id) !== String(id));
-        // Ürün sepetten tamamen silindiyse kart üzerindeki kırmızı oku gizle
-        const badge = $(`badge-${id}`);
-        if (badge) badge.style.display = 'none';
+        removeItem(id);
+        return;
       }
+
+      updateCartCount();
+      renderCart();
+    }
+
+    // Ürünü Sepetten Tamamen Silme (Çöp Kutusu)
+    function removeItem(id) {
+      cart = cart.filter(p => String(p.id) !== String(id));
+      
+      const badge = $(`badge-${id}`);
+      if (badge) badge.style.display = 'none';
 
       updateCartCount();
       renderCart();
