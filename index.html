@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f27a1a">
+  <meta name="theme-color" content="#14b8a6">
   <title>BULZOVİK | İstediğin Burada!</title>
   <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -11,96 +11,91 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary: #f27a1a; /* Trendyol Turuncusu */
-      --primary-dark: #d96813;
-      --secondary: #333333;
-      --bg: #f4f5f7;
+      --turquoise-light: #e0f7f6;
+      --turquoise: #0d9488;
+      --turquoise-dark: #115e59;
+      --yellow-light: #fef08a;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --dark: #1f2937;
+      --bg: #f8fafc;
       --white: #ffffff;
-      --border: #e2e8f0;
-      --success: #22c55e;
+      --border: #ccfbf1;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background: var(--bg); color: var(--secondary); }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--dark); line-height: 1.5; }
     button, input { font: inherit; }
     button { cursor: pointer; border: 0; background: none; }
-
-    /* Top Bar */
-    .top-bar {
-      background: #fafafa;
-      font-size: 11px;
-      color: #666;
-      padding: 6px 5%;
-      display: flex;
-      justify-content: flex-end;
-      gap: 20px;
-      border-bottom: 1px solid var(--border);
-    }
 
     /* Header */
     header {
       background: var(--white);
-      padding: 15px 5%;
+      padding: 16px 5%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      gap: 15px;
+      border-bottom: 2px solid var(--turquoise-light);
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.05);
     }
-    .logo-area { display: flex; flex-direction: column; }
-    .logo { font-size: 26px; font-weight: 900; color: var(--primary); letter-spacing: 1px; }
-    .tagline { font-size: 10px; color: #888; font-weight: 600; text-transform: uppercase; }
+    .logo-area { display: flex; flex-direction: column; cursor: pointer; }
+    .logo { font-size: 26px; font-weight: 900; color: var(--turquoise-dark); letter-spacing: 0.5px; }
+    .tagline { font-size: 11px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
 
     /* Search Bar */
     .search-box {
       flex: 1;
-      max-width: 600px;
+      max-width: 550px;
       position: relative;
     }
     .search-box input {
       width: 100%;
       padding: 12px 15px 12px 42px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: #f3f4f6;
+      border-radius: 12px;
+      border: 2px solid var(--turquoise-light);
+      background: var(--turquoise-light);
       font-size: 14px;
       outline: none;
       transition: all 0.3s;
+      color: var(--dark);
     }
     .search-box input:focus {
       background: var(--white);
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(242, 122, 26, 0.15);
+      border-color: var(--turquoise);
+      box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
     }
     .search-box i {
       position: absolute;
       left: 15px;
       top: 50%;
       transform: translateY(-50%);
-      color: #777;
+      color: var(--turquoise);
     }
 
     /* Cart Button */
     .cart-btn {
-      background: var(--primary);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 700;
+      background: var(--yellow);
+      color: var(--dark);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 800;
       display: flex;
       align-items: center;
       gap: 8px;
-      transition: background 0.2s;
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
+      transition: transform 0.2s, background 0.2s;
     }
-    .cart-btn:hover { background: var(--primary-dark); }
+    .cart-btn:hover { background: #ca8a04; color: white; transform: translateY(-1px); }
     .cart-badge {
-      background: white;
-      color: var(--primary);
-      font-size: 12px;
-      padding: 2px 6px;
-      border-radius: 10px;
+      background: var(--dark);
+      color: white;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 20px;
       font-weight: 900;
     }
 
@@ -111,17 +106,26 @@
       padding: 0 5%;
     }
     .hero-banner {
-      background: linear-gradient(135deg, #f27a1a, #ff9f43);
-      border-radius: 16px;
+      background: linear-gradient(135deg, var(--turquoise), var(--turquoise-dark));
+      border-radius: 20px;
       color: white;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      box-shadow: 0 10px 25px rgba(242, 122, 26, 0.2);
+      padding: 35px 40px;
+      box-shadow: 0 10px 25px rgba(13, 148, 136, 0.15);
+      position: relative;
+      overflow: hidden;
     }
-    .hero-banner h1 { font-size: clamp(24px, 4vw, 36px); font-weight: 800; }
-    .hero-banner p { font-size: 15px; opacity: 0.9; }
+    .hero-banner h1 { font-size: clamp(22px, 3.5vw, 34px); font-weight: 900; margin-bottom: 8px; }
+    .hero-banner p { font-size: 14px; opacity: 0.9; }
+    .hero-badge {
+      display: inline-block;
+      background: var(--yellow-light);
+      color: var(--dark);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
 
     /* Categories */
     .categories-container {
@@ -136,42 +140,43 @@
     .categories-container::-webkit-scrollbar { display: none; }
     .cat-pill {
       background: var(--white);
-      border: 1px solid var(--border);
-      padding: 10px 20px;
-      border-radius: 20px;
+      border: 2px solid var(--turquoise-light);
+      color: var(--dark);
+      padding: 8px 18px;
+      border-radius: 25px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       white-space: nowrap;
       transition: all 0.2s;
     }
     .cat-pill:hover, .cat-pill.active {
-      background: var(--primary);
+      background: var(--turquoise);
       color: white;
-      border-color: var(--primary);
-      box-shadow: 0 4px 12px rgba(242, 122, 26, 0.2);
+      border-color: var(--turquoise);
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
     }
 
-    /* Main Container & Grid */
+    /* Main Grid */
     main {
       max-width: 1280px;
       margin: 0 auto;
       padding: 0 5% 50px;
     }
-    .section-title { font-size: 20px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-    
+    .section-title { font-size: 20px; font-weight: 900; margin-bottom: 20px; color: var(--turquoise-dark); display: flex; align-items: center; gap: 8px; }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 15px;
+      gap: 16px;
     }
     @media (min-width: 640px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
     @media (min-width: 1024px) { .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 
-    /* Product Card (Trendyol Style) */
+    /* Product Card */
     .card {
       background: var(--white);
-      border-radius: 12px;
-      border: 1px solid var(--border);
+      border-radius: 16px;
+      border: 2px solid var(--turquoise-light);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -180,13 +185,39 @@
       position: relative;
     }
     .card:hover {
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(13, 148, 136, 0.1);
+      transform: translateY(-4px);
+      border-color: var(--turquoise);
     }
+
+    /* Kırmızı Ok / Eklendi Rozeti */
+    .added-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--red);
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+      z-index: 10;
+      animation: bounceIn 0.3s ease;
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0); opacity: 0; }
+      70% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
     .photo-wrapper {
       width: 100%;
-      height: 180px;
-      background: #f8fafc;
+      height: 170px;
+      background: var(--turquoise-light);
       position: relative;
       overflow: hidden;
     }
@@ -197,111 +228,121 @@
       transition: transform 0.3s;
     }
     .card:hover .photo-wrapper img { transform: scale(1.05); }
-    
-    .card-body { padding: 12px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; gap: 10px; }
-    .product-name { font-size: 13px; font-weight: 600; color: #333; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .product-desc { font-size: 11px; color: #777; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-    
-    .price-box { display: flex; flex-direction: column; }
-    .price { font-size: 16px; font-weight: 800; color: var(--primary); }
 
-    /* Add to Cart Button & Ok Animasyonu */
+    .card-body { padding: 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: space-between; }
+    .product-name { font-size: 13px; font-weight: 700; color: var(--dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .product-desc { font-size: 11px; color: #64748b; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+    
+    .price { font-size: 16px; font-weight: 900; color: var(--turquoise); }
+
     .add-btn {
       width: 100%;
-      background: #fff3ec;
-      color: var(--primary);
-      border: 1px solid rgba(242, 122, 26, 0.3);
+      background: var(--yellow-light);
+      color: var(--dark);
+      border: 2px solid var(--yellow);
       padding: 10px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 13px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
       transition: all 0.2s;
-      position: relative;
-      overflow: hidden;
     }
     .add-btn:hover {
-      background: var(--primary);
-      color: white;
-    }
-    .add-btn.success {
-      background: var(--success) !important;
-      color: white !important;
-      border-color: var(--success) !important;
+      background: var(--yellow);
+      transform: scale(1.02);
     }
 
-    /* Sepet Ekranı */
-    .cart-view {
+    /* Derli Toplu Sepet Ekranı */
+    .cart-container {
       background: var(--white);
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      border-radius: 20px;
+      border: 2px solid var(--turquoise-light);
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(13, 148, 136, 0.05);
+      max-width: 800px;
+      margin: 0 auto;
     }
     .cart-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 15px 0;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--turquoise-light);
+      gap: 15px;
     }
-    .cart-controls { display: flex; align-items: center; gap: 10px; }
-    .cart-controls button {
-      background: #f3f4f6;
-      width: 30px;
-      height: 30px;
-      border-radius: 6px;
-      font-weight: bold;
+    .cart-item-info { flex: 1; }
+    .cart-item-title { font-weight: 800; font-size: 14px; color: var(--dark); }
+    .cart-item-price { font-size: 13px; color: var(--turquoise); font-weight: 700; margin-top: 2px; }
+
+    .qty-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--turquoise-light);
+      padding: 6px 12px;
+      border-radius: 12px;
     }
-    .checkout-box {
-      margin-top: 20px;
+    .qty-btn {
+      background: var(--white);
+      color: var(--turquoise-dark);
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: background 0.2s;
+    }
+    .qty-btn:hover { background: var(--turquoise); color: white; }
+
+    .cart-summary {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 2px solid var(--turquoise-light);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
     }
-    .checkout-btn {
-      background: var(--primary);
-      color: white;
-      padding: 12px 25px;
-      border-radius: 8px;
-      font-weight: bold;
+    .total-price { font-size: 20px; font-weight: 900; color: var(--turquoise-dark); }
+    
+    .action-btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 14px;
+      transition: transform 0.2s;
     }
-    .back-btn {
-      background: #e2e8f0;
-      color: #333;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: bold;
-    }
+    .action-btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--turquoise); color: white; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2); }
+    .btn-secondary { background: var(--turquoise-light); color: var(--turquoise-dark); }
 
-    .empty-state { text-align: center; padding: 40px; color: #888; grid-column: 1 / -1; }
+    .empty-state { text-align: center; padding: 50px; color: #64748b; font-weight: 600; grid-column: 1 / -1; }
     [hidden] { display: none !important; }
   </style>
 </head>
 <body>
 
-  <!-- Top bar -->
-  <div class="top-bar">
-    <span>✨ Süper Fırsatlar</span>
-    <span>📦 Hızlı Teslimat</span>
-  </div>
-
   <!-- Header -->
   <header>
-    <div class="logo-area" style="cursor: pointer;" onclick="goHome()">
+    <div class="logo-area" onclick="goHome()">
       <div class="logo">BULZOVİK</div>
       <div class="tagline">İstediğin Burada!</div>
     </div>
 
     <div class="search-box">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" placeholder="Aradığınız ürün, kategori veya markayı yazın...">
+      <input type="text" id="searchInput" placeholder="Aradığınız ürünü veya kategoriyi yazın...">
     </div>
 
     <button class="cart-btn" id="cartButton">
-      <i class="fa-solid fa-cart-shopping"></i> Sepet
+      <i class="fa-solid fa-basket-shopping"></i> Sepet
       <span class="cart-badge" id="count">0</span>
     </button>
   </header>
@@ -309,8 +350,9 @@
   <!-- Hero Section -->
   <section class="hero" id="heroSection">
     <div class="hero-banner">
-      <h1>Sezonun En Büyük İndirimleri 🚀</h1>
-      <p>Yüzlerce kategoride binlerce ürün seni bekliyor. Hemen keşfet!</p>
+      <span class="hero-badge">✨ Özel Koleksiyon</span>
+      <h1>Aradığın Her Şey Burada!</h1>
+      <p>Açık turkuaz ve sarının enerjisiyle benzersiz alışveriş deneyimi seni bekliyor.</p>
     </div>
   </section>
 
@@ -327,9 +369,9 @@
 
   <!-- Main Content -->
   <main>
-    <!-- Store Products View -->
+    <!-- Store View -->
     <section id="storeView">
-      <h2 class="section-title"><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> Öne Çıkan Ürünler</h2>
+      <h2 class="section-title"><i class="fa-solid fa-fire" style="color: var(--yellow);"></i> Öne Çıkan Ürünler</h2>
       <div id="productsGrid" class="grid">
         <div class="empty-state">Ürünler Supabase'den yükleniyor...</div>
       </div>
@@ -337,25 +379,24 @@
 
     <!-- Cart View -->
     <section id="cartView" hidden>
-      <h2 class="section-title">Sepetim</h2>
-      <div class="cart-view">
+      <h2 class="section-title"><i class="fa-solid fa-shopping-cart"></i> Sepetim</h2>
+      <div class="cart-container">
         <div id="cartItemsList"></div>
-        <div class="checkout-box">
-          <button class="back-btn" id="backButton">← Alışverişe Devam Et</button>
-          <div style="font-size: 18px; font-weight: bold;" id="cartTotalText">Toplam: 0,00 TL</div>
-          <button class="checkout-btn" onclick="alert('Sipariş modülü yakında aktif olacaktır!')">Siparişi Tamamla</button>
+        <div class="cart-summary">
+          <button class="action-btn btn-secondary" id="backButton">← Alışverişe Devam Et</button>
+          <div class="total-price" id="cartTotalText">Toplam: 0,00 TL</div>
+          <button class="action-btn btn-primary" onclick="alert('Sipariş modülü yakında aktif olacaktır!')">Siparişi Tamamla</button>
         </div>
       </div>
     </section>
   </main>
 
-  <footer style="text-align: center; padding: 30px; background: white; border-top: 1px solid var(--border); margin-top: 40px; font-size: 12px; color: #777;">
-    © 2026 BULZOVİK · Tüm hakları saklıdır.
+  <footer style="text-align: center; padding: 35px; background: white; border-top: 2px solid var(--turquoise-light); margin-top: 40px; font-size: 12px; color: var(--turquoise-dark); font-weight: 700;">
+    © 2026 BULZOVİK · İstediğin Burada!
   </footer>
 
   <!-- Script & Supabase Logic -->
   <script>
-    // Supabase Bağlantı Bilgilerin
     const SUPABASE_URL = 'https://nkczfvapwgmpmumfwses.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_YgTYxkXdPDTqnPnbPjMwJQ_5JULfgZL';
 
@@ -374,7 +415,7 @@
       })[c]);
     }
 
-    // Ürünleri Supabase'den Çek
+    // Ürünleri Supabase'den Çek (Fotoğrafı olmayanlar filtrelenir)
     async function loadProducts() {
       try {
         const { data, error } = await supabaseClient
@@ -382,7 +423,9 @@
           .select('id, name, description, price, category, image_url, stock');
 
         if (error) throw error;
-        products = data || [];
+        
+        // FOTOĞRAFI OLMAYAN ÜRÜNLERİ BURADA ELELİYORUZ
+        products = (data || []).filter(p => p.image_url && p.image_url.trim() !== '');
         renderProducts();
       } catch (err) {
         console.error('Veri çekme hatası:', err);
@@ -412,23 +455,28 @@
       }
 
       grid.innerHTML = filtered.map(p => {
-        const img = p.image_url ? `<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.parentElement.textContent='🛍️'">` : '🛍️';
+        const img = `<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}" loading="lazy">`;
         const priceFormatted = Number(p.price || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 });
+
+        // Sepette bu üründen var mı kontrol et (Kırmızı Ok için)
+        const cartItem = cart.find(item => String(item.id) === String(p.id));
+        const badgeHTML = cartItem ? `<div class="added-badge"><i class="fa-solid fa-arrow-down"></i> Eklendi! ▾</div>` : '';
 
         return `
           <article class="card">
             <div>
+              ${badgeHTML}
               <div class="photo-wrapper">${img}</div>
               <div class="card-body">
                 <div>
                   <div class="product-name">${escapeHtml(p.name)}</div>
-                  <div class="product-desc">${escapeHtml(p.description || 'BULZOVİK güvencesiyle.')}</div>
+                  <div class="product-desc">${escapeHtml(p.description || 'BULZOVİK’te seni bekliyor.')}</div>
                 </div>
               </div>
             </div>
-            <div style="padding: 12px; border-top: 1px solid #f1f5f9;">
+            <div style="padding: 12px; border-top: 1px solid var(--turquoise-light);">
               <div class="price" style="margin-bottom: 8px;">${priceFormatted} TL</div>
-              <button class="add-btn" id="btn-${p.id}" onclick="addToCart('${p.id}', this)">
+              <button class="add-btn" onclick="addToCart('${p.id}')">
                 <i class="fa-solid fa-basket-shopping"></i> Sepete Ekle
               </button>
             </div>
@@ -437,8 +485,8 @@
       }).join('');
     }
 
-    // İstediğin Ok Animasyonlu ve Geri Bildirimli Sepete Ekleme Fonksiyonu
-    function addToCart(id, btnElement) {
+    // Sepete Ekleme Fonksiyonu
+    function addToCart(id) {
       const product = products.find(p => String(p.id) === String(id));
       if (!product) return;
 
@@ -455,18 +503,8 @@
         cart.push({ ...product, quantity: 1 });
       }
 
-      // Sepet sayacını güncelle
       updateCartCount();
-
-      // Butonda "Eklendi ✓" ve ok işareti animasyonu tetikle
-      const originalHTML = btnElement.innerHTML;
-      btnElement.classList.add('success');
-      btnElement.innerHTML = '<i class="fa-solid fa-circle-check"></i> Eklendi ✓';
-
-      setTimeout(() => {
-        btnElement.classList.remove('success');
-        btnElement.innerHTML = originalHTML;
-      }, 1500);
+      renderProducts(); // Kırmızı okun anında görünmesi için listeyi yenile
     }
 
     function updateCartCount() {
@@ -485,14 +523,14 @@
 
       list.innerHTML = cart.map(p => `
         <div class="cart-item">
-          <div>
-            <strong>${escapeHtml(p.name)}</strong><br>
-            <span style="color: var(--primary); font-weight: bold;">${(Number(p.price) * p.quantity).toLocaleString('tr-TR')} TL</span>
+          <div class="cart-item-info">
+            <div class="cart-item-title">${escapeHtml(p.name)}</div>
+            <div class="cart-item-price">${(Number(p.price) * p.quantity).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL</div>
           </div>
-          <div class="cart-controls">
-            <button onclick="changeQty('${p.id}', -1)">-</button>
-            <span>${p.quantity}</span>
-            <button onclick="changeQty('${p.id}', 1)">+</button>
+          <div class="qty-box">
+            <button class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button>
+            <span style="font-weight: 900; font-size: 14px;">${p.quantity}</span>
+            <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
           </div>
         </div>
       `).join('');
@@ -509,6 +547,7 @@
       cart = cart.filter(p => p.quantity > 0);
       updateCartCount();
       renderCart();
+      renderProducts(); // Ürün sepetten tamamen çıkarsa kırmızı okun kalkması için
     }
 
     function toggleCartView() {
@@ -523,7 +562,7 @@
         renderCart();
         $('cartButton').innerHTML = '<i class="fa-solid fa-store"></i> Mağaza';
       } else {
-        $('cartButton').innerHTML = `<i class="fa-solid fa-cart-shopping"></i> Sepet <span class="cart-badge" id="count">${cart.reduce((s, p) => s + p.quantity, 0)}</span>`;
+        $('cartButton').innerHTML = `<i class="fa-solid fa-basket-shopping"></i> Sepet <span class="cart-badge" id="count">${cart.reduce((s, p) => s + p.quantity, 0)}</span>`;
       }
     }
 
