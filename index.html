@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151a2d">
+  <title>BULZOVİK | İstediğin burada!</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#f5f6fa;color:#202337;font-family:Arial,sans-serif}
+    header{background:#151a2d;color:white;padding:20px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .logo{font-size:28px;font-weight:900;letter-spacing:2px;color:#ffb52e}
+    .tagline{font-size:12px;margin-top:5px}
+    button{cursor:pointer;border:0;border-radius:9px;padding:12px 16px;font-weight:bold}
+    .cart{background:#ffb52e;color:#151a2d}
+    .hero{margin:20px auto;max-width:1200px;padding:30px 5%;background:#202944;color:white;border-radius:18px}
+    .hero h1{font-size:clamp(28px,5vw,44px);margin:0 0 12px}
+    .hero p{line-height:1.6;color:#e0e3ed}
+    .search{display:block;width:90%;max-width:700px;margin:20px auto;padding:15px;border:1px solid #ddd;border-radius:12px;font-size:16px}
+    .categories{display:flex;gap:9px;overflow-x:auto;padding:5px 5% 15px}
+    .category{background:white;white-space:nowrap;color:#202337}
+    .category.active{background:#151a2d;color:white}
+    main{max-width:1200px;margin:auto;padding:10px 5% 40px}
+    h2{font-size:24px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .card{background:white;border-radius:14px;padding:12px;box-shadow:0 3px 12px #10172b0b}
+    .photo{width:100%;height:145px;background:#f0f1f6;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:42px}
+    .photo img{width:100%;height:100%;object-fit:cover}
+    .name{font-weight:bold;margin:12px 0 7px}
+    .desc{font-size:13px;color:#737789;min-height:32px}
+    .price{color:#c87500;font-size:20px;font-weight:900;margin:12px 0}
+    .add{width:100%;background:#ffb52e;color:#151a2d}
+    .empty{padding:25px;text-align:center;color:#777}
+    .cart-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #eee}
+    .total{text-align:right;font-size:22px;font-weight:bold;margin:20px 0}
+    .checkout{width:100%;background:#151a2d;color:white}
+    footer{text-align:center;padding:25px;background:#151a2d;color:#ddd;font-size:13px}
+    @media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.photo{height:210px}}
+    @media(min-width:950px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="logo">BULZOVİK</div>
+      <div class="tagline">İstediğin burada!</div>
+    </div>
+    <button class="cart" onclick="toggleCart()">🛒 Sepet (<span id="count">0</span>)</button>
+  </header>
+
+  <section class="hero">
+    <h1>Aradığın her şey burada! ✨</h1>
+    <p>Yeni ürünleri keşfet, favorilerini bul ve alışverişe başla.</p>
+  </section>
+
+  <input id="search" class="search" placeholder="🔎 Ürün ara..." oninput="render()">
+
+  <nav class="categories" id="categories">
+    <button class="category active" data-cat="Tümü" onclick="chooseCat('Tümü')">Tümü</button>
+    <button class="category" data-cat="Elektronik" onclick="chooseCat('Elektronik')">Elektronik</button>
+    <button class="category" data-cat="Giyim" onclick="chooseCat('Giyim')">Giyim</button>
+    <button class="category" data-cat="Ev" onclick="chooseCat('Ev')">Ev & Yaşam</button>
+    <button class="category" data-cat="Spor" onclick="chooseCat('Spor')">Spor</button>
+    <button class="category" data-cat="Diğer" onclick="chooseCat('Diğer')">Diğer</button>
+  </nav>
+
+  <main>
+    <section id="store">
+      <h2>Öne çıkan ürünler</h2>
+      <div id="products" class="grid">
+        <p>Ürünler yükleniyor...</p>
+      </div>
+    </section>
+    <section id="cartView" hidden>
+      <h2>Alışveriş sepetin</h2>
+      <div id="cartItems"></div>
+      <div class="total" id="total"></div>
+      <button class="checkout" onclick="checkout()">Sipariş formuna geç</button>
+      <p><button onclick="toggleCart()">← Mağazaya dön</button></p>
+    </section>
+  </main>
+
+  <footer>© <span id="year"></span> BULZOVİK · İstediğin burada!</footer>
+
+  <script>
+    const SUPABASE_URL = 'https://nkczfvapwgmpmumfwses.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_YgTYxkXdPDTqnPnbPjMwJQ_5JULfgZL';
+    let products = [], cart = [], selectedCategory = 'Tümü', showingCart = false;
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    async function loadProducts(){
+      try {
+        const response = await fetch(
+          SUPABASE_URL + '/rest/v1/products?select=id,name,description,price,category,image_url,stock&is_active=eq.true&order=created_at.desc',
+          {headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY}}
+        );
+        if(!response.ok) throw new Error('Ürünler alınamadı');
+        products = await response.json();
+        render();
+      } catch(e) {
+        document.getElementById('products').innerHTML =
+          '<p class="empty">Ürünler şu an yüklenemedi. Lütfen biraz sonra tekrar dene.</p>';
+      }
+    }
+
+    function chooseCat(cat){
+      selectedCategory=cat;
+      document.querySelectorAll('.category').forEach(b=>{
+        b.classList.toggle('active',b.dataset.cat===cat);
+      });
+      render();
+    }
+
+    function render(){
+      if(showingCart){renderCart();return;}
+      const term=document.getElementById('search').value.trim().toLocaleLowerCase('tr-TR');
+      const filtered=products.filter(p=>{
+        const matchesName=(p.name||'').toLocaleLowerCase('tr-TR').includes(term);
+        const matchesCat=selectedCategory==='Tümü'||
+          (p.category||'').toLocaleLowerCase('tr-TR')===selectedCategory.toLocaleLowerCase('tr-TR');
+        return matchesName&&matchesCat;
+      });
+      const area=document.getElementById('products');
+      if(!filtered.length){
+        area.innerHTML='<p class="empty">Bu aramada ürün bulunamadı.</p>';
+        return;
+      }
+      area.innerHTML=filtered.map(p=>`
+        <article class="card">
+          <div class="photo">${p.image_url?`<img src="${escapeAttr(p.image_url)}" alt="">`:'🛍️'}</div>
+          <div class="name">${escapeHtml(p.name)}</div>
+          <div class="desc">${escapeHtml(p.description||'BULZOVİK’te seni bekliyor.')}</div>
+          <div class="price">${Number(p.price).toLocaleString('tr-TR')} TL</div>
+          <button class="add" onclick="addToCart('${String(p.id).replace(/'/g,"")}')">Sepete ekle</button>
+        </article>`).join('');
+    }
+
+    function escapeHtml(value){
+      return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function escapeAttr(value){
+      return escapeHtml(value);
+    }
+
+    function addToCart(id){
+      const p=products.find(x=>String(x.id)===String(id));
+      if(!p)return;
+      const item=cart.find(x=>String(x.id)===String(id));
+      if(Number(p.stock)<=0){alert('Bu ürün şu anda stokta yok.');return;}
+      if(item){
+        if(item.quantity>=Number(p.stock)){alert('Stok sınırına ulaştın.');return;}
+        item.quantity++;
+      }else cart.push({...p,quantity:1});
+      updateCount();
+      alert('Ürün sepete eklendi!');
+    }
+
+    function updateCount(){
+      document.getElementById('count').textContent=cart.reduce((s,p)=>s+p.quantity,0);
+    }
+
+    function toggleCart(){
+      showingCart=!showingCart;
+      document.getElementById('store').hidden=showingCart;
+      document.getElementById('categories').hidden=showingCart;
+      document.getElementById('search').hidden=showingCart;
+      document.getElementById('cartView').hidden=!showingCart;
+      document.querySelector('.hero').hidden=showingCart;
+      document.querySelector('.cart').innerHTML=showingCart?'← Mağaza':'🛒 Sepet (<span id="count">'+cart.reduce((s,p)=>s+p.quantity,0)+'</span>)';
+      renderCart();
+    }
+
+    function renderCart(){
+      const area=document.getElementById('cartItems');
+      if(!cart.length){
+        area.innerHTML='<p class="empty">Sepetin henüz boş.</p>';
+        document.getElementById('total').textContent='';
+        return;
+      }
+      area.innerHTML=cart.map(p=>`
+        <div class="cart-item">
+          <div><strong>${escapeHtml(p.name)}</strong><br>${(Number(p.price)*p.quantity).toLocaleString('tr-TR')} TL</div>
+          <div>
+            <button onclick="changeQty('${String(p.id).replace(/'/g,"")}',-1)">−</button>
+            ${p.quantity}
+            <button onclick="changeQty('${String(p.id).replace(/'/g,"")}',1)">+</button>
+          </div>
+        </div>`).join('');
+      document.getElementById('total').textContent='Toplam: '+cart.reduce((s,p)=>s+Number(p.price)*p.quantity,0).toLocaleString('tr-TR')+' TL';
+    }
+
+    function changeQty(id,delta){
+      const p=cart.find(x=>String(x.id)===String(id));
+      if(!p)return;
+      if(delta>0&&p.quantity>=Number(p.stock)){alert('Stok sınırına ulaştın.');return;}
+      p.quantity+=delta;
+      cart=cart.filter(x=>x.quantity>0);
+      updateCount();
+      renderCart();
+    }
+
+    function checkout(){
+      if(!cart.length){alert('Önce sepetine ürün ekle.');return;}
+      alert('Sepetin hazır! Gerçek sipariş kaydı için güvenli sipariş formu ve veritabanı bağlantısını bir sonraki adımda kuracağız.');
+    }
+
+    loadProducts();
+  </script>
+</body>
+</html>
