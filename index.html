@@ -63,7 +63,7 @@
       z-index: 100;
       box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.05);
     }
-    .logo-area { display: flex; flex-direction: column; cursor: pointer; }
+    .logo-area { display: flex; flex-direction: column; cursor: pointer; user-select: none; }
     .logo { font-size: 22px; font-weight: 900; color: var(--turquoise-dark); letter-spacing: 0.5px; }
     .tagline { font-size: 9px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
 
@@ -78,6 +78,7 @@
     .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--turquoise-dark); font-size: 14px; pointer-events: none; }
 
     /* Cart Button */
+    .nav-actions { display: flex; gap: 8px; align-items: center; }
     .cart-btn {
       background: var(--yellow); color: var(--dark); padding: 8px 14px;
       border-radius: 12px; font-weight: 800; font-size: 13px; display: flex;
@@ -139,7 +140,6 @@
     .qty-btn { background: var(--white); color: var(--turquoise-dark); width: 22px; height: 22px; border-radius: 6px; font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 12px; }
     .delete-btn { background: #fee2e2; color: var(--red); width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 
-    /* Summary Card */
     .cart-summary { margin-top: 16px; padding-top: 14px; border-top: 2px solid var(--turquoise-light); display: flex; flex-direction: column; gap: 8px; }
     .summary-line { display: flex; justify-content: space-between; font-size: 13px; color: #475569; }
     .summary-line.total { font-size: 17px; font-weight: 900; color: var(--turquoise-dark); border-top: 1px dashed var(--turquoise-light); padding-top: 8px; margin-top: 4px; }
@@ -149,7 +149,6 @@
     .btn-primary { background: var(--turquoise); color: white; flex: 1; }
     .btn-secondary { background: var(--turquoise-light); color: var(--turquoise-dark); }
 
-    /* Payment Tabs */
     .payment-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
     .payment-tab {
       border: 2px solid var(--turquoise-light); padding: 10px 6px; border-radius: 10px;
@@ -158,7 +157,6 @@
     .payment-tab.active { border-color: var(--turquoise); background: var(--turquoise-light); color: var(--turquoise-dark); }
     .payment-tab i { font-size: 16px; display: block; margin-bottom: 4px; color: var(--turquoise); }
 
-    /* Form UI */
     .form-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
     @media (min-width: 650px) { .form-grid { grid-template-columns: 1fr 1fr; } }
 
@@ -170,22 +168,30 @@
     }
     .form-group input:focus, .form-group textarea:focus { border-color: var(--turquoise); background: var(--white); }
 
-    /* Virtual Credit Card Display */
     .virtual-card {
       background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 14px;
       padding: 16px; color: white; margin-bottom: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      position: relative; overflow: hidden;
     }
     .v-chip { width: 32px; height: 24px; background: #e2e8f0; border-radius: 4px; margin-bottom: 14px; }
     .v-number { font-family: monospace; font-size: 16px; letter-spacing: 2px; margin-bottom: 12px; }
     .v-bottom { display: flex; justify-content: space-between; font-size: 10px; text-transform: uppercase; opacity: 0.8; }
 
-    /* IBAN Box */
     .iban-box {
       background: var(--turquoise-light); border: 1px dashed var(--turquoise);
       border-radius: 10px; padding: 12px; font-size: 12px; display: flex; flex-direction: column; gap: 6px;
     }
     .copy-btn { background: var(--turquoise); color: white; font-size: 10px; padding: 4px 8px; border-radius: 6px; margin-left: auto; width: fit-content; }
+
+    /* Admin Panel Styles */
+    .admin-order-card {
+      background: var(--bg); border: 1px solid var(--turquoise-light); border-radius: 12px;
+      padding: 15px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 12px;
+    }
+    .admin-order-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 13px; color: var(--turquoise-dark); }
+    .status-badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+    .status-bekliyor { background: #fef3c7; color: #b45309; }
+    .status-onaylandi { background: #d1fae5; color: #065f46; }
+    .status-iptal { background: #fee2e2; color: #991b1b; }
 
     .empty-state { text-align: center; padding: 40px; color: #64748b; font-weight: 600; grid-column: 1 / -1; }
     [hidden] { display: none !important; }
@@ -201,7 +207,7 @@
 
   <!-- Header -->
   <header>
-    <div class="logo-area" onclick="goHome()">
+    <div class="logo-area" id="logoClickArea" title="Yönetim paneli">
       <div class="logo">BULZOVİK</div>
       <div class="tagline">İstediğin Burada!</div>
     </div>
@@ -211,10 +217,12 @@
       <input type="text" id="searchInput" placeholder="Arayın...">
     </div>
 
-    <button class="cart-btn" id="cartButton">
-      <i class="fa-solid fa-basket-shopping"></i> Sepet
-      <span class="cart-badge" id="count">0</span>
-    </button>
+    <div class="nav-actions">
+      <button class="cart-btn" id="cartButton">
+        <i class="fa-solid fa-basket-shopping"></i> Sepet
+        <span class="cart-badge" id="count">0</span>
+      </button>
+    </div>
   </header>
 
   <!-- Hero Section -->
@@ -275,13 +283,12 @@
       </div>
     </section>
 
-    <!-- Adres & Ödeme Tamamlama Sayfası -->
+    <!-- Adres & Ödeme Sayfası -->
     <section id="checkoutView" hidden>
       <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> Güvenli Sipariş ve Ödeme</h2>
       <div class="cart-container">
         <form id="orderForm" onsubmit="handleOrderSubmit(event)">
           
-          <!-- Adres Bilgileri -->
           <h3 style="font-size:14px; font-weight:800; color:var(--turquoise-dark); margin-bottom:10px;">1. Teslimat Adresi</h3>
           <div class="form-grid" style="margin-bottom:20px;">
             <div class="form-group">
@@ -302,7 +309,6 @@
             </div>
           </div>
 
-          <!-- Ödeme Yöntemi Seçimi -->
           <h3 style="font-size:14px; font-weight:800; color:var(--turquoise-dark); margin-bottom:10px;">2. Ödeme Yöntemi</h3>
           <div class="payment-methods">
             <div class="payment-tab active" onclick="setPaymentMethod('card', this)">
@@ -316,7 +322,6 @@
             </div>
           </div>
 
-          <!-- Kart Bilgileri Alanı -->
           <div id="cardPaymentArea">
             <div class="virtual-card">
               <div class="v-chip"></div>
@@ -349,25 +354,21 @@
             </div>
           </div>
 
-          <!-- Havale/EFT Bilgileri Alanı -->
           <div id="eftPaymentArea" hidden>
             <div class="iban-box">
               <div style="font-weight:800; color:var(--turquoise-dark);">Ziraat Bankası - BULZOVİK A.Ş.</div>
               <div style="font-family:monospace; font-size:13px; font-weight:700;">TR12 0001 0009 8765 4321 0000 01</div>
               <button type="button" class="copy-btn" onclick="alert('IBAN kopyalandı!')"><i class="fa-regular fa-copy"></i> IBAN Kopyala</button>
-              <p style="font-size:10px; color:#64748b; margin-top:4px;">* Lütfen Havale/EFT yaparken açıklama kısmına Ad Soyadınızı yazınız.</p>
             </div>
           </div>
 
-          <!-- Kapıda Ödeme Bilgileri Alanı -->
           <div id="doorPaymentArea" hidden>
             <div class="iban-box" style="background:#fef3c7; border-color:#f59e0b;">
               <div style="font-weight:800; color:#b45309;"><i class="fa-solid fa-truck-ramp-box"></i> Kapıda Ödeme Hizmeti</div>
-              <p style="font-size:11px; color:#78350f;">Siparişinizi teslim alırken kargo görevlisine **Nakit veya Kredi Kartı** ile güvenle ödeme yapabilirsiniz.</p>
+              <p style="font-size:11px; color:#78350f;">Teslimat sırasında nakit veya kartla ödeme yapabilirsiniz.</p>
             </div>
           </div>
 
-          <!-- Sipariş Özeti ve Buton -->
           <div class="cart-summary" style="margin-top:20px;">
             <div class="summary-line total">
               <span>Ödenecek Tutar</span>
@@ -383,18 +384,33 @@
       </div>
     </section>
 
-    <!-- Sipariş Başarılı / Dekont Ekranı -->
+    <!-- Sipariş Başarılı Ekranı -->
     <section id="orderSuccessView" hidden>
       <div class="cart-container" style="text-align:center;">
         <i class="fa-solid fa-circle-check" style="font-size:55px; color:var(--green); margin-bottom:10px;"></i>
         <h2 style="color:var(--turquoise-dark); font-weight:900;">Siparişiniz Başarıyla Alındı! 🎉</h2>
-        <p style="font-size:12px; color:#64748b; margin-top:4px;">Siparişiniz Supabase veri tabanına kaydedildi. Detaylar aşağıdadır:</p>
+        <p style="font-size:12px; color:#64748b; margin-top:4px;">Siparişiniz sisteme kaydedildi ve yönetici paneline düştü.</p>
 
-        <div id="orderReceipt" style="background:var(--bg); border:1px solid var(--turquoise-light); border-radius:12px; padding:15px; margin:15px 0; text-align:left; font-size:12px;">
-          <!-- JS Dinamik Dekont Dolduracak -->
-        </div>
+        <div id="orderReceipt" style="background:var(--bg); border:1px solid var(--turquoise-light); border-radius:12px; padding:15px; margin:15px 0; text-align:left; font-size:12px;"></div>
 
         <button class="action-btn btn-primary" onclick="goHome()">Alışverişe Devam Et</button>
+      </div>
+    </section>
+
+    <!-- 👑 YÖNETİM PANELİ (GİZLİ) -->
+    <section id="adminView" hidden>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h2 class="section-title" style="margin:0;"><i class="fa-solid fa-user-shield"></i> Yönetici Sipariş Paneli</h2>
+        <button class="action-btn btn-secondary" onclick="goHome()">Mağazaya Dön</button>
+      </div>
+      <div class="cart-container">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid var(--turquoise-light); padding-bottom:10px;">
+          <span style="font-weight:800; font-size:13px; color:var(--turquoise-dark);">Gelen Müşteri Siparişleri</span>
+          <button class="action-btn btn-primary" style="padding:6px 12px; font-size:11px;" onclick="loadAdminOrders()"><i class="fa-solid fa-rotate"></i> Yenile</button>
+        </div>
+        <div id="adminOrdersList">
+          <div class="empty-state">Siparişler yükleniyor...</div>
+        </div>
       </div>
     </section>
   </main>
@@ -435,27 +451,22 @@
           .select('id, name, description, price, category, image_url, stock');
 
         if (error) throw error;
-        
         products = (data || []).filter(p => p.image_url && p.image_url.trim() !== '');
         renderProducts();
       } catch (err) {
         console.error('Veri çekme hatası:', err);
-        $('productsGrid').innerHTML = '<div class="empty-state">Ürünler yüklenemedi. Lütfen bağlantıyı kontrol edin.</div>';
       }
     }
 
     function renderProducts() {
       const term = $('searchInput').value.trim().toLocaleLowerCase('tr-TR');
-      
       const filtered = products.filter(p => {
         const name = (p.name || '').toLocaleLowerCase('tr-TR');
         const cat = (p.category || '').toLocaleLowerCase('tr-TR');
         const desc = (p.description || '').toLocaleLowerCase('tr-TR');
-
         const matchesSearch = name.includes(term) || cat.includes(term) || desc.includes(term);
         const sel = selectedCategory.toLocaleLowerCase('tr-TR');
         const matchesCat = selectedCategory === 'Tümü' || cat.includes(sel) || (selectedCategory === 'Ev' && (cat.includes('yaşam') || cat.includes('ev')));
-
         return matchesSearch && matchesCat;
       });
 
@@ -468,7 +479,6 @@
       grid.innerHTML = filtered.map(p => {
         const img = `<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}" loading="lazy">`;
         const priceFormatted = Number(p.price || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 });
-
         const cartItem = cart.find(item => String(item.id) === String(p.id));
         const badgeStyle = cartItem ? 'display: flex;' : 'display: none;';
 
@@ -500,15 +510,11 @@
     function addToCart(id) {
       const product = products.find(p => String(p.id) === String(id));
       if (!product) return;
-
       const stock = Number(product.stock ?? 100);
       const item = cart.find(p => String(p.id) === String(id));
 
       if (item) {
-        if (item.quantity >= stock) {
-          alert('Stok sınırına ulaştınız.');
-          return;
-        }
+        if (item.quantity >= stock) return alert('Stok sınırına ulaştınız.');
         item.quantity++;
       } else {
         cart.push({ ...product, quantity: 1 });
@@ -535,7 +541,6 @@
       }
 
       $('startCheckoutBtn').style.display = 'inline-block';
-
       list.innerHTML = cart.map(p => `
         <div class="cart-item">
           <div class="cart-item-left">
@@ -551,9 +556,7 @@
               <span style="font-weight: 900; font-size: 12px; min-width: 14px; text-align: center;">${p.quantity}</span>
               <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
             </div>
-            <button class="delete-btn" onclick="removeItem('${p.id}')" title="Sil">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
+            <button class="delete-btn" onclick="removeItem('${p.id}')"><i class="fa-solid fa-trash-can"></i></button>
           </div>
         </div>
       `).join('');
@@ -573,13 +576,8 @@
     function changeQty(id, delta) {
       const item = cart.find(p => String(p.id) === String(id));
       if (!item) return;
-
       item.quantity += delta;
-      if (item.quantity <= 0) {
-        removeItem(id);
-        return;
-      }
-
+      if (item.quantity <= 0) { removeItem(id); return; }
       updateCartUI();
       renderCart();
     }
@@ -588,7 +586,6 @@
       cart = cart.filter(p => String(p.id) !== String(id));
       const badge = $(`badge-${id}`);
       if (badge) badge.style.display = 'none';
-
       updateCartUI();
       renderCart();
     }
@@ -597,12 +594,8 @@
       currentPaymentMethod = method;
       document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
       element.classList.add('active');
-
       $('cardPaymentArea').hidden = method !== 'card';
       $('eftPaymentArea').hidden = method !== 'eft';$('doorPaymentArea').hidden = method !== 'door';
-
-      $('cardNum').required = method === 'card';$('cardName').required = method === 'card';
-      $('cardExp').required = method === 'card';$('cardCvc').required = method === 'card';
     }
 
     function updateVirtualCard() {
@@ -620,6 +613,7 @@
       $('cartView').hidden = true;
       $('checkoutView').hidden = true;
       $('orderSuccessView').hidden = true;
+      $('adminView').hidden = true;
     }
 
     function showCartView() {
@@ -635,13 +629,11 @@
       $('checkoutView').hidden = false;
     }
 
-    // SUPABASE'E SİPARİŞ KAYDETME FONKSİYONU
     async function handleOrderSubmit(e) {
       e.preventDefault();
-
       const submitBtn = $('submitOrderBtn');
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Sipariş Kaydediliyor...';
+      submitBtn.textContent = 'İşleniyor...';
 
       const orderNo = 'BZ-' + Math.floor(100000 + Math.random() * 900000);
       const name = $('custName').value;
@@ -658,34 +650,21 @@
       if (currentPaymentMethod === 'door') methodTitle = 'Kapıda Ödeme';
 
       try {
-        // Siparişi Supabase 'orders' tablosuna ekle
-        const { error } = await supabaseClient.from('orders').insert([
-          {
-            order_no: orderNo,
-            customer_name: name,
-            phone: phone,
-            city: city,
-            address: addr,
-            payment_method: methodTitle,
-            total_amount: grandTotal,
-            items: cart
-          }
-        ]);
+        const { error } = await supabaseClient.from('orders').insert([{
+          order_no: orderNo, customer_name: name, phone: phone, city: city,
+          address: addr, payment_method: methodTitle, total_amount: grandTotal, items: cart, status: 'Bekliyor'
+        }]);
 
         if (error) throw error;
 
-        // Başarılı Dekont Gösterimi
         const totalFormatted = grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
         $('orderReceipt').innerHTML = `
           <div style="font-weight:900; color:var(--turquoise-dark); font-size:14px; margin-bottom:8px;">Sipariş Kodu: #${orderNo}</div>
           <div><strong>Müşteri:</strong> ${escapeHtml(name)}</div>
           <div><strong>Telefon:</strong> ${escapeHtml(phone)}</div>
-          <div><strong>Teslimat Adresi:</strong> ${escapeHtml(addr)} - ${escapeHtml(city)}</div>
-          <div><strong>Ödeme Yöntemi:</strong> ${methodTitle}</div>
-          <div><strong>Ödenen Tutar:</strong> <span style="color:var(--turquoise); font-weight:800;">${totalFormatted}</span></div>
-          <hr style="margin:10px 0; border:0; border-top:1px dashed var(--turquoise-light);">
-          <div style="font-weight:800; margin-bottom:4px;">Satın Alınan Ürünler:</div>
-          ${cart.map(i => `<div>• ${escapeHtml(i.name)} (${i.quantity} Adet)</div>`).join('')}
+          <div><strong>Adres:</strong> ${escapeHtml(addr)} - ${escapeHtml(city)}</div>
+          <div><strong>Ödeme:</strong> ${methodTitle}</div>
+          <div><strong>Tutar:</strong> <span style="color:var(--turquoise); font-weight:800;">${totalFormatted}</span></div>
         `;
 
         cart = [];
@@ -696,11 +675,95 @@
         $('orderSuccessView').hidden = false;
 
       } catch (err) {
-        console.error('Sipariş kaydetme hatası:', err);
-        alert('Sipariş kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.');
+        console.error(err);
+        alert('Sipariş kaydedilirken bir hata oluştu.');
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Siparişi Onayla ve Bitir';
+      }
+    }
+
+    // 👑 YÖNETİM PANELİ (6 Kere Tıklama & Onurkaya6103 Şifresi)
+    let logoClickCount = 0;
+    $('logoClickArea').addEventListener('click', () => {
+      logoClickCount++;
+      if (logoClickCount >= 6) {
+        logoClickCount = 0;
+        let pass = prompt('Yönetici Şifresini Giriniz:');
+        if (pass === 'Onurkaya6103') {
+          hideAllViews();
+          $('adminView').hidden = false;
+          loadAdminOrders();
+        } else if (pass !== null) {
+          alert('Şifre yanlış!');
+        }
+      }
+    });
+
+    async function loadAdminOrders() {
+      const list = $('adminOrdersList');
+      list.innerHTML = '<div class="empty-state">Siparişler yükleniyor...</div>';
+      try {
+        const { data, error } = await supabaseClient
+          .from('orders')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        if (!data || !data.length) {
+          list.innerHTML = '<div class="empty-state">Henüz hiç sipariş yok.</div>';
+          return;
+        }
+
+        list.innerHTML = data.map(o => {
+          let st = o.status || 'Bekliyor';
+          let stClass = st === 'Onaylandı' ? 'status-onaylandi' : (st === 'İptal' ? 'status-iptal' : 'status-bekliyor');
+          let itemsHtml = (o.items || []).map(i => `<div>• ${escapeHtml(i.name)} (${i.quantity} Adet)</div>`).join('');
+          let dateStr = new Date(o.created_at).toLocaleString('tr-TR');
+
+          return `
+            <div class="admin-order-card">
+              <div class="admin-order-header">
+                <span>#${escapeHtml(o.order_no)} - ${escapeHtml(o.customer_name)}</span>
+                <span class="status-badge ${stClass}">${st}</span>
+              </div>
+              <div><strong>Telefon:</strong> ${escapeHtml(o.phone)}</div>
+              <div><strong>Adres:</strong> ${escapeHtml(o.address)} / ${escapeHtml(o.city)}</div>
+              <div><strong>Ödeme:</strong> ${escapeHtml(o.payment_method)} (${Number(o.total_amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL)</div>
+              <div><strong>Tarih:</strong> ${dateStr}</div>
+              <div style="background:var(--white); padding:6px; border-radius:6px; margin-top:4px;"><strong>Ürünler:</strong><br>${itemsHtml}</div>
+              <div style="display:flex; gap:6px; margin-top:8px;">
+                <button class="action-btn btn-primary" style="padding:5px 10px; font-size:11px;" onclick="updateOrderStatus('${o.id}', 'Onaylandı')">Onayla</button>
+                <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:5px 10px; font-size:11px;" onclick="updateOrderStatus('${o.id}', 'İptal')">İptal Et</button>
+                <button class="action-btn" style="background:#e2e8f0; color:#334155; padding:5px 10px; font-size:11px;" onclick="deleteOrder('${o.id}')">Sil</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error(err);
+        list.innerHTML = '<div class="empty-state">Siparişler yüklenirken hata oluştu. Not: orders tablosunda status sütunu olmayabilir.</div>';
+      }
+    }
+
+    async function updateOrderStatus(id, newStatus) {
+      try {
+        const { error } = await supabaseClient.from('orders').update({ status: newStatus }).eq('id', id);
+        if (error) throw error;
+        loadAdminOrders();
+      } catch (err) {
+        alert('Durum güncellenirken hata oluştu: ' + err.message);
+      }
+    }
+
+    async function deleteOrder(id) {
+      if (!confirm('Bu siparişi silmek istediğinize emin misiniz?')) return;
+      try {
+        const { error } = await supabaseClient.from('orders').delete().eq('id', id);
+        if (error) throw error;
+        loadAdminOrders();
+      } catch (err) {
+        alert('Silme sırasında hata oluştu.');
       }
     }
 
@@ -710,14 +773,11 @@
       $('categories').hidden = false;
       $('searchInput').parentElement.hidden = false;
       $('heroSection').hidden = false;
-
       $('searchInput').value = '';
       selectedCategory = 'Tümü';
       document.querySelectorAll('.cat-pill').forEach(b => b.classList.toggle('active', b.dataset.cat === 'Tümü'));
-
       const totalCount = cart.reduce((s, p) => s + p.quantity, 0);
       $('cartButton').innerHTML = `<i class="fa-solid fa-basket-shopping"></i> Sepet <span class="cart-badge" id="count">${totalCount}</span>`;
-
       renderProducts();
     }
 
@@ -733,7 +793,6 @@
     $('cartButton').addEventListener('click', () => {
       if (!$('cartView').hidden) goHome(); else showCartView();
     });
-    $('backButton').addEventListener('click', goHome);
 
     loadProducts();
   </script>
