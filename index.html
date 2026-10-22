@@ -14,7 +14,7 @@
       --turquoise-light: #e0f7f6;
       --turquoise: #0d9488;
       --turquoise-dark: #115e59;
-      --yellow-light: #fef08a;
+      --yellow-light: #fffbeb;
       --yellow: #eab308;
       --red: #ef4444;
       --dark: #1f2937;
@@ -27,6 +27,29 @@
     body { background: var(--bg); color: var(--dark); line-height: 1.5; }
     button, input { font: inherit; }
     button { cursor: pointer; border: 0; background: none; }
+
+    /* Üst Mini Bant / Marka ve O.K İmzası */
+    .mini-top-bar {
+      background: var(--turquoise-dark);
+      color: var(--white);
+      font-size: 11px;
+      padding: 5px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
+    .brand-ok-signature {
+      letter-spacing: 0.5px;
+    }
+    .brand-ok-signature span.ok-tag {
+      font-weight: 200;
+      opacity: 0.85;
+      font-size: 10px;
+      margin-left: 4px;
+      border-left: 1px solid rgba(255,255,255,0.4);
+      padding-left: 5px;
+    }
 
     /* Header */
     header {
@@ -111,8 +134,6 @@
       color: white;
       padding: 35px 40px;
       box-shadow: 0 10px 25px rgba(13, 148, 136, 0.15);
-      position: relative;
-      overflow: hidden;
     }
     .hero-banner h1 { font-size: clamp(22px, 3.5vw, 34px); font-weight: 900; margin-bottom: 8px; }
     .hero-banner p { font-size: 14px; opacity: 0.9; }
@@ -156,7 +177,7 @@
       box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
     }
 
-    /* Main Grid */
+    /* Main Grid (3 Sütunlu Yapı) */
     main {
       max-width: 1280px;
       margin: 0 auto;
@@ -169,8 +190,8 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
     }
-    @media (min-width: 640px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-    @media (min-width: 1024px) { .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+    @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 950px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
     /* Product Card */
     .card {
@@ -190,7 +211,7 @@
       border-color: var(--turquoise);
     }
 
-    /* Kırmızı Ok / Eklendi Rozeti */
+    /* Kırmızı Kalıcı Ok / Eklendi Rozeti */
     .added-badge {
       position: absolute;
       top: 10px;
@@ -216,7 +237,7 @@
 
     .photo-wrapper {
       width: 100%;
-      height: 170px;
+      height: 190px;
       background: var(--turquoise-light);
       position: relative;
       overflow: hidden;
@@ -229,11 +250,11 @@
     }
     .card:hover .photo-wrapper img { transform: scale(1.05); }
 
-    .card-body { padding: 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: space-between; }
-    .product-name { font-size: 13px; font-weight: 700; color: var(--dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-body { padding: 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: space-between; }
+    .product-name { font-size: 14px; font-weight: 700; color: var(--dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .product-desc { font-size: 11px; color: #64748b; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
     
-    .price { font-size: 16px; font-weight: 900; color: var(--turquoise); }
+    .price { font-size: 17px; font-weight: 900; color: var(--turquoise); }
 
     .add-btn {
       width: 100%;
@@ -329,6 +350,12 @@
 </head>
 <body>
 
+  <!-- En Üst Mini Bant / Marka ve İncecik O.K İmzası -->
+  <div class="mini-top-bar">
+    <span>✨ Güvenli Alışveriş ve Hızlı Teslimat</span>
+    <div class="brand-ok-signature">BULZOVİK <span class="ok-tag">O.K</span></div>
+  </div>
+
   <!-- Header -->
   <header>
     <div class="logo-area" onclick="goHome()">
@@ -350,9 +377,9 @@
   <!-- Hero Section -->
   <section class="hero" id="heroSection">
     <div class="hero-banner">
-      <span class="hero-badge">✨ Özel Koleksiyon</span>
+      <span class="hero-badge">✨ Seçilmiş Ürünler</span>
       <h1>Aradığın Her Şey Burada!</h1>
-      <p>Açık turkuaz ve sarının enerjisiyle benzersiz alışveriş deneyimi seni bekliyor.</p>
+      <p>Açık turkuaz ve sarının uyumuyla keyifli alışveriş deneyimi.</p>
     </div>
   </section>
 
@@ -424,7 +451,6 @@
 
         if (error) throw error;
         
-        // FOTOĞRAFI OLMAYAN ÜRÜNLERİ BURADA ELELİYORUZ
         products = (data || []).filter(p => p.image_url && p.image_url.trim() !== '');
         renderProducts();
       } catch (err) {
@@ -458,12 +484,11 @@
         const img = `<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}" loading="lazy">`;
         const priceFormatted = Number(p.price || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 });
 
-        // Sepette bu üründen var mı kontrol et (Kırmızı Ok için)
         const cartItem = cart.find(item => String(item.id) === String(p.id));
-        const badgeHTML = cartItem ? `<div class="added-badge"><i class="fa-solid fa-arrow-down"></i> Eklendi! ▾</div>` : '';
+        const badgeHTML = cartItem ? `<div class="added-badge" id="badge-${p.id}"><i class="fa-solid fa-arrow-down"></i> Eklendi! ▾</div>` : `<div class="added-badge" id="badge-${p.id}" style="display:none;"><i class="fa-solid fa-arrow-down"></i> Eklendi! ▾</div>`;
 
         return `
-          <article class="card">
+          <article class="card" id="card-${p.id}">
             <div>
               ${badgeHTML}
               <div class="photo-wrapper">${img}</div>
@@ -474,7 +499,7 @@
                 </div>
               </div>
             </div>
-            <div style="padding: 12px; border-top: 1px solid var(--turquoise-light);">
+            <div style="padding: 14px; border-top: 1px solid var(--turquoise-light);">
               <div class="price" style="margin-bottom: 8px;">${priceFormatted} TL</div>
               <button class="add-btn" onclick="addToCart('${p.id}')">
                 <i class="fa-solid fa-basket-shopping"></i> Sepete Ekle
@@ -485,7 +510,7 @@
       }).join('');
     }
 
-    // Sepete Ekleme Fonksiyonu
+    // Sepete Ekleme Fonksiyonu (Fotoğrafların gidip gelmesini önleyen optimize yapı)
     function addToCart(id) {
       const product = products.find(p => String(p.id) === String(id));
       if (!product) return;
@@ -504,7 +529,10 @@
       }
 
       updateCartCount();
-      renderProducts(); // Kırmızı okun anında görünmesi için listeyi yenile
+      
+      // Tüm sayfayı yeniden render etmek yerine sadece ilgili kartın rozetini açıyoruz (Gidip gelme sorunu tamamen biter)
+      const badge = $(`badge-${id}`);
+      if (badge) badge.style.display = 'flex';
     }
 
     function updateCartCount() {
@@ -544,10 +572,16 @@
       if (!item) return;
 
       item.quantity += delta;
-      cart = cart.filter(p => p.quantity > 0);
+      
+      if (item.quantity <= 0) {
+        cart = cart.filter(p => String(p.id) !== String(id));
+        // Ürün sepetten tamamen silindiyse kart üzerindeki kırmızı oku gizle
+        const badge = $(`badge-${id}`);
+        if (badge) badge.style.display = 'none';
+      }
+
       updateCartCount();
       renderCart();
-      renderProducts(); // Ürün sepetten tamamen çıkarsa kırmızı okun kalkması için
     }
 
     function toggleCartView() {
