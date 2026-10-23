@@ -48,37 +48,37 @@
     /* Header */
     header {
       background: var(--white); padding: 12px 5%; display: flex; align-items: center;
-      justify-content: space-between; gap: 10px; border-bottom: 2px solid var(--turquoise-light);
+      justify-content: space-between; gap: 8px; border-bottom: 2px solid var(--turquoise-light);
       position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.05);
     }
     .logo-area { display: flex; flex-direction: column; cursor: pointer; user-select: none; }
-    .logo { font-size: 22px; font-weight: 900; color: var(--turquoise-dark); letter-spacing: 0.5px; }
-    .tagline { font-size: 9px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
+    .logo { font-size: 20px; font-weight: 900; color: var(--turquoise-dark); letter-spacing: 0.5px; }
+    .tagline { font-size: 8px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
 
     /* Search Bar */
-    .search-box { flex: 1; max-width: 400px; position: relative; }
+    .search-box { flex: 1; max-width: 350px; position: relative; }
     .search-box input {
-      width: 100%; padding: 9px 12px 9px 36px; border-radius: 12px;
-      border: 2px solid var(--turquoise); background: var(--white); font-size: 13px;
+      width: 100%; padding: 8px 12px 8px 34px; border-radius: 12px;
+      border: 2px solid var(--turquoise); background: var(--white); font-size: 12px;
       font-weight: 600; outline: none; transition: all 0.2s; color: #000 !important;
     }
     .search-box input::placeholder { color: #64748b; font-weight: 400; }
-    .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--turquoise-dark); font-size: 14px; pointer-events: none; }
+    .search-box i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--turquoise-dark); font-size: 13px; pointer-events: none; }
 
     /* Nav Actions */
-    .nav-actions { display: flex; gap: 6px; align-items: center; }
+    .nav-actions { display: flex; gap: 5px; align-items: center; }
     .nav-btn {
-      background: var(--turquoise-light); color: var(--turquoise-dark); padding: 8px 10px;
-      border-radius: 12px; font-weight: 800; font-size: 11px; display: flex;
+      background: var(--turquoise-light); color: var(--turquoise-dark); padding: 7px 10px;
+      border-radius: 10px; font-weight: 800; font-size: 11px; display: flex;
       align-items: center; gap: 4px; white-space: nowrap; border: 1.5px solid var(--turquoise);
     }
     .cart-btn {
-      background: var(--yellow); color: var(--dark); padding: 8px 12px;
-      border-radius: 12px; font-weight: 800; font-size: 12px; display: flex;
-      align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
+      background: var(--yellow); color: var(--dark); padding: 7px 10px;
+      border-radius: 10px; font-weight: 800; font-size: 11px; display: flex;
+      align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
       white-space: nowrap; border: none;
     }
-    .cart-badge { background: var(--dark); color: white; font-size: 10px; padding: 2px 6px; border-radius: 20px; font-weight: 900; }
+    .cart-badge { background: var(--dark); color: white; font-size: 9px; padding: 2px 5px; border-radius: 20px; font-weight: 900; }
 
     /* Hero Banner */
     .hero { max-width: 1280px; margin: 14px auto; padding: 0 4%; }
@@ -105,6 +105,8 @@
     .card:hover { border-color: var(--turquoise); transform: translateY(-2px); }
 
     .added-badge { position: absolute; top: 6px; right: 6px; background: var(--red); color: white; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 12px; display: flex; align-items: center; gap: 3px; z-index: 10; }
+    .fav-btn { position: absolute; top: 6px; left: 6px; background: rgba(255,255,255,0.9); color: #cbd5e1; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; z-index: 10; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .fav-btn.active { color: var(--red); }
 
     .photo-wrapper { width: 100%; height: 110px; background: var(--turquoise-light); position: relative; overflow: hidden; cursor: pointer; }
     @media (min-width: 900px) { .photo-wrapper { height: 180px; } }
@@ -120,7 +122,7 @@
     .add-btn { width: 100%; background: var(--yellow-light); color: var(--dark); border: 1.5px solid var(--yellow); padding: 6px; border-radius: 8px; font-weight: 800; font-size: 10px; display: flex; align-items: center; justify-content: center; gap: 4px; }
     @media (min-width: 900px) { .add-btn { font-size: 12px; padding: 8px; } }
 
-    /* Cart & Checkout Panel */
+    /* Cart & Containers */
     .cart-container { background: var(--white); border-radius: 16px; border: 2px solid var(--turquoise-light); padding: 20px; box-shadow: 0 10px 30px rgba(13, 148, 136, 0.05); max-width: 850px; margin: 0 auto; }
     .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--turquoise-light); gap: 10px; }
     .cart-item-left { display: flex; align-items: center; gap: 10px; flex: 1; }
@@ -176,7 +178,7 @@
     }
     .copy-btn { background: var(--turquoise); color: white; font-size: 10px; padding: 4px 8px; border-radius: 6px; margin-left: auto; width: fit-content; }
 
-    /* Admin & User Tabs */
+    /* Admin & Tabs */
     .admin-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid var(--turquoise-light); padding-bottom: 8px; flex-wrap: wrap; }
     .admin-tab-btn { padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; color: var(--turquoise-dark); background: var(--turquoise-light); }
     .admin-tab-btn.active { background: var(--turquoise); color: white; }
@@ -226,8 +228,9 @@
     </div>
 
     <div class="nav-actions">
+      <button class="nav-btn" onclick="showFavoritesView()"><i class="fa-solid fa-heart" style="color:var(--red);"></i> Favoriler</button>
       <button class="nav-btn" onclick="showTrackingModal()"><i class="fa-solid fa-truck-fast"></i> Sipariş Takip</button>
-      <button class="nav-btn" id="userAccountBtn" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> Giriş / Üye Ol</button>
+      <button class="nav-btn" id="userAccountBtn" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> Giriş</button>
       <button class="cart-btn" id="cartButton">
         <i class="fa-solid fa-basket-shopping"></i> Sepet
         <span class="cart-badge" id="count">0</span>
@@ -237,10 +240,10 @@
 
   <!-- Hero Section -->
   <section class="hero" id="heroSection">
-    <div class="hero-banner">
+    <div class="hero-banner" id="heroBannerBox">
       <span class="hero-badge">✨ Seçilmiş Ürünler</span>
-      <h1>Aradığın Her Şey Burada!</h1>
-      <p>Açık turkuaz ve sarının uyumuyla keyifli alışveriş deneyimi.</p>
+      <h1 id="heroBannerTitle">Aradığın Her Şey Burada!</h1>
+      <p id="heroBannerDesc">Açık turkuaz ve sarının uyumuyla keyifli alışveriş deneyimi.</p>
     </div>
   </section>
 
@@ -265,7 +268,16 @@
       </div>
     </section>
 
-    <!-- Ürün Detay & Yorumlar Görünümü -->
+    <!-- Favoriler Görünümü -->
+    <section id="favoritesView" hidden>
+      <h2 class="section-title"><i class="fa-solid fa-heart" style="color:var(--red);"></i> Favori Ürünlerim</h2>
+      <div id="favoritesGrid" class="grid"></div>
+      <div style="text-align:center; margin-top:20px;">
+        <button class="action-btn btn-secondary" onclick="goHome()">← Mağazaya Dön</button>
+      </div>
+    </section>
+
+    <!-- Ürün Detay & Yorumlar -->
     <section id="productDetailView" hidden>
       <div class="cart-container" style="max-width:800px;">
         <button class="action-btn btn-secondary" onclick="goHome()" style="margin-bottom:15px;">← Mağazaya Dön</button>
@@ -273,7 +285,7 @@
       </div>
     </section>
 
-    <!-- Giriş / Üye Ol Modal Görünümü -->
+    <!-- Giriş / Üye Ol -->
     <section id="authView" hidden>
       <div class="cart-container" style="max-width:450px;">
         <h2 id="authTitle" style="color:var(--turquoise-dark); font-weight:900; margin-bottom:15px;">Giriş Yap</h2>
@@ -301,7 +313,7 @@
       </div>
     </section>
 
-    <!-- Kullanıcı Hesabım Ekranı -->
+    <!-- Kullanıcı Hesabım -->
     <section id="profileView" hidden>
       <div class="cart-container" style="max-width:700px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid var(--turquoise-light); padding-bottom:10px;">
@@ -317,7 +329,7 @@
       </div>
     </section>
 
-    <!-- Sipariş Takip Görünümü -->
+    <!-- Sipariş Takip -->
     <section id="trackingView" hidden>
       <h2 class="section-title"><i class="fa-solid fa-magnifying-glass-location"></i> Sipariş Durumu Sorgulama</h2>
       <div class="cart-container" style="max-width:550px;">
@@ -379,42 +391,24 @@
       </div>
     </section>
 
-    <!-- Adres & Ödeme Sayfası -->
+    <!-- Adres & Ödeme -->
     <section id="checkoutView" hidden>
       <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> Güvenli Sipariş ve Ödeme</h2>
       <div class="cart-container">
         <form id="orderForm" onsubmit="handleOrderSubmit(event)">
           <h3 style="font-size:14px; font-weight:800; color:var(--turquoise-dark); margin-bottom:10px;">1. Teslimat Adresi</h3>
           <div class="form-grid" style="margin-bottom:20px;">
-            <div class="form-group">
-              <label>Adınız Soyadınız *</label>
-              <input type="text" id="custName" required placeholder="Ahmet Yılmaz">
-            </div>
-            <div class="form-group">
-              <label>Telefon Numaranız *</label>
-              <input type="tel" id="custPhone" required placeholder="05XX XXX XX XX">
-            </div>
-            <div class="form-group">
-              <label>İl / İlçe *</label>
-              <input type="text" id="custCity" required placeholder="İstanbul / Kadıköy">
-            </div>
-            <div class="form-group">
-              <label>Açık Adres *</label>
-              <input type="text" id="custAddress" required placeholder="Mahalle, Cadde, Sokak, Bina No">
-            </div>
+            <div class="form-group"><label>Adınız Soyadınız *</label><input type="text" id="custName" required placeholder="Ahmet Yılmaz"></div>
+            <div class="form-group"><label>Telefon Numaranız *</label><input type="tel" id="custPhone" required placeholder="05XX XXX XX XX"></div>
+            <div class="form-group"><label>İl / İlçe *</label><input type="text" id="custCity" required placeholder="İstanbul / Kadıköy"></div>
+            <div class="form-group"><label>Açık Adres *</label><input type="text" id="custAddress" required placeholder="Mahalle, Cadde, Sokak, Bina No"></div>
           </div>
 
           <h3 style="font-size:14px; font-weight:800; color:var(--turquoise-dark); margin-bottom:10px;">2. Ödeme Yöntemi</h3>
           <div class="payment-methods">
-            <div class="payment-tab active" onclick="setPaymentMethod('card', this)">
-              <i class="fa-solid fa-credit-card"></i> Kredi/Banka Kartı
-            </div>
-            <div class="payment-tab" onclick="setPaymentMethod('eft', this)">
-              <i class="fa-solid fa-building-columns"></i> Havale / EFT
-            </div>
-            <div class="payment-tab" onclick="setPaymentMethod('door', this)">
-              <i class="fa-solid fa-hand-holding-dollar"></i> Kapıda Ödeme
-            </div>
+            <div class="payment-tab active" onclick="setPaymentMethod('card', this)"><i class="fa-solid fa-credit-card"></i> Kredi/Banka Kartı</div>
+            <div class="payment-tab" onclick="setPaymentMethod('eft', this)"><i class="fa-solid fa-building-columns"></i> Havale / EFT</div>
+            <div class="payment-tab" onclick="setPaymentMethod('door', this)"><i class="fa-solid fa-hand-holding-dollar"></i> Kapıda Ödeme</div>
           </div>
 
           <div id="cardPaymentArea">
@@ -424,14 +418,8 @@
               <div class="v-bottom"><span id="vCardName">AD SOYAD</span><span id="vCardExp">MM/YY</span></div>
             </div>
             <div class="form-grid">
-              <div class="form-group" style="grid-column: 1 / -1;">
-                <label>Kart Numarası *</label>
-                <input type="text" id="cardNum" maxlength="19" placeholder="4543 **** **** ****" oninput="updateVirtualCard()">
-              </div>
-              <div class="form-group">
-                <label>Kart Üzerindeki İsim *</label>
-                <input type="text" id="cardName" placeholder="AHMET YILMAZ" oninput="updateVirtualCard()">
-              </div>
+              <div class="form-group" style="grid-column: 1 / -1;"><label>Kart Numarası *</label><input type="text" id="cardNum" maxlength="19" placeholder="4543 **** **** ****" oninput="updateVirtualCard()"></div>
+              <div class="form-group"><label>Kart Üzerindeki İsim *</label><input type="text" id="cardName" placeholder="AHMET YILMAZ" oninput="updateVirtualCard()"></div>
               <div class="form-group" style="display:flex; gap:8px;">
                 <div style="flex:1;"><label>Son Kullanma *</label><input type="text" id="cardExp" maxlength="5" placeholder="MM/YY" oninput="updateVirtualCard()"></div>
                 <div style="flex:1;"><label>CVC / CVV *</label><input type="password" id="cardCvc" maxlength="3" placeholder="***"></div>
@@ -466,7 +454,7 @@
       </div>
     </section>
 
-    <!-- Sipariş Başarılı Ekranı -->
+    <!-- Sipariş Başarılı -->
     <section id="orderSuccessView" hidden>
       <div class="cart-container" style="text-align:center;">
         <i class="fa-solid fa-circle-check" style="font-size:55px; color:var(--green); margin-bottom:10px;"></i>
@@ -491,7 +479,10 @@
       <div class="admin-tabs">
         <button class="admin-tab-btn active" id="tabOrdersBtn" onclick="switchAdminTab('orders')"><i class="fa-solid fa-box"></i> Siparişler</button>
         <button class="admin-tab-btn" id="tabProductsBtn" onclick="switchAdminTab('products')"><i class="fa-solid fa-store"></i> Ürün Yönetimi</button>
+        <button class="admin-tab-btn" id="tabBannerBtn" onclick="switchAdminTab('banner')"><i class="fa-solid fa-bullhorn"></i> Banner Ayarları</button>
       </div>
+      
+      <!-- Siparişler -->
       <div id="adminOrdersTab" class="cart-container">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid var(--turquoise-light); padding-bottom:10px;">
           <span style="font-weight:800; font-size:13px; color:var(--turquoise-dark);">Gelen Müşteri Siparişleri</span>
@@ -499,6 +490,8 @@
         </div>
         <div id="adminOrdersList"><div class="empty-state">Siparişler yükleniyor...</div></div>
       </div>
+
+      <!-- Ürün Yönetimi -->
       <div id="adminProductsTab" class="cart-container" hidden>
         <h3 style="font-size:14px; font-weight:800; color:var(--turquoise-dark); margin-bottom:12px;">Yeni Ürün Ekle</h3>
         <form id="addProductForm" onsubmit="handleProductAdd(event)" class="form-grid" style="margin-bottom:20px;">
@@ -519,6 +512,24 @@
         <h3 style="font-size:14px; font-weight:800; color:var(--turquoise-dark); margin-bottom:12px; border-top:1px solid var(--turquoise-light); padding-top:12px;">Mevcut Ürünler</h3>
         <div id="adminProductsList"></div>
       </div>
+
+      <!-- Banner Yönetimi -->
+      <div id="adminBannerTab" class="cart-container" hidden>
+        <h3 style="font-size:14px; font-weight:800; color:var(--turquoise-dark); margin-bottom:12px;">Ana Sayfa Kampanya Banner Düzenleme</h3>
+        <form onsubmit="handleBannerUpdate(event)" class="form-grid">
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label>Banner Başlığı *</label>
+            <input type="text" id="bannerTitleInput" required placeholder="Aradığın Her Şey Burada!">
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label>Banner Açıklaması *</label>
+            <input type="text" id="bannerDescInput" required placeholder="Açık turkuaz ve sarının uyumu...">
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <button type="submit" class="action-btn btn-primary" style="width:100%;">Banner'ı Güncelle</button>
+          </div>
+        </form>
+      </div>
     </section>
   </main>
 
@@ -533,6 +544,7 @@
     let supabaseClient = null;
     let products = [];
     let cart = [];
+    let favorites = JSON.parse(localStorage.getItem('bulzovik_favs')) || [];
     let selectedCategory = 'Tümü';
     let currentPaymentMethod = 'card';
     let appliedDiscount = 0;
@@ -564,9 +576,21 @@
         products = (data || []).filter(p => p.image_url && p.image_url.trim() !== '');
         renderProducts();
         updateUserNavUI();
+        loadBannerSettings();
       } catch (err) {
         console.error('Veri çekme hatası:', err);
       }
+    }
+
+    async function loadBannerSettings() {
+      try {
+        const { data } = await supabaseClient.from('settings').select('*').eq('key', 'hero_banner').single();
+        if (data && data.value) {
+          const parts = data.value.split('|');
+          if (parts[0]) $('heroBannerTitle').textContent = parts[0];
+          if (parts[1]) $('heroBannerDesc').textContent = parts[1];
+        }
+      } catch (err) { console.error(err); }
     }
 
     function updateUserNavUI() {
@@ -575,7 +599,7 @@
         btn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${escapeHtml(currentUser.full_name || currentUser.email.split('@')[0])}`;
         btn.onclick = showProfileView;
       } else {
-        btn.innerHTML = `<i class="fa-solid fa-user"></i> Giriş / Üye Ol`;
+        btn.innerHTML = `<i class="fa-solid fa-user"></i> Giriş`;
         btn.onclick = openAuthModal;
       }
     }
@@ -592,21 +616,28 @@
         return matchesSearch && matchesCat;
       });
 
-      const grid = $('productsGrid');
-      if (!filtered.length) {
+      renderProductGrid(filtered, 'productsGrid');
+    }
+
+    function renderProductGrid(listData, containerId) {
+      const grid = $(containerId);
+      if (!listData.length) {
         grid.innerHTML = '<div class="empty-state">Aradığınız kriterlere uygun ürün bulunamadı.</div>';
         return;
       }
 
-      grid.innerHTML = filtered.map(p => {
+      grid.innerHTML = listData.map(p => {
         const img = `<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}" loading="lazy">`;
         const priceFormatted = Number(p.price || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 });
         const cartItem = cart.find(item => String(item.id) === String(p.id));
         const badgeStyle = cartItem ? 'display: flex;' : 'display: none;';
+        const isFav = favorites.includes(String(p.id));
+        const favClass = isFav ? 'fav-btn active' : 'fav-btn';
 
         return `
           <article class="card" id="card-${p.id}">
             <div>
+              <button class="${favClass}" onclick="toggleFavorite('${p.id}')"><i class="fa-solid fa-heart"></i></button>
               <div class="added-badge" id="badge-${p.id}" style="${badgeStyle}">
                 <i class="fa-solid fa-arrow-down"></i> Eklendi!
               </div>
@@ -629,7 +660,27 @@
       }).join('');
     }
 
-    // 🌟 Ürün Detay ve Yorumlar Ekranı
+    // ⭐ 1. Favoriler Fonksiyonu
+    function toggleFavorite(id) {
+      id = String(id);
+      if (favorites.includes(id)) {
+        favorites = favorites.filter(fav => fav !== id);
+      } else {
+        favorites.push(id);
+      }
+      localStorage.setItem('bulzovik_favs', JSON.stringify(favorites));
+      renderProducts();
+      if (!$('favoritesView').hidden) showFavoritesView();
+    }
+
+    function showFavoritesView() {
+      hideAllViews();
+      $('favoritesView').hidden = false;
+      const favProducts = products.filter(p => favorites.includes(String(p.id)));
+      renderProductGrid(favProducts, 'favoritesGrid');
+    }
+
+    // Ürün Detay & Yorumlar
     async function openProductDetail(id) {
       const p = products.find(item => String(item.id) === String(id));
       if (!p) return;
@@ -676,11 +727,8 @@
               <div class="form-group" style="margin-bottom:10px;">
                 <label>Puanınız *</label>
                 <select id="reviewRating" required>
-                  <option value="5">★★★★★ (5 Yıldız)</option>
-                  <option value="4">★★★★☆ (4 Yıldız)</option>
-                  <option value="3">★★★☆☆ (3 Yıldız)</option>
-                  <option value="2">★★☆☆☆ (2 Yıldız)</option>
-                  <option value="1">★☆☆☆☆ (1 Yıldız)</option>
+                  <option value="5">★★★★★ (5 Yıldız)</option><option value="4">★★★★☆ (4 Yıldız)</option>
+                  <option value="3">★★★☆☆ (3 Yıldız)</option><option value="2">★★☆☆☆ (2 Yıldız)</option><option value="1">★☆☆☆☆ (1 Yıldız)</option>
                 </select>
               </div>
               <div class="form-group" style="margin-bottom:10px;">
@@ -706,12 +754,10 @@
         if (error) throw error;
         alert('Yorumunuz başarıyla eklendi!');
         openProductDetail(productId);
-      } catch (err) {
-        alert('Yorum eklenirken hata oluştu.');
-      }
+      } catch (err) { alert('Yorum eklenirken hata oluştu.'); }
     }
 
-    // 👤 Üyelik & Giriş Fonksiyonları
+    // Üyelik Fonksiyonları
     function openAuthModal() {
       hideAllViews();
       $('authView').hidden = false;
@@ -744,7 +790,7 @@
           if (error) throw error;
           currentUser = data;
           localStorage.setItem('bulzovik_user', JSON.stringify(currentUser));
-          alert('Kayıt başarılı! Hoş geldin, ' + fullName);
+          alert('Kayıt başarılı!');
         } else {
           const { data, error } = await supabaseClient.from('profiles').select('*').eq('email', email).eq('password', password).single();
           if (error || !data) throw new Error('E-posta veya şifre hatalı.');
@@ -753,9 +799,7 @@
           alert('Giriş başarılı!');
         }
         goHome();
-      } catch (err) {
-        alert('İşlem başarısız: ' + err.message);
-      }
+      } catch (err) { alert('İşlem başarısız: ' + err.message); }
     }
 
     function logoutUser() {
@@ -770,34 +814,25 @@
       if (!currentUser) return openAuthModal();
       hideAllViews();
       $('profileView').hidden = false;
-
       $('profileInfo').innerHTML = `
         <div><strong>Ad Soyad:</strong> ${escapeHtml(currentUser.full_name || 'Belirtilmemiş')}</div>
         <div><strong>E-posta:</strong> ${escapeHtml(currentUser.email)}</div>
       `;
-
       const list = $('userOrdersList');
       list.innerHTML = '<div class="empty-state">Siparişler yükleniyor...</div>';
       try {
-        const { data, error } = await supabaseClient.from('orders').select('*').eq('phone', currentUser.phone || '0000000000').order('created_at', { ascending: false });
-        if (error) throw error;
+        const { data } = await supabaseClient.from('orders').select('*').eq('phone', currentUser.phone || '0000000000').order('created_at', { ascending: false });
         if (!data || !data.length) {
-          list.innerHTML = '<div class="empty-state">Bu hesaba ait henüz sipariş bulunamadı.</div>';
+          list.innerHTML = '<div class="empty-state">Sipariş bulunamadı.</div>';
           return;
         }
         list.innerHTML = data.map(o => `
           <div class="admin-order-card">
-            <div class="admin-order-header">
-              <span>#${escapeHtml(o.order_no)}</span>
-              <span class="status-badge status-${(o.status||'bekliyor').toLowerCase()}">${o.status || 'Bekliyor'}</span>
-            </div>
+            <div class="admin-order-header"><span>#${escapeHtml(o.order_no)}</span><span class="status-badge">${o.status}</span></div>
             <div><strong>Tutar:</strong> ${Number(o.total_amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL</div>
-            <div><strong>Ödeme:</strong> ${escapeHtml(o.payment_method)}</div>
           </div>
         `).join('');
-      } catch (err) {
-        list.innerHTML = '<div class="empty-state">Siparişler yüklenemedi.</div>';
-      }
+      } catch (err) { list.innerHTML = '<div class="empty-state">Yüklenemedi.</div>'; }
     }
 
     function addToCart(id) {
@@ -812,7 +847,6 @@
       } else {
         cart.push({ ...product, quantity: 1 });
       }
-
       updateCartUI();
       const badge = $(`badge-${id}`);
       if (badge) badge.style.display = 'flex';
@@ -834,7 +868,7 @@
         appliedDiscount = 50;
         $('couponNotice').textContent = '✨ 50 TL İndirim Kuponu Uygulandı!';
       } else {
-        alert('Geçersiz veya şartları karşılamayan kupon kodu.');
+        alert('Geçersiz kupon kodu.');
         appliedDiscount = 0;
         $('couponNotice').textContent = '';
       }
@@ -844,7 +878,7 @@
     function renderCart() {
       const list = $('cartItemsList');
       if (!cart.length) {
-        list.innerHTML = '<div class="empty-state">Sepetiniz henüz boş. Alışverişe hemen başlayın!</div>';
+        list.innerHTML = '<div class="empty-state">Sepetiniz henüz boş.</div>';
         $('subTotalText').textContent = '0,00 TL';
         $('shippingText').textContent = '0,00 TL';
         $('cartTotalText').textContent = '0,00 TL';
@@ -852,23 +886,15 @@
         $('discountRow').hidden = true;
         return;
       }
-
       $('startCheckoutBtn').style.display = 'inline-block';
       list.innerHTML = cart.map(p => `
         <div class="cart-item">
           <div class="cart-item-left">
             <img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}" class="cart-item-thumb">
-            <div>
-              <div class="cart-item-title">${escapeHtml(p.name)}</div>
-              <div class="cart-item-price">${(Number(p.price) * p.quantity).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL</div>
-            </div>
+            <div><div class="cart-item-title">${escapeHtml(p.name)}</div><div class="cart-item-price">${(Number(p.price) * p.quantity).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL</div></div>
           </div>
           <div class="cart-item-right">
-            <div class="qty-box">
-              <button class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button>
-              <span style="font-weight: 900; font-size: 12px; min-width: 14px; text-align: center;">${p.quantity}</span>
-              <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
-            </div>
+            <div class="qty-box"><button class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button><span style="font-weight:900; font-size:12px; min-width:14px; text-align:center;">${p.quantity}</span><button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button></div>
             <button class="delete-btn" onclick="removeItem('${p.id}')"><i class="fa-solid fa-trash-can"></i></button>
           </div>
         </div>
@@ -882,13 +908,9 @@
       if (appliedDiscount > 0) {
         $('discountRow').hidden = false;
         $('discountText').textContent = '-' + appliedDiscount.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
-      } else {
-        $('discountRow').hidden = true;
-      }
-
+      } else { $('discountRow').hidden = true; }
       $('shippingText').textContent = shipping === 0 ? 'ÜCRETSİZ' : shipping.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
       $('freeShippingNotice').textContent = subtotal >= 150 ? '(Kargo Bedava!)' : '';
-      
       const formattedGrand = grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
       $('cartTotalText').textContent = formattedGrand;
       $('finalCheckoutTotalText').textContent = formattedGrand;
@@ -916,13 +938,8 @@
       const subtotal = cart.reduce((sum, p) => sum + (Number(p.price) * p.quantity), 0);
       const shipping = subtotal >= 150 ? 0 : 29.90;
       const grandTotal = Math.max(0, subtotal - appliedDiscount) + shipping;
-
       let itemsText = cart.map(i => `• ${i.name} (${i.quantity} Adet) - ${(i.price * i.quantity).toFixed(2)} TL`).join('%0A');
-      let message = `🛒 *BULZOVİK - YENİ WHATSAPP SİPARİŞİ*%0A%0A` +
-                    `📦 *Ürünler:*%0A${itemsText}%0A%0A` +
-                    `💰 *Toplam Tutar:* ${grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL%0A%0A` +
-                    `Lütfen siparişimi onaylar mısınız?`;
-
+      let message = `🛒 *BULZOVİK - WHATSAPP SİPARİŞİ*%0A%0A📦 *Ürünler:*%0A${itemsText}%0A%0A💰 *Toplam:* ${grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
       window.open(`https://wa.me/905318105861?text=${message}`, '_blank');
     }
 
@@ -956,6 +973,7 @@
       $('productDetailView').hidden = true;
       $('authView').hidden = true;
       $('profileView').hidden = true;
+      $('favoritesView').hidden = true;
     }
 
     function showCartView() {
@@ -988,30 +1006,31 @@
       const phone = $('trackPhone').value.trim();
       const resArea = $('trackingResultArea');
 
-      if (!orderNo || !phone) {
-        alert('Lütfen sipariş kodu ve telefon numaranızı giriniz.');
-        return;
-      }
-
-      resArea.innerHTML = '<div style="text-align:center; color:#64748b; font-weight:600;">Sipariş aranıyor...</div>';
+      if (!orderNo || !phone) return alert('Lütfen bilgileri doldurunuz.');
+      resArea.innerHTML = '<div style="text-align:center; color:#64748b;">Sipariş aranıyor...</div>';
 
       try {
-        const { data, error } = await supabaseClient
-          .from('orders')
-          .select('*')
-          .eq('order_no', orderNo)
-          .eq('phone', phone)
-          .single();
-
+        const { data, error } = await supabaseClient.from('orders').select('*').eq('order_no', orderNo).eq('phone', phone).single();
         if (error || !data) {
-          resArea.innerHTML = '<div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:8px; text-align:center; font-weight:700;">Girdiğiniz bilgilere ait sipariş bulunamadı.</div>';
+          resArea.innerHTML = '<div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:8px; text-align:center; font-weight:700;">Sipariş bulunamadı.</div>';
           return;
         }
 
         let st = data.status || 'Bekliyor';
         let stClass = st === 'Onaylandı' ? 'status-onaylandi' : (st === 'Kargoda' ? 'status-kargoda' : (st === 'İptal' ? 'status-iptal' : 'status-bekliyor'));
-        let tracking = data.tracking_code ? `<div style="margin-top:6px;"><strong>Kargo Takip No:</strong> ${escapeHtml(data.tracking_code)}</div>` : '';
-        let dateStr = new Date(data.created_at).toLocaleString('tr-TR');
+        
+        // 📦 5. Çoklu Kargo Takip Linkleri Entegrasyonu
+        let trackingHtml = '';
+        if (data.tracking_code) {
+          let company = data.shipping_company || 'Aras Kargo';
+          let trackUrl = '#';
+          if (company.includes('Aras')) trackUrl = `https://www.araskargo.com.tr/tr/eniro.aspx?kargo_takip_no=${data.tracking_code}`;
+          else if (company.includes('MNG')) trackUrl = `https://www.mngkargo.com.tr/gonderitakip?kargoTakipNo=${data.tracking_code}`;
+          else if (company.includes('Yurtiçi')) trackUrl = `https://www.yurticikargo.com/tr/online-servisler/gonderi-sorgula?code=${data.tracking_code}`;
+          else trackUrl = `https://www.trendyol.com/kargotakip?trackingCode=${data.tracking_code}`;
+
+          trackingHtml = `<div style="margin-top:6px;"><strong>Kargo (${company}):</strong> <a href="${trackUrl}" target="_blank" style="color:var(--turquoise); font-weight:800; text-decoration:underline;">${escapeHtml(data.tracking_code)} (Takip Et)</a></div>`;
+        }
 
         resArea.innerHTML = `
           <div style="background:var(--bg); border:1.5px solid var(--turquoise-light); border-radius:12px; padding:15px; font-size:12px;">
@@ -1020,15 +1039,12 @@
               <span class="status-badge ${stClass}">${st}</span>
             </div>
             <div><strong>Müşteri:</strong> ${escapeHtml(data.customer_name)}</div>
-            <div><strong>Teslimat Adresi:</strong> ${escapeHtml(data.address)} / ${escapeHtml(data.city)}</div>
+            <div><strong>Adres:</strong> ${escapeHtml(data.address)} / ${escapeHtml(data.city)}</div>
             <div><strong>Ödeme:</strong> ${escapeHtml(data.payment_method)} (${Number(data.total_amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL)</div>
-            <div><strong>Tarih:</strong> ${dateStr}</div>
-            ${tracking}
+            ${trackingHtml}
           </div>
         `;
-      } catch (err) {
-        resArea.innerHTML = '<div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:8px; text-align:center; font-weight:700;">Sipariş sorgulanırken hata oluştu.</div>';
-      }
+      } catch (err) { resArea.innerHTML = '<div style="background:#fee2e2; color:#991b1b; padding:12px; text-align:center;">Hata oluştu.</div>'; }
     }
 
     async function handleOrderSubmit(e) {
@@ -1046,10 +1062,7 @@
       const subtotal = cart.reduce((sum, p) => sum + (Number(p.price) * p.quantity), 0);
       const shipping = subtotal >= 150 ? 0 : 29.90;
       const grandTotal = Math.max(0, subtotal - appliedDiscount) + shipping;
-
-      let methodTitle = 'Kredi/Banka Kartı';
-      if (currentPaymentMethod === 'eft') methodTitle = 'Havale / EFT';
-      if (currentPaymentMethod === 'door') methodTitle = 'Kapıda Ödeme';
+      let methodTitle = currentPaymentMethod === 'eft' ? 'Havale / EFT' : (currentPaymentMethod === 'door' ? 'Kapıda Ödeme' : 'Kredi/Banka Kartı');
 
       try {
         const { error } = await supabaseClient.from('orders').insert([{
@@ -1058,46 +1071,32 @@
         }]);
 
         if (error) throw error;
-
-        const totalFormatted = grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
-        $('orderReceipt').innerHTML = `
+        $('orderReceipt.innerHTML = `
           <div style="font-weight:900; color:var(--turquoise-dark); font-size:14px; margin-bottom:8px;">Sipariş Kodu: #${orderNo}</div>
           <div><strong>Müşteri:</strong> ${escapeHtml(name)}</div>
-          <div><strong>Telefon:</strong> ${escapeHtml(phone)}</div>
-          <div><strong>Adres:</strong> ${escapeHtml(addr)} - ${escapeHtml(city)}</div>
-          <div><strong>Ödeme:</strong> ${methodTitle}</div>
-          <div><strong>Tutar:</strong> <span style="color:var(--turquoise); font-weight:800;">${totalFormatted}</span></div>
+          <div><strong>Tutar:</strong> <span style="color:var(--turquoise); font-weight:800;">${grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL</span></div>
         `;
-
         cart = [];
         appliedDiscount = 0;
         updateCartUI();
         document.querySelectorAll('.added-badge').forEach(b => b.style.display = 'none');
-
         hideAllViews();
         $('orderSuccessView').hidden = false;
-
-      } catch (err) {
-        console.error(err);
-        alert('Sipariş kaydedilirken bir hata oluştu.');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Siparişi Onayla ve Bitir';
-      }
+      } catch (err) { alert('Sipariş kaydedilemedi.'); }
+      finally { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Siparişi Onayla ve Bitir'; }
     }
 
-    // 👑 YÖNETİM PANELİ VE ÇİFT ŞİFRELEME (3 Logo + 2 O.K Tıklaması)
+    // Yönetim Paneli
     let logoClicks = 0;
     let okClicks = 0;
-
     $('logoClickArea').addEventListener('click', () => { logoClicks++; });
     $('okClickTag').addEventListener('click', () => {
       okClicks++;
       if (logoClicks >= 3 && okClicks >= 2) {
         logoClicks = 0; okClicks = 0;
-        let pass1 = prompt('1. Yönetici Şifresini Giriniz:');
+        let pass1 = prompt('1. Yönetici Şifresi:');
         if (pass1 === 'Onurkaya6103') {
-          let pass2 = prompt('2. Güvenlik Şifresini Giriniz:');
+          let pass2 = prompt('2. Güvenlik Şifresi:');
           if (pass2 === 'AKD891') {
             hideAllViews();
             $('adminView').hidden = false;
@@ -1110,8 +1109,10 @@
     function switchAdminTab(tab) {
       $('tabOrdersBtn').classList.toggle('active', tab === 'orders');
       $('tabProductsBtn').classList.toggle('active', tab === 'products');
+      $('tabBannerBtn').classList.toggle('active', tab === 'banner');
       $('adminOrdersTab').hidden = tab !== 'orders';
       $('adminProductsTab').hidden = tab !== 'products';
+      $('adminBannerTab').hidden = tab !== 'banner';
 
       if (tab === 'orders') loadAdminOrders();
       if (tab === 'products') loadAdminProducts();
@@ -1121,162 +1122,104 @@
       const list = $('adminOrdersList');
       list.innerHTML = '<div class="empty-state">Siparişler yükleniyor...</div>';
       try {
-        const { data, error } = await supabaseClient
-          .from('orders')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-        
-        let totalCiro = 0;
-        let totalOrdersCount = data.length;
-        let pendingCount = 0;
-
-        data.forEach(o => {
-          if (o.status !== 'İptal') {
-            totalCiro += Number(o.total_amount || 0);
-          }
-          if (!o.status || o.status === 'Bekliyor') {
-            pendingCount++;
-          }
+        const { data } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false });
+        let totalCiro = 0, pending = 0;
+        (data || []).forEach(o => {
+          if (o.status !== 'İptal') totalCiro += Number(o.total_amount || 0);
+          if (!o.status || o.status === 'Bekliyor') pending++;
         });
-
         $('statCiro').textContent = totalCiro.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
-        $('statOrders').textContent = totalOrdersCount;
-        $('statPending').textContent = pendingCount;
+        $('statOrders').textContent = (data || []).length;
+        $('statPending').textContent = pending;
 
-        if (!data.length) {
-          list.innerHTML = '<div class="empty-state">Henüz hiç sipariş yok.</div>';
-          return;
-        }
+        if (!data || !data.length) { list.innerHTML = '<div class="empty-state">Sipariş yok.</div>'; return; }
 
-        list.innerHTML = data.map(o => {
-          let st = o.status || 'Bekliyor';
-          let stClass = st === 'Onaylandı' ? 'status-onaylandi' : (st === 'Kargoda' ? 'status-kargoda' : (st === 'İptal' ? 'status-iptal' : 'status-bekliyor'));
-          let itemsHtml = (o.items || []).map(i => `<div>• ${escapeHtml(i.name)} (${i.quantity} Adet)</div>`).join('');
-          let dateStr = new Date(o.created_at).toLocaleString('tr-TR');
-          let tracking = o.tracking_code ? `<strong>Kargo Takip:</strong> ${escapeHtml(o.tracking_code)}` : '';
-
-          return `
-            <div class="admin-order-card">
-              <div class="admin-order-header">
-                <span>#${escapeHtml(o.order_no)} - ${escapeHtml(o.customer_name)}</span>
-                <span class="status-badge ${stClass}">${st}</span>
-              </div>
-              <div><strong>Telefon:</strong> ${escapeHtml(o.phone)}</div>
-              <div><strong>Adres:</strong> ${escapeHtml(o.address)} / ${escapeHtml(o.city)}</div>
-              <div><strong>Ödeme:</strong> ${escapeHtml(o.payment_method)} (${Number(o.total_amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL)</div>
-              <div><strong>Tarih:</strong> ${dateStr}</div>
-              ${tracking ? `<div>${tracking}</div>` : ''}
-              <div style="background:var(--white); padding:6px; border-radius:6px; margin-top:4px;"><strong>Ürünler:</strong><br>${itemsHtml}</div>
-              
-              <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;">
-                <button class="action-btn btn-primary" style="padding:5px 10px; font-size:11px;" onclick="updateOrderStatus('${o.id}', 'Onaylandı')">Onayla</button>
-                <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:5px 10px; font-size:11px;" onclick="updateOrderStatus('${o.id}', 'İptal')">İptal Et</button>
-                <button class="action-btn" style="background:#e0f2fe; color:#0369a1; padding:5px 10px; font-size:11px;" onclick="addTrackingCode('${o.id}')">Kargo Kodu Ekle</button>
-                <button class="action-btn" style="background:#e2e8f0; color:#334155; padding:5px 10px; font-size:11px;" onclick="deleteOrder('${o.id}')">Sil</button>
-              </div>
+        list.innerHTML = data.map(o => `
+          <div class="admin-order-card">
+            <div class="admin-order-header"><span>#${escapeHtml(o.order_no)} - ${escapeHtml(o.customer_name)}</span><span class="status-badge">${o.status}</span></div>
+            <div><strong>Telefon:</strong> ${escapeHtml(o.phone)}</div>
+            <div><strong>Adres:</strong> ${escapeHtml(o.address)} / ${escapeHtml(o.city)}</div>
+            <div><strong>Ödeme:</strong> ${escapeHtml(o.payment_method)} (${Number(o.total_amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL)</div>
+            ${o.tracking_code ? `<div><strong>Kargo:</strong> ${escapeHtml(o.shipping_company || 'Kargo')} - ${escapeHtml(o.tracking_code)}</div>` : ''}
+            <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;">
+              <button class="action-btn btn-primary" style="padding:5px 10px; font-size:11px;" onclick="updateOrderStatus('${o.id}', 'Onaylandı')">Onayla</button>
+              <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:5px 10px; font-size:11px;" onclick="updateOrderStatus('${o.id}', 'İptal')">İptal</button>
+              <button class="action-btn" style="background:#e0f2fe; color:#0369a1; padding:5px 10px; font-size:11px;" onclick="addTrackingCodeWithCompany('${o.id}')">Kargo Kodu Ekle</button>
+              <button class="action-btn" style="background:#e2e8f0; color:#334155; padding:5px 10px; font-size:11px;" onclick="deleteOrder('${o.id}')">Sil</button>
             </div>
-          `;
-        }).join('');
-      } catch (err) {
-        console.error(err);
-        list.innerHTML = '<div class="empty-state">Siparişler yüklenirken hata oluştu.</div>';
-      }
+          </div>
+        `).join('');
+      } catch (err) { list.innerHTML = '<div class="empty-state">Yüklenemedi.</div>'; }
     }
 
-    async function addTrackingCode(id) {
+    // 📦 Çoklu Kargo Firması Seçimi ile Takip Kodu Atama
+    async function addTrackingCodeWithCompany(id) {
+      let company = prompt('Kargo Firmasını Seçiniz:\n1. Aras Kargo\n2. MNG Kargo\n3. Yurtiçi Kargo\n4. Trendyol Express', 'Aras Kargo');
+      if (!company) return;
       let code = prompt('Kargo Takip Numarasını Giriniz:');
       if (!code) return;
+
       try {
-        const { error } = await supabaseClient.from('orders').update({ tracking_code: code, status: 'Kargoda' }).eq('id', id);
+        const { error } = await supabaseClient.from('orders').update({ tracking_code: code, shipping_company: company, status: 'Kargoda' }).eq('id', id);
         if (error) throw error;
         loadAdminOrders();
-      } catch (err) {
-        alert('Kargo kodu eklenirken hata oluştu.');
-      }
+      } catch (err) { alert('Hata oluştu.'); }
     }
 
     async function updateOrderStatus(id, newStatus) {
       try {
-        const { error } = await supabaseClient.from('orders').update({ status: newStatus }).eq('id', id);
-        if (error) throw error;
+        await supabaseClient.from('orders').update({ status: newStatus }).eq('id', id);
         loadAdminOrders();
-      } catch (err) {
-        alert('Durum güncellenirken hata oluştu.');
-      }
+      } catch (err) { alert('Hata oluştu.'); }
     }
 
     async function deleteOrder(id) {
-      if (!confirm('Bu siparişi silmek istediğinize emin misiniz?')) return;
-      try {
-        const { error } = await supabaseClient.from('orders').delete().eq('id', id);
-        if (error) throw error;
-        loadAdminOrders();
-      } catch (err) {
-        alert('Silme sırasında hata oluştu.');
-      }
+      if (!confirm('Silmek istediğinize emin misiniz?')) return;
+      await supabaseClient.from('orders').delete().eq('id', id);
+      loadAdminOrders();
     }
 
     async function loadAdminProducts() {
       const list = $('adminProductsList');
-      list.innerHTML = '<div class="empty-state">Ürünler yükleniyor...</div>';
-      try {
-        const { data, error } = await supabaseClient.from('products').select('*').order('created_at', { ascending: false });
-        if (error) throw error;
-        if (!data || !data.length) {
-          list.innerHTML = '<div class="empty-state">Henüz hiç ürün eklenmemiş.</div>';
-          return;
-        }
-
-        list.innerHTML = data.map(p => `
-          <div class="admin-prod-card" style="display:flex; flex-direction:row; justify-content:space-between; align-items:center;">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <img src="${escapeHtml(p.image_url)}" style="width:40px; height:40px; border-radius:6px; object-fit:cover;">
-              <div>
-                <strong>${escapeHtml(p.name)}</strong>
-                <div style="font-size:11px; color:#64748b;">${p.price} TL | Stok: ${p.stock} | Kat: ${escapeHtml(p.category)}</div>
-              </div>
-            </div>
-            <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:5px 10px; font-size:11px;" onclick="deleteProduct('${p.id}')">Sil</button>
-          </div>
-        `).join('');
-      } catch (err) {
-        console.error(err);
-      }
+      const { data } = await supabaseClient.from('products').select('*').order('created_at', { ascending: false });
+      if (!data || !data.length) { list.innerHTML = '<div class="empty-state">Ürün yok.</div>'; return; }
+      list.innerHTML = data.map(p => `
+        <div class="admin-prod-card" style="display:flex; justify-content:space-between; align-items:center;">
+          <div><strong>${escapeHtml(p.name)}</strong> (${p.price} TL)</div>
+          <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:5px 10px; font-size:11px;" onclick="deleteProduct('${p.id}')">Sil</button>
+        </div>
+      `).join('');
     }
 
     async function handleProductAdd(e) {
       e.preventDefault();
-      const name = $('pName').value;
-      const price = parseFloat($('pPrice').value);
-      const category = $('pCategory').value;
-      const stock = parseInt($('pStock').value);
-      const image_url = $('pImg').value;
-      const description = $('pDesc').value;
-
-      try {
-        const { error } = await supabaseClient.from('products').insert([{ name, price, category, stock, image_url, description }]);
-        if (error) throw error;
-        alert('Ürün başarıyla yayınlandı!');
-        $('addProductForm').reset();
-        loadAdminProducts();
-        loadProducts();
-      } catch (err) {
-        alert('Ürün eklenirken hata oluştu: ' + err.message);
-      }
+      const name = $('pName').value, price = parseFloat($('pPrice').value), category = $('pCategory').value, stock = parseInt($('pStock').value), image_url = $('pImg').value, description = $('pDesc').value;
+      await supabaseClient.from('products').insert([{ name, price, category, stock, image_url, description }]);
+      alert('Ürün eklendi!');
+      $('addProductForm').reset();
+      loadAdminProducts();
+      loadProducts();
     }
 
     async function deleteProduct(id) {
-      if (!confirm('Bu ürüne ait tüm yorumlar da silinecektir. Emin misiniz?')) return;
+      if (!confirm('Silinsin mi?')) return;
+      await supabaseClient.from('products').delete().eq('id', id);
+      loadAdminProducts();
+      loadProducts();
+    }
+
+    // 🎫 3. Banner Ayarlarını Güncelleme
+    async function handleBannerUpdate(e) {
+      e.preventDefault();
+      const title = $('bannerTitleInput').value.trim();
+      const desc = $('bannerDescInput').value.trim();
+      const combined = title + '|' + desc;
+
       try {
-        const { error } = await supabaseClient.from('products').delete().eq('id', id);
-        if (error) throw error;
-        loadAdminProducts();
-        loadProducts();
-      } catch (err) {
-        alert('Ürün silinirken hata oluştu.');
-      }
+        await supabaseClient.from('settings').upsert({ key: 'hero_banner', value: combined });
+        alert('Kampanya banneri güncellendi!');
+        loadBannerSettings();
+      } catch (err) { alert('Banner güncellenemedi.'); }
     }
 
     function goHome() {
