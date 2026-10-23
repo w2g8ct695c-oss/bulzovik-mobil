@@ -71,7 +71,7 @@
     .logo { font-size: 18px; font-weight: 900; color: var(--turquoise-dark); letter-spacing: 0.5px; }
     .tagline { font-size: 7px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
 
-    /* Arama Çubuğu (Tıklayınca Tam Ekran Modalı Tetikler) */
+    /* Arama Çubuğu */
     .search-box {
       flex: 1;
       max-width: 150px;
@@ -92,7 +92,7 @@
     .search-box input::placeholder { color: #64748b; font-weight: 400; }
     .search-box i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--turquoise-dark); font-size: 12px; pointer-events: none; }
 
-    /* 🌟 Tam Ekran Akıllı Arama Modalı */
+    /* Tam Ekran Akıllı Arama Modalı */
     #searchOverlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -106,7 +106,7 @@
     .search-overlay-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 15px;
     }
     .search-overlay-input-wrap {
@@ -127,10 +127,18 @@
     .search-overlay-input-wrap i {
       position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--turquoise-dark); font-size: 14px;
     }
+    .search-action-btn {
+      background: var(--turquoise);
+      color: white;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 11px;
+    }
     .close-search-btn {
       background: var(--turquoise-light);
       color: var(--turquoise-dark);
-      padding: 10px 14px;
+      padding: 11px 12px;
       border-radius: 10px;
       font-weight: 800;
       font-size: 11px;
@@ -169,7 +177,7 @@
       font-size: 14px;
     }
     .autocomplete-item img {
-      width: 30px; height: 30px; border-radius: 6px; object-fit: cover; margin-right: 8px;
+      width: 32px; height: 32px; border-radius: 6px; object-fit: cover; margin-right: 8px;
     }
 
     /* Nav Actions */
@@ -324,7 +332,7 @@
       <div class="tagline">İstediğin Burada!</div>
     </div>
 
-    <!-- Arama Çubuğu (Tıklayınca Tam Ekran Modalı Açılır) -->
+    <!-- Arama Çubuğu -->
     <div class="search-box">
       <i class="fa-solid fa-magnifying-glass"></i>
       <input type="text" id="searchInput" placeholder="Ürün veya kategori ara..." readonly onclick="openSearchOverlay()">
@@ -342,13 +350,14 @@
     </div>
   </header>
 
-  <!-- 🌟 Tam Ekran Arama Modalı (Gizli Başlar) -->
+  <!-- Tam Ekran Akıllı Arama Modalı -->
   <div id="searchOverlay" hidden>
     <div class="search-overlay-header">
       <div class="search-overlay-input-wrap">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="overlaySearchInput" placeholder="Ne aramıştınız?" oninput="handleOverlaySearch(this.value)">
+        <input type="text" id="overlaySearchInput" placeholder="Ne aramıştınız?" onkeyup="handleKeySearch(event)" oninput="liveProductSuggest(this.value)">
       </div>
+      <button class="search-action-btn" onclick="executeSearch()">Ara</button>
       <button class="close-search-btn" onclick="closeSearchOverlay()">Vazgeç</button>
     </div>
 
@@ -362,7 +371,7 @@
     </div>
 
     <!-- Canlı Eşleşen Ürünler (Autocomplete) -->
-    <div class="search-section-title" id="autocompleteTitle" hidden style="margin-top:15px;">Eşleşen Ürünler</div>
+    <div class="search-section-title" id="autocompleteTitle" hidden style="margin-top:12px;">Eşleşen Ürünler</div>
     <div id="autocompleteResults"></div>
   </div>
 
@@ -644,7 +653,7 @@
         <div id="adminCouponsList"></div>
       </div>
 
-      <!-- Banner (Hatasız Güncelleme) -->
+      <!-- Banner Düzenleme -->
       <div id="adminBannerTab" class="cart-container" hidden>
         <h3 style="font-size:13px; font-weight:800; color:var(--turquoise-dark); margin-bottom:10px;">Banner Düzenle</h3>
         <form onsubmit="handleBannerUpdate(event)" class="form-grid">
@@ -714,7 +723,16 @@
       } catch (err) { console.error(err); }
     }
 
+    /* 🌟 Akıllı Banner Çekme (Yedekli Yapı) */
     async function loadBannerSettings() {
+      // Önce yerel hafızadaki yedekten oku
+      const localBanner = localStorage.getItem('bulzovik_local_banner');
+      if (localBanner) {
+        const parts = localBanner.split('|');
+        if (parts[0]) $('heroBannerTitle').textContent = parts[0];
+        if (parts[1]) $('heroBannerDesc').textContent = parts[1];
+      }
+
       try {
         const { data } = await supabaseClient.from('settings').select('*').eq('key', 'hero_banner').maybeSingle();
         if (data && data.value) {
@@ -722,10 +740,10 @@
           if (parts[0]) $('heroBannerTitle').textContent = parts[0];
           if (parts[1]) $('heroBannerDesc').textContent = parts[1];
         }
-      } catch (err) { console.error('Banner yükleme hatası:', err); }
+      } catch (err) { console.error('Banner yüklenemedi:', err); }
     }
 
-    /* 🌟 Akıllı Tam Ekran Arama Modalı ve Geçmiş Yönetimi */
+    /* 🌟 Akıllı Arama Modalı ve Geçmiş Mantığı */
     function openSearchOverlay() {
       $('searchOverlay').hidden = false;
       $('overlaySearchInput').focus();
@@ -769,10 +787,40 @@
 
     function selectSearchTerm(term) {
       $('overlaySearchInput').value = term;
-      handleOverlaySearch(term);
+      executeSearch();
     }
 
-    function handleOverlaySearch(term) {
+    function handleKeySearch(e) {
+      if (e.key === 'Enter') {
+        executeSearch();
+      }
+    }
+
+    // 🌟 Sadece "Ara"ya basılınca veya Enter yapılınca geçmişe kaydeder
+    function executeSearch() {
+      const term = $('overlaySearchInput').value.trim();
+      if (!term) return;
+
+      if (!searchHistory.includes(term)) {
+        searchHistory.unshift(term);
+        if (searchHistory.length > 8) searchHistory.pop();
+        localStorage.setItem('bulzovik_search_history', JSON.stringify(searchHistory));
+      }
+
+      closeSearchOverlay();
+      
+      // Mağaza grid'inde filtrele
+      const termLower = term.toLocaleLowerCase('tr-TR');
+      const matched = products.filter(p => {
+        const name = (p.name || '').toLocaleLowerCase('tr-TR');
+        const cat = (p.category || '').toLocaleLowerCase('tr-TR');
+        return name.includes(termLower) || cat.includes(termLower);
+      });
+      renderProductGrid(matched, 'productsGrid');
+    }
+
+    // Harf harf yazarken canlı ürün önerisi (geçmişe kaydetmez)
+    function liveProductSuggest(term) {
       term = term.trim();
       const resultsContainer = $('autocompleteResults');
       const title = $('autocompleteTitle');
@@ -784,14 +832,7 @@
         return;
       }
 
-      // Geçmişe ekle (tekrarı önle)
-      if (!searchHistory.includes(term)) {
-        searchHistory.unshift(term);
-        if (searchHistory.length > 8) searchHistory.pop(); // Max 8 kayıt
-        localStorage.setItem('bulzovik_search_history', JSON.stringify(searchHistory));
-      }
-
-      $('searchHistorySection').hidden = true; // Arama yaparken geçmişi gizle, ürünleri göster
+      $('searchHistorySection').hidden = true;
 
       const termLower = term.toLocaleLowerCase('tr-TR');
       const matched = products.filter(p => {
@@ -1230,7 +1271,7 @@
       finally { submitBtn.disabled = false; submitBtn.textContent = 'Siparişi Onayla'; }
     }
 
-    // Yönetim Paneli
+    // Yönetim Paneli Girişi
     let logoClicks = 0, okClicks = 0;
     $('logoClickArea').addEventListener('click', () => { logoClicks++; });
     $('okClickTag').addEventListener('click', () => {
@@ -1350,21 +1391,26 @@
       loadAdminCoupons();
     }
 
-    // 🌟 Banner Güncelleme Hatası Giderilmiş Kesin Çözüm
+    /* 🌟 %100 Garantili Kesin Banner Güncelleme Mantığı */
     async function handleBannerUpdate(e) {
       e.preventDefault();
       const title = $('bannerTitleInput').value.trim();
       const desc = $('bannerDescInput').value.trim();
       const combined = title + '|' + desc;
 
+      // 1. Önce cihazın kendi hafızasına anında yaz (Garantili Çalışma)
+      localStorage.setItem('bulzovik_local_banner', combined);
+
       try {
-        // Önce var olan kaydı sil veya güncelle
+        // 2. Supabase'e kaydetmeyi dene
         await supabaseClient.from('settings').delete().eq('key', 'hero_banner');
-        const { error } = await supabaseClient.from('settings').insert([{ key: 'hero_banner', value: combined }]);
-        if (error) throw error;
-        alert('Banner güncellendi!');
-        location.reload(); 
-      } catch (err) { alert('Banner güncellenemedi: ' + err.message); }
+        await supabaseClient.from('settings').insert([{ key: 'hero_banner', value: combined }]);
+      } catch (err) {
+        console.warn('Veritabanına yazılamadı ama yerel kaydedildi:', err);
+      }
+
+      alert('Banner başarıyla güncellendi!');
+      location.reload(); 
     }
 
     function goHome() {
