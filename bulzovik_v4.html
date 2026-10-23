@@ -71,12 +71,16 @@
     .logo { font-size: 18px; font-weight: 900; color: var(--turquoise-dark); letter-spacing: 0.5px; }
     .tagline { font-size: 7px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
 
-    /* 🌟 TRENDYOL TARZI GENİŞLEYEN ARAMA ÇUBUĞU (Mobil & Masaüstü Uyumlu) */
+    /* 🌟 TRENDYOL TARZI KUSURSUZ GENİŞLEYEN ARAMA ÇUBUĞU */
     .search-box {
       flex: 1;
-      max-width: 220px;
+      max-width: 130px;
       position: relative;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
+    }
+    .search-box:focus-within {
+      max-width: 100% !important;
+      flex: 3;
     }
     .search-box input {
       width: 100%;
@@ -87,17 +91,11 @@
       font-size: 11px;
       font-weight: 600;
       outline: none;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       color: var(--text-color) !important;
     }
     .search-box input::placeholder { color: #64748b; font-weight: 400; }
     .search-box i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--turquoise-dark); font-size: 12px; pointer-events: none; }
-
-    /* Tıklandığında Genişleme Efekti */
-    .search-box:focus-within {
-      max-width: 100% !important;
-      flex: 2;
-    }
     .search-box input:focus {
       box-shadow: 0 4px 20px rgba(13, 148, 136, 0.25);
       border-color: var(--turquoise-dark);
@@ -132,7 +130,7 @@
     .cat-pill { background: var(--white); border: 2px solid var(--turquoise-light); color: var(--text-color); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; transition: all 0.2s; }
     .cat-pill.active { background: var(--turquoise); color: white; border-color: var(--turquoise); box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2); }
 
-    /* MAIN GRID (Mobil 3, Masaüstü 4) */
+    /* MAIN GRID */
     main { max-width: 1280px; margin: 0 auto; padding: 0 4% 40px; }
     .section-title { font-size: 16px; font-weight: 900; margin-bottom: 12px; color: var(--turquoise-dark); display: flex; align-items: center; gap: 8px; }
 
@@ -624,13 +622,13 @@
 
     async function loadBannerSettings() {
       try {
-        const { data } = await supabaseClient.from('settings').select('*').eq('key', 'hero_banner').single();
+        const { data, error } = await supabaseClient.from('settings').select('*').eq('key', 'hero_banner').maybeSingle();
         if (data && data.value) {
           const parts = data.value.split('|');
           if (parts[0]) $('heroBannerTitle').textContent = parts[0];
           if (parts[1]) $('heroBannerDesc').textContent = parts[1];
         }
-      } catch (err) { console.error(err); }
+      } catch (err) { console.error('Banner yükleme hatası:', err); }
     }
 
     function updateUserNavUI() {
@@ -783,7 +781,7 @@
       const subtotal = cart.reduce((sum, p) => sum + (Number(p.price) * p.quantity), 0);
 
       try {
-        const { data, error } = await supabaseClient.from('coupons').select('*').eq('code', code).single();
+        const { data, error } = await supabaseClient.from('coupons').select('*').eq('code', code).maybeSingle();
         if (error || !data) {
           alert('Geçersiz kupon kodu.');
           appliedDiscount = 0;
@@ -842,7 +840,7 @@
           localStorage.setItem('bulzovik_user', JSON.stringify(currentUser));
           alert('Kayıt başarılı!');
         } else {
-          const { data, error } = await supabaseClient.from('profiles').select('*').eq('email', email).eq('password', password).single();
+          const { data, error } = await supabaseClient.from('profiles').select('*').eq('email', email).eq('password', password).maybeSingle();
           if (error || !data) throw new Error('Bilgiler hatalı.');
           currentUser = data;
           localStorage.setItem('bulzovik_user', JSON.stringify(currentUser));
@@ -1011,7 +1009,7 @@
       resArea.innerHTML = '<div style="text-align:center;">Aranıyor...</div>';
 
       try {
-        const { data } = await supabaseClient.from('orders').select('*').eq('order_no', orderNo).eq('phone', phone).single();
+        const { data } = await supabaseClient.from('orders').select('*').eq('order_no', orderNo).eq('phone', phone).maybeSingle();
         if (!data) { resArea.innerHTML = '<div style="background:#fee2e2; color:#991b1b; padding:8px; text-align:center; font-size:11px;">Bulunamadı.</div>'; return; }
         
         let trackUrl = '#';
@@ -1174,7 +1172,7 @@
       const combined = title + '|' + desc;
 
       try {
-        const { error } = await supabaseClient.from('settings').upsert({ key: 'hero_banner', value: combined });
+        const { error } = await supabaseClient.from('settings').upsert({ key: 'hero_banner', value: combined }, { onConflict: 'key' });
         if (error) throw error;
         alert('Banner güncellendi!');
         location.reload(); 
