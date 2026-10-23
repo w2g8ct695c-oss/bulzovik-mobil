@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#14b8a6">
+  <title>BULZOVİK | İstediğin Burada!</title>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --turquoise-light: #e0f7f6;
+      --turquoise: #0d9488;
+      --turquoise-dark: #115e59;
+      --yellow-light: #fffbeb;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --dark: #1f2937;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --border: #ccfbf1;
+      --green: #10b981;
+      --text-color: #1f2937;
+    }
+
+    [data-theme="dark"] {
+      --turquoise-light: #134e4a;
+      --turquoise: #14b8a6;
+      --turquoise-dark: #2dd4bf;
+      --yellow-light: #422006;
+      --yellow: #facc15;
+      --red: #f87171;
+      --dark: #f8fafc;
+      --bg: #0f172a;
+      --white: #1e293b;
+      --border: #115e59;
+      --green: #34d399;
+      --text-color: #f1f5f9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text-color); line-height: 1.5; -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; border: 0; background: none; }
+
+    /* Top Bar */
+    .mini-top-bar {
+      background: var(--turquoise-dark);
+      color: var(--white);
+      font-size: 11px;
+      padding: 6px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
+    .brand-ok-signature span.ok-tag {
+      font-weight: 300; opacity: 0.85; font-size: 10px; margin-left: 4px;
+      border-left: 1px solid rgba(255,255,255,0.4); padding-left: 5px; cursor: pointer; user-select: none;
+    }
+
+    /* Header */
+    header {
+      background: var(--white); padding: 12px 5%; display: flex; align-items: center;
+      justify-content: space-between; gap: 8px; border-bottom: 2px solid var(--turquoise-light);
+      position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.05);
+    }
+    .logo-area { display: flex; flex-direction: column; cursor: pointer; user-select: none; }
+    .logo { font-size: 18px; font-weight: 900; color: var(--turquoise-dark); letter-spacing: 0.5px; }
+    .tagline { font-size: 7px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
+
+    /* 🌟 TRENDYOL TARZI GENİŞLEYEN ARAMA ÇUBUĞU (Mobil & Masaüstü Uyumlu) */
+    .search-box {
+      flex: 1;
+      max-width: 220px;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .search-box input {
+      width: 100%;
+      padding: 8px 10px 8px 32px;
+      border-radius: 12px;
+      border: 2px solid var(--turquoise);
+      background: var(--white);
+      font-size: 11px;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--text-color) !important;
+    }
+    .search-box input::placeholder { color: #64748b; font-weight: 400; }
+    .search-box i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--turquoise-dark); font-size: 12px; pointer-events: none; }
+
+    /* Tıklandığında Genişleme Efekti */
+    .search-box:focus-within {
+      max-width: 100% !important;
+      flex: 2;
+    }
+    .search-box input:focus {
+      box-shadow: 0 4px 20px rgba(13, 148, 136, 0.25);
+      border-color: var(--turquoise-dark);
+      font-size: 12px;
+    }
+
+    /* Nav Actions */
+    .nav-actions { display: flex; gap: 4px; align-items: center; }
+    .nav-btn {
+      background: var(--turquoise-light); color: var(--turquoise-dark); padding: 6px 8px;
+      border-radius: 9px; font-weight: 800; font-size: 10px; display: flex;
+      align-items: center; gap: 3px; white-space: nowrap; border: 1.5px solid var(--turquoise);
+    }
+    .cart-btn {
+      background: var(--yellow); color: var(--dark); padding: 6px 9px;
+      border-radius: 9px; font-weight: 800; font-size: 10px; display: flex;
+      align-items: center; gap: 3px; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
+      white-space: nowrap; border: none;
+    }
+    .cart-badge { background: var(--dark); color: var(--white); font-size: 8px; padding: 2px 4px; border-radius: 20px; font-weight: 900; }
+
+    /* Hero Banner */
+    .hero { max-width: 1280px; margin: 14px auto; padding: 0 4%; }
+    .hero-banner { background: linear-gradient(135deg, var(--turquoise), var(--turquoise-dark)); border-radius: 16px; color: white; padding: 20px 24px; box-shadow: 0 10px 25px rgba(13, 148, 136, 0.15); }
+    .hero-banner h1 { font-size: clamp(16px, 3vw, 26px); font-weight: 900; margin-bottom: 4px; color: #ffffff; }
+    .hero-banner p { font-size: 11px; opacity: 0.9; color: #ffffff; }
+    .hero-badge { display: inline-block; background: var(--yellow-light); color: var(--dark); padding: 3px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; margin-bottom: 6px; }
+
+    /* Categories */
+    .categories-container { max-width: 1280px; margin: 0 auto 14px; padding: 0 4%; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+    .categories-container::-webkit-scrollbar { display: none; }
+    .cat-pill { background: var(--white); border: 2px solid var(--turquoise-light); color: var(--text-color); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; transition: all 0.2s; }
+    .cat-pill.active { background: var(--turquoise); color: white; border-color: var(--turquoise); box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2); }
+
+    /* MAIN GRID (Mobil 3, Masaüstü 4) */
+    main { max-width: 1280px; margin: 0 auto; padding: 0 4% 40px; }
+    .section-title { font-size: 16px; font-weight: 900; margin-bottom: 12px; color: var(--turquoise-dark); display: flex; align-items: center; gap: 8px; }
+
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    @media (min-width: 900px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; } }
+
+    /* Product Card */
+    .card { background: var(--white); border-radius: 12px; border: 1.5px solid var(--turquoise-light); overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s; }
+    .card:hover { border-color: var(--turquoise); transform: translateY(-2px); }
+
+    .added-badge { position: absolute; top: 6px; right: 6px; background: var(--red); color: white; font-size: 8px; font-weight: 800; padding: 2px 5px; border-radius: 12px; display: flex; align-items: center; gap: 2px; z-index: 10; }
+    .fav-btn { position: absolute; top: 6px; left: 6px; background: rgba(255,255,255,0.9); color: #cbd5e1; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; z-index: 10; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .fav-btn.active { color: var(--red); }
+
+    .photo-wrapper { width: 100%; height: 110px; background: var(--turquoise-light); position: relative; overflow: hidden; cursor: pointer; }
+    @media (min-width: 900px) { .photo-wrapper { height: 180px; } }
+    .photo-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+    .card-body { padding: 8px; display: flex; flex-direction: column; gap: 2px; flex: 1; justify-content: space-between; }
+    .product-name { font-size: 10px; font-weight: 700; color: var(--text-color); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; cursor: pointer; }
+    @media (min-width: 900px) { .product-name { font-size: 13px; } }
+    .product-desc { font-size: 9px; color: #64748b; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+    .price { font-size: 12px; font-weight: 900; color: var(--turquoise); margin-top: 4px; }
+    @media (min-width: 900px) { .price { font-size: 16px; } }
+
+    .add-btn { width: 100%; background: var(--yellow-light); color: var(--text-color); border: 1.5px solid var(--yellow); padding: 6px; border-radius: 8px; font-weight: 800; font-size: 10px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    @media (min-width: 900px) { .add-btn { font-size: 12px; padding: 8px; } }
+
+    /* Cart & Containers */
+    .cart-container { background: var(--white); border-radius: 16px; border: 2px solid var(--turquoise-light); padding: 16px; box-shadow: 0 10px 30px rgba(13, 148, 136, 0.05); max-width: 850px; margin: 0 auto; }
+    .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--turquoise-light); gap: 8px; }
+    .cart-item-left { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .cart-item-thumb { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: var(--turquoise-light); border: 1px solid var(--turquoise-light); flex-shrink: 0; }
+    .cart-item-title { font-weight: 800; font-size: 11px; color: var(--text-color); }
+    .cart-item-price { font-size: 10px; color: var(--turquoise); font-weight: 700; margin-top: 2px; }
+
+    .cart-item-right { display: flex; align-items: center; gap: 6px; }
+    .qty-box { display: flex; align-items: center; gap: 4px; background: var(--turquoise-light); padding: 2px 4px; border-radius: 6px; }
+    .qty-btn { background: var(--white); color: var(--turquoise-dark); width: 20px; height: 20px; border-radius: 4px; font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+    .delete-btn { background: #fee2e2; color: var(--red); width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+
+    .cart-summary { margin-top: 14px; padding-top: 12px; border-top: 2px solid var(--turquoise-light); display: flex; flex-direction: column; gap: 6px; }
+    .summary-line { display: flex; justify-content: space-between; font-size: 12px; color: #64748b; }
+    .summary-line.total { font-size: 16px; font-weight: 900; color: var(--turquoise-dark); border-top: 1px dashed var(--turquoise-light); padding-top: 6px; margin-top: 4px; }
+
+    .checkout-nav { display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .action-btn { padding: 9px 16px; border-radius: 10px; font-weight: 800; font-size: 11px; text-align: center; }
+    .btn-primary { background: var(--turquoise); color: white; flex: 1; }
+    .btn-secondary { background: var(--turquoise-light); color: var(--turquoise-dark); }
+    .btn-whatsapp { background: #25d366; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; flex: 1; }
+
+    .payment-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 14px; }
+    .payment-tab {
+      border: 2px solid var(--turquoise-light); padding: 8px 4px; border-radius: 8px;
+      text-align: center; font-size: 10px; font-weight: 700; color: #64748b; cursor: pointer; transition: all 0.2s;
+    }
+    .payment-tab.active { border-color: var(--turquoise); background: var(--turquoise-light); color: var(--turquoise-dark); }
+    .payment-tab i { font-size: 14px; display: block; margin-bottom: 3px; color: var(--turquoise); }
+
+    .form-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 650px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+
+    .form-group { display: flex; flex-direction: column; gap: 3px; }
+    .form-group label { font-size: 10px; font-weight: 800; color: var(--turquoise-dark); }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--turquoise-light);
+      outline: none; font-size: 12px; background: var(--bg); color: var(--text-color);
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--turquoise); background: var(--white); }
+
+    .virtual-card {
+      background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 12px;
+      padding: 14px; color: white; margin-bottom: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .v-chip { width: 28px; height: 20px; background: #e2e8f0; border-radius: 4px; margin-bottom: 12px; }
+    .v-number { font-family: monospace; font-size: 14px; letter-spacing: 2px; margin-bottom: 10px; }
+    .v-bottom { display: flex; justify-content: space-between; font-size: 9px; text-transform: uppercase; opacity: 0.8; }
+
+    .iban-box {
+      background: var(--turquoise-light); border: 1px dashed var(--turquoise);
+      border-radius: 8px; padding: 10px; font-size: 11px; display: flex; flex-direction: column; gap: 5px;
+    }
+    .copy-btn { background: var(--turquoise); color: white; font-size: 9px; padding: 3px 6px; border-radius: 5px; margin-left: auto; width: fit-content; }
+
+    /* Admin & Tabs */
+    .admin-tabs { display: flex; gap: 5px; margin-bottom: 14px; border-bottom: 2px solid var(--turquoise-light); padding-bottom: 6px; flex-wrap: wrap; }
+    .admin-tab-btn { padding: 6px 10px; border-radius: 7px; font-size: 10px; font-weight: 800; color: var(--turquoise-dark); background: var(--turquoise-light); }
+    .admin-tab-btn.active { background: var(--turquoise); color: white; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+    .stat-card { background: var(--bg); border: 1.5px solid var(--turquoise-light); border-radius: 8px; padding: 10px; text-align: center; }
+    .stat-card .val { font-size: 16px; font-weight: 900; color: var(--turquoise-dark); margin-top: 2px; }
+    .stat-card .lbl { font-size: 9px; color: #64748b; font-weight: 700; text-transform: uppercase; }
+
+    .admin-order-card, .admin-prod-card {
+      background: var(--bg); border: 1px solid var(--turquoise-light); border-radius: 10px;
+      padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 11px;
+    }
+    .admin-order-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 12px; color: var(--turquoise-dark); }
+
+    .coupon-box { display: flex; gap: 6px; margin-top: 8px; }
+    .coupon-box input { flex: 1; padding: 7px; border: 1.5px solid var(--turquoise-light); border-radius: 7px; font-size: 11px; text-transform: uppercase; background: var(--bg); color: var(--text-color); }
+
+    .star-rating { color: #eab308; font-size: 12px; }
+    .empty-state { text-align: center; padding: 30px; color: #64748b; font-weight: 600; grid-column: 1 / -1; font-size: 12px; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body data-theme="light">
+
+  <!-- Top Bar -->
+  <div class="mini-top-bar">
+    <span>✨ 150 TL Üzeri Ücretsiz Kargo</span>
+    <div class="brand-ok-signature">BULZOVİK <span class="ok-tag" id="okClickTag">O.K</span></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-area" id="logoClickArea">
+      <div class="logo">BULZOVİK</div>
+      <div class="tagline">İstediğin Burada!</div>
+    </div>
+
+    <!-- Trendyol Tarzı Genişleyen Arama Çubuğu -->
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="Ürün veya kategori ara...">
+    </div>
+
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="toggleDarkMode()" title="Tema"><i class="fa-solid fa-moon" id="themeIcon"></i></button>
+      <button class="nav-btn" onclick="showFavoritesView()" title="Favoriler"><i class="fa-solid fa-heart" style="color:var(--red);"></i></button>
+      <button class="nav-btn" onclick="showTrackingModal()" title="Takip"><i class="fa-solid fa-truck-fast"></i></button>
+      <button class="nav-btn" id="userAccountBtn" onclick="openAuthModal()" title="Hesap"><i class="fa-solid fa-user"></i></button>
+      <button class="cart-btn" id="cartButton">
+        <i class="fa-solid fa-basket-shopping"></i>
+        <span class="cart-badge" id="count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="heroSection">
+    <div class="hero-banner" id="heroBannerBox">
+      <span class="hero-badge">✨ Seçilmiş Ürünler</span>
+      <h1 id="heroBannerTitle">Aradığın Her Şey Burada!</h1>
+      <p id="heroBannerDesc">Açık turkuaz ve sarının uyumuyla keyifli alışveriş deneyimi.</p>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <div class="categories-container" id="categories">
+    <button class="cat-pill active" data-cat="Tümü">✨ Tümü</button>
+    <button class="cat-pill" data-cat="Elektronik">🎧 Elektronik</button>
+    <button class="cat-pill" data-cat="Giyim">👕 Giyim</button>
+    <button class="cat-pill" data-cat="Ev">🏠 Ev & Yaşam</button>
+    <button class="cat-pill" data-cat="Spor">⚽ Spor</button>
+    <button class="cat-pill" data-cat="Kozmetik">💄 Kozmetik</button>
+    <button class="cat-pill" data-cat="Diğer">🛍️ Diğer</button>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Mağaza Görünümü -->
+    <section id="storeView">
+      <h2 class="section-title"><i class="fa-solid fa-fire" style="color: var(--yellow);"></i> Öne Çıkan Ürünler</h2>
+      <div id="productsGrid" class="grid">
+        <div class="empty-state">Ürünler Supabase'den yükleniyor...</div>
+      </div>
+    </section>
+
+    <!-- Favoriler -->
+    <section id="favoritesView" hidden>
+      <h2 class="section-title"><i class="fa-solid fa-heart" style="color:var(--red);"></i> Favori Ürünlerim</h2>
+      <div id="favoritesGrid" class="grid"></div>
+      <div style="text-align:center; margin-top:16px;">
+        <button class="action-btn btn-secondary" onclick="goHome()">← Mağazaya Dön</button>
+      </div>
+    </section>
+
+    <!-- Ürün Detay & Yorumlar -->
+    <section id="productDetailView" hidden>
+      <div class="cart-container" style="max-width:800px;">
+        <button class="action-btn btn-secondary" onclick="goHome()" style="margin-bottom:12px;">← Mağazaya Dön</button>
+        <div id="productDetailContent"></div>
+      </div>
+    </section>
+
+    <!-- Giriş / Üye Ol -->
+    <section id="authView" hidden>
+      <div class="cart-container" style="max-width:420px;">
+        <h2 id="authTitle" style="color:var(--turquoise-dark); font-weight:900; margin-bottom:12px; font-size:16px;">Giriş Yap</h2>
+        <form id="authForm" onsubmit="handleAuthSubmit(event)">
+          <div class="form-group" id="nameGroup" hidden style="margin-bottom:10px;">
+            <label>Ad Soyad *</label>
+            <input type="text" id="authName" placeholder="Ahmet Yılmaz">
+          </div>
+          <div class="form-group" style="margin-bottom:10px;">
+            <label>E-posta Adresi *</label>
+            <input type="email" id="authEmail" required placeholder="ornek@mail.com">
+          </div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label>Şifre *</label>
+            <input type="password" id="authPass" required placeholder="******">
+          </div>
+          <button type="submit" class="action-btn btn-primary" id="authSubmitBtn" style="width:100%; margin-bottom:8px;">Giriş Yap</button>
+        </form>
+        <div style="text-align:center; font-size:11px; margin-top:8px;">
+          <span id="authToggleText">Hesabın yok mu?</span> <a href="#" onclick="toggleAuthMode(); return false;" style="color:var(--turquoise); font-weight:800;" id="authToggleBtn">Üye Ol</a>
+        </div>
+        <div style="text-align:center; margin-top:12px;">
+          <button class="action-btn btn-secondary" onclick="goHome()">İptal</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kullanıcı Hesabım -->
+    <section id="profileView" hidden>
+      <div class="cart-container" style="max-width:700px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--turquoise-light); padding-bottom:8px;">
+          <h2 style="color:var(--turquoise-dark); font-weight:900; font-size:16px;"><i class="fa-solid fa-user-circle"></i> Hesabım</h2>
+          <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:5px 10px; font-size:10px;" onclick="logoutUser()">Çıkış Yap</button>
+        </div>
+        <div id="profileInfo" style="margin-bottom:16px; font-size:12px;"></div>
+        <h3 style="font-size:13px; font-weight:800; color:var(--turquoise-dark); margin-bottom:8px;">Geçmiş Siparişlerim</h3>
+        <div id="userOrdersList"><div class="empty-state">Yükleniyor...</div></div>
+        <div style="text-align:center; margin-top:16px;">
+          <button class="action-btn btn-secondary" onclick="goHome()">Mağazaya Dön</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sipariş Takip -->
+    <section id="trackingView" hidden>
+      <h2 class="section-title"><i class="fa-solid fa-magnifying-glass-location"></i> Sipariş Takibi</h2>
+      <div class="cart-container" style="max-width:500px;">
+        <p style="font-size:11px; color:#64748b; margin-bottom:12px;">Sipariş kodunu ve telefon numaranı girerek durumunu sorgula.</p>
+        <div class="form-grid" style="margin-bottom:12px;">
+          <div class="form-group">
+            <label>Sipariş Kodu *</label>
+            <input type="text" id="trackOrderNo" placeholder="Örn: BZ-482910">
+          </div>
+          <div class="form-group">
+            <label>Telefon Numarası *</label>
+            <input type="tel" id="trackPhone" placeholder="05XX XXX XX XX">
+          </div>
+        </div>
+        <button class="action-btn btn-primary" style="width:100%; margin-bottom:12px;" onclick="searchOrderResult()">Sorgula</button>
+        <div id="trackingResultArea" style="margin-top:12px;"></div>
+        <div style="text-align:center; margin-top:16px;">
+          <button class="action-btn btn-secondary" onclick="goHome()">← Mağazaya Dön</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sepet -->
+    <section id="cartView" hidden>
+      <h2 class="section-title"><i class="fa-solid fa-shopping-cart"></i> Sepetim</h2>
+      <div class="cart-container">
+        <div id="cartItemsList"></div>
+        
+        <div class="coupon-box">
+          <input type="text" id="couponInput" placeholder="Kupon Kodu">
+          <button class="action-btn btn-secondary" onclick="applyCoupon()">Uygula</button>
+        </div>
+        <div id="couponNotice" style="font-size:10px; color:var(--green); font-weight:700; margin-top:4px;"></div>
+
+        <div class="cart-summary" id="cartSummaryBox">
+          <div class="summary-line"><span>Ara Toplam</span><span id="subTotalText">0,00 TL</span></div>
+          <div class="summary-line" id="discountRow" hidden><span>İndirim</span><span id="discountText" style="color:var(--red); font-weight:700;">-0,00 TL</span></div>
+          <div class="summary-line"><span>Kargo <small id="freeShippingNotice" style="color:var(--green); font-weight:700;"></small></span><span id="shippingText">29,90 TL</span></div>
+          <div class="summary-line total"><span>Toplam Tutar</span><span id="cartTotalText">0,00 TL</span></div>
+        </div>
+
+        <div class="checkout-nav" style="margin-top:12px;">
+          <button class="action-btn btn-secondary" id="backButton">← Mağaza</button>
+          <button class="action-btn btn-whatsapp" onclick="checkoutWithWhatsApp()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+          <button class="action-btn btn-primary" id="startCheckoutBtn" onclick="showCheckoutForm()">Ödemeye Geç →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Adres & Ödeme -->
+    <section id="checkoutView" hidden>
+      <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> Güvenli Ödeme</h2>
+      <div class="cart-container">
+        <form id="orderForm" onsubmit="handleOrderSubmit(event)">
+          <h3 style="font-size:13px; font-weight:800; color:var(--turquoise-dark); margin-bottom:8px;">1. Teslimat Adresi</h3>
+          <div class="form-grid" style="margin-bottom:16px;">
+            <div class="form-group"><label>Ad Soyad *</label><input type="text" id="custName" required placeholder="Ahmet Yılmaz"></div>
+            <div class="form-group"><label>Telefon *</label><input type="tel" id="custPhone" required placeholder="05XX XXX XX XX"></div>
+            <div class="form-group"><label>İl / İlçe *</label><input type="text" id="custCity" required placeholder="İstanbul / Kadıköy"></div>
+            <div class="form-group"><label>Açık Adres *</label><input type="text" id="custAddress" required placeholder="Mahalle, Cadde, Sokak, Bina No"></div>
+          </div>
+
+          <h3 style="font-size:13px; font-weight:800; color:var(--turquoise-dark); margin-bottom:8px;">2. Ödeme Yöntemi</h3>
+          <div class="payment-methods">
+            <div class="payment-tab active" onclick="setPaymentMethod('card', this)"><i class="fa-solid fa-credit-card"></i> Kredi Kartı</div>
+            <div class="payment-tab" onclick="setPaymentMethod('eft', this)"><i class="fa-solid fa-building-columns"></i> Havale / EFT</div>
+            <div class="payment-tab" onclick="setPaymentMethod('door', this)"><i class="fa-solid fa-hand-holding-dollar"></i> Kapıda Ödeme</div>
+          </div>
+
+          <div id="cardPaymentArea">
+            <div class="virtual-card">
+              <div class="v-chip"></div>
+              <div class="v-number" id="vCardNum">**** **** **** ****</div>
+              <div class="v-bottom"><span id="vCardName">AD SOYAD</span><span id="vCardExp">MM/YY</span></div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group" style="grid-column: 1 / -1;"><label>Kart Numarası *</label><input type="text" id="cardNum" maxlength="19" placeholder="4543 **** **** ****" oninput="updateVirtualCard()"></div>
+              <div class="form-group"><label>Kart Üzerindeki İsim *</label><input type="text" id="cardName" placeholder="AHMET YILMAZ" oninput="updateVirtualCard()"></div>
+              <div class="form-group" style="display:flex; gap:6px;">
+                <div style="flex:1;"><label>Son Kul. *</label><input type="text" id="cardExp" maxlength="5" placeholder="MM/YY" oninput="updateVirtualCard()"></div>
+                <div style="flex:1;"><label>CVV *</label><input type="password" id="cardCvc" maxlength="3" placeholder="***"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="eftPaymentArea" hidden>
+            <div class="iban-box">
+              <div style="font-weight:800; color:var(--turquoise-dark);">Ziraat Bankası - BULZOVİK</div>
+              <div style="font-family:monospace; font-size:12px; font-weight:700;">TR12 0001 0009 8765 4321 0000 01</div>
+              <button type="button" class="copy-btn" onclick="alert('IBAN kopyalandı!')"><i class="fa-regular fa-copy"></i> Kopyala</button>
+            </div>
+          </div>
+
+          <div id="doorPaymentArea" hidden>
+            <div class="iban-box" style="background:#fef3c7; border-color:#f59e0b;">
+              <div style="font-weight:800; color:#b45309;"><i class="fa-solid fa-truck-ramp-box"></i> Kapıda Ödeme</div>
+              <p style="font-size:10px; color:#78350f;">Teslimat sırasında nakit veya kartla ödeyebilirsiniz.</p>
+            </div>
+          </div>
+
+          <div class="cart-summary" style="margin-top:16px;">
+            <div class="summary-line total"><span>Ödenecek Tutar</span><span id="finalCheckoutTotalText">0,00 TL</span></div>
+          </div>
+
+          <div class="checkout-nav">
+            <button type="button" class="action-btn btn-secondary" onclick="showCartView()">← Sepete Dön</button>
+            <button type="submit" class="action-btn btn-primary" id="submitOrderBtn"><i class="fa-solid fa-lock"></i> Siparişi Onayla</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Sipariş Başarılı -->
+    <section id="orderSuccessView" hidden>
+      <div class="cart-container" style="text-align:center;">
+        <i class="fa-solid fa-circle-check" style="font-size:50px; color:var(--green); margin-bottom:8px;"></i>
+        <h2 style="color:var(--turquoise-dark); font-weight:900; font-size:16px;">Siparişiniz Alındı! 🎉</h2>
+        <p style="font-size:11px; color:#64748b; margin-top:4px;">Yönetim paneline başarıyla aktarıldı.</p>
+        <div id="orderReceipt" style="background:var(--bg); border:1px solid var(--turquoise-light); border-radius:10px; padding:12px; margin:12px 0; text-align:left; font-size:11px;"></div>
+        <button class="action-btn btn-primary" onclick="goHome()">Alışverişe Devam Et</button>
+      </div>
+    </section>
+
+    <!-- 👑 YÖNETİM PANELİ -->
+    <section id="adminView" hidden>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h2 class="section-title" style="margin:0; font-size:15px;"><i class="fa-solid fa-user-shield"></i> Yönetici Paneli</h2>
+        <button class="action-btn btn-secondary" onclick="goHome()" style="padding:5px 10px; font-size:10px;">Mağaza</button>
+      </div>
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="lbl">Ciro</div><div class="val" id="statCiro">0 TL</div></div>
+        <div class="stat-card"><div class="lbl">Sipariş</div><div class="val" id="statOrders">0</div></div>
+        <div class="stat-card"><div class="lbl">Bekleyen</div><div class="val" id="statPending">0</div></div>
+      </div>
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" id="tabOrdersBtn" onclick="switchAdminTab('orders')">Siparişler</button>
+        <button class="admin-tab-btn" id="tabProductsBtn" onclick="switchAdminTab('products')">Ürünler</button>
+        <button class="admin-tab-btn" id="tabCouponsBtn" onclick="switchAdminTab('coupons')">Kuponlar</button>
+        <button class="admin-tab-btn" id="tabBannerBtn" onclick="switchAdminTab('banner')">Banner</button>
+      </div>
+      
+      <!-- Siparişler -->
+      <div id="adminOrdersTab" class="cart-container">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--turquoise-light); padding-bottom:8px;">
+          <span style="font-weight:800; font-size:12px; color:var(--turquoise-dark);">Gelen Siparişler</span>
+          <button class="action-btn btn-primary" style="padding:5px 10px; font-size:10px;" onclick="loadAdminOrders()">Yenile</button>
+        </div>
+        <div id="adminOrdersList"><div class="empty-state">Yükleniyor...</div></div>
+      </div>
+
+      <!-- Ürünler -->
+      <div id="adminProductsTab" class="cart-container" hidden>
+        <h3 style="font-size:13px; font-weight:800; color:var(--turquoise-dark); margin-bottom:10px;">Yeni Ürün Ekle</h3>
+        <form id="addProductForm" onsubmit="handleProductAdd(event)" class="form-grid" style="margin-bottom:16px;">
+          <div class="form-group"><label>Ürün Adı *</label><input type="text" id="pName" required placeholder="Örn: Kulaklık"></div>
+          <div class="form-group"><label>Fiyat (TL) *</label><input type="number" step="0.01" id="pPrice" required placeholder="299.90"></div>
+          <div class="form-group"><label>Kategori *</label>
+            <select id="pCategory" required>
+              <option value="Elektronik">Elektronik</option><option value="Giyim">Giyim</option>
+              <option value="Ev">Ev & Yaşam</option><option value="Spor">Spor</option>
+              <option value="Kozmetik">Kozmetik</option><option value="Diğer">Diğer</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Stok *</label><input type="number" id="pStock" value="100" required></div>
+          <div class="form-group" style="grid-column: 1 / -1;"><label>Resim URL *</label><input type="url" id="pImg" required placeholder="https://..."></div>
+          <div class="form-group" style="grid-column: 1 / -1;"><label>Açıklama</label><input type="text" id="pDesc" placeholder="Ürün açıklaması..."></div>
+          <div style="grid-column: 1 / -1;"><button type="submit" class="action-btn btn-primary" style="width:100%;">Ürünü Yayınla</button></div>
+        </form>
+        <h3 style="font-size:13px; font-weight:800; color:var(--turquoise-dark); margin-bottom:10px; border-top:1px solid var(--turquoise-light); padding-top:10px;">Mevcut Ürünler</h3>
+        <div id="adminProductsList"></div>
+      </div>
+
+      <!-- Kuponlar -->
+      <div id="adminCouponsTab" class="cart-container" hidden>
+        <h3 style="font-size:13px; font-weight:800; color:var(--turquoise-dark); margin-bottom:10px;">Kupon Oluştur</h3>
+        <form id="addCouponForm" onsubmit="handleCouponAdd(event)" class="form-grid" style="margin-bottom:16px;">
+          <div class="form-group"><label>Kupon Kodu *</label><input type="text" id="cCode" required placeholder="Örn: YAZ20" style="text-transform:uppercase;"></div>
+          <div class="form-group"><label>Tür *</label>
+            <select id="cType" required><option value="percent">Yüzde (%)</option><option value="fixed">Tutar (TL)</option></select>
+          </div>
+          <div class="form-group"><label>Değer *</label><input type="number" step="0.01" id="cValue" required placeholder="10"></div>
+          <div class="form-group"><label>Min. Tutar</label><input type="number" step="0.01" id="cMin" value="0"></div>
+          <div style="grid-column: 1 / -1;"><button type="submit" class="action-btn btn-primary" style="width:100%;">Kupon Ekle</button></div>
+        </form>
+        <div id="adminCouponsList"></div>
+      </div>
+
+      <!-- Banner -->
+      <div id="adminBannerTab" class="cart-container" hidden>
+        <h3 style="font-size:13px; font-weight:800; color:var(--turquoise-dark); margin-bottom:10px;">Banner Düzenle</h3>
+        <form onsubmit="handleBannerUpdate(event)" class="form-grid">
+          <div class="form-group" style="grid-column: 1 / -1;"><label>Başlık *</label><input type="text" id="bannerTitleInput" required placeholder="Başlık..."></div>
+          <div class="form-group" style="grid-column: 1 / -1;"><label>Açıklama *</label><input type="text" id="bannerDescInput" required placeholder="Açıklama..."></div>
+          <div style="grid-column: 1 / -1;"><button type="submit" class="action-btn btn-primary" style="width:100%;">Güncelle</button></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer style="text-align: center; padding: 16px; background: var(--white); border-top: 2px solid var(--turquoise-light); margin-top: 24px; font-size: 10px; color: var(--turquoise-dark); font-weight: 700;">
+    © 2026 BULZOVİK · Tüm Hakları Saklıdır.
+  </footer>
+
+  <script>
+    const SUPABASE_URL = 'https://nkczfvapwgmpmumfwses.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_YgTYxkXdPDTqnPnbPjMwJQ_5JULfgZL';
+
+    let supabaseClient = null;
+    let products = [];
+    let cart = [];
+    let favorites = JSON.parse(localStorage.getItem('bulzovik_favs')) || [];
+    let selectedCategory = 'Tümü';
+    let currentPaymentMethod = 'card';
+    let appliedDiscount = 0;
+    let currentUser = JSON.parse(localStorage.getItem('bulzovik_user')) || null;
+    let isRegisterMode = false;
+
+    const $ = id => document.getElementById(id);
+
+    function escapeHtml(value) {
+      return String(value || '').replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[c]);
+    }
+
+    function toggleDarkMode() {
+      const body = document.body;
+      const isDark = body.getAttribute('data-theme') === 'dark';
+      body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      $('themeIcon').className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+      localStorage.setItem('bulzovik_theme', isDark ? 'light' : 'dark');
+    }
+
+    if (localStorage.getItem('bulzovik_theme') === 'dark') {
+      document.body.setAttribute('data-theme', 'dark');
+      $('themeIcon').className = 'fa-solid fa-sun';
+    }
+
+    async function loadProducts() {
+      try {
+        if (typeof supabase !== 'undefined') {
+          supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } else {
+          setTimeout(loadProducts, 300);
+          return;
+        }
+
+        const { data, error } = await supabaseClient.from('products').select('*');
+        if (error) throw error;
+        products = (data || []).filter(p => p.image_url && p.image_url.trim() !== '');
+        renderProducts();
+        updateUserNavUI();
+        loadBannerSettings();
+      } catch (err) { console.error(err); }
+    }
+
+    async function loadBannerSettings() {
+      try {
+        const { data } = await supabaseClient.from('settings').select('*').eq('key', 'hero_banner').single();
+        if (data && data.value) {
+          const parts = data.value.split('|');
+          if (parts[0]) $('heroBannerTitle').textContent = parts[0];
+          if (parts[1]) $('heroBannerDesc').textContent = parts[1];
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    function updateUserNavUI() {
+      const btn = $('userAccountBtn');
+      if (currentUser) {
+        btn.innerHTML = `<i class="fa-solid fa-user-check"></i>`;
+        btn.onclick = showProfileView;
+      } else {
+        btn.innerHTML = `<i class="fa-solid fa-user"></i>`;
+        btn.onclick = openAuthModal;
+      }
+    }
+
+    function renderProducts() {
+      const term = $('searchInput').value.trim().toLocaleLowerCase('tr-TR');
+      const filtered = products.filter(p => {
+        const name = (p.name || '').toLocaleLowerCase('tr-TR');
+        const cat = (p.category || '').toLocaleLowerCase('tr-TR');
+        const desc = (p.description || '').toLocaleLowerCase('tr-TR');
+        const matchesSearch = name.includes(term) || cat.includes(term) || desc.includes(term);
+        const sel = selectedCategory.toLocaleLowerCase('tr-TR');
+        const matchesCat = selectedCategory === 'Tümü' || cat.includes(sel) || (selectedCategory === 'Ev' && (cat.includes('yaşam') || cat.includes('ev')));
+        return matchesSearch && matchesCat;
+      });
+      renderProductGrid(filtered, 'productsGrid');
+    }
+
+    function renderProductGrid(listData, containerId) {
+      const grid = $(containerId);
+      if (!listData.length) {
+        grid.innerHTML = '<div class="empty-state">Ürün bulunamadı.</div>';
+        return;
+      }
+
+      grid.innerHTML = listData.map(p => {
+        const img = `<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}" loading="lazy">`;
+        const priceFormatted = Number(p.price || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 });
+        const cartItem = cart.find(item => String(item.id) === String(p.id));
+        const badgeStyle = cartItem ? 'display: flex;' : 'display: none;';
+        const isFav = favorites.includes(String(p.id));
+        const favClass = isFav ? 'fav-btn active' : 'fav-btn';
+
+        return `
+          <article class="card" id="card-${p.id}">
+            <div>
+              <button class="${favClass}" onclick="toggleFavorite('${p.id}')"><i class="fa-solid fa-heart"></i></button>
+              <div class="added-badge" id="badge-${p.id}" style="${badgeStyle}">
+                <i class="fa-solid fa-arrow-down"></i> Eklendi!
+              </div>
+              <div class="photo-wrapper" onclick="openProductDetail('${p.id}')">${img}</div>
+              <div class="card-body">
+                <div>
+                  <div class="product-name" onclick="openProductDetail('${p.id}')">${escapeHtml(p.name)}</div>
+                  <div class="product-desc">${escapeHtml(p.description || 'BULZOVİK')}</div>
+                </div>
+              </div>
+            </div>
+            <div style="padding: 6px; border-top: 1px solid var(--turquoise-light);">
+              <div class="price" style="margin-bottom: 4px;">${priceFormatted} TL</div>
+              <button class="add-btn" onclick="addToCart('${p.id}')">
+                <i class="fa-solid fa-basket-shopping"></i> Ekle
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function toggleFavorite(id) {
+      id = String(id);
+      if (favorites.includes(id)) favorites = favorites.filter(fav => fav !== id);
+      else favorites.push(id);
+      localStorage.setItem('bulzovik_favs', JSON.stringify(favorites));
+      renderProducts();
+      if (!$('favoritesView').hidden) showFavoritesView();
+    }
+
+    function showFavoritesView() {
+      hideAllViews();
+      $('favoritesView').hidden = false;
+      const favProducts = products.filter(p => favorites.includes(String(p.id)));
+      renderProductGrid(favProducts, 'favoritesGrid');
+    }
+
+    async function openProductDetail(id) {
+      const p = products.find(item => String(item.id) === String(id));
+      if (!p) return;
+      hideAllViews();
+      $('productDetailView').hidden = false;
+
+      let reviewsHtml = '<div style="color:#64748b; font-size:11px;">Yorumlar yükleniyor...</div>';
+      try {
+        const { data: revs } = await supabaseClient.from('reviews').select('*').eq('product_id', id).order('created_at', { ascending: false });
+        if (revs && revs.length > 0) {
+          reviewsHtml = revs.map(r => `
+            <div style="background:var(--bg); border:1px solid var(--turquoise-light); padding:8px; border-radius:6px; margin-bottom:6px; font-size:11px;">
+              <div style="display:flex; justify-content:space-between; font-weight:800; color:var(--turquoise-dark);">
+                <span>${escapeHtml(r.user_name)}</span>
+                <span class="star-rating">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+              </div>
+              <p style="margin-top:2px; color:var(--text-color);">${escapeHtml(r.comment)}</p>
+            </div>
+          `).join('');
+        } else {
+          reviewsHtml = '<div style="color:#64748b; font-size:11px;">Henüz yorum yapılmamış. İlk yorumu sen yap!</div>';
+        }
+      } catch (err) { console.error(err); }
+
+      $('productDetailContent').innerHTML = `
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <img src="${escapeHtml(p.image_url)}" style="width:100%; max-width:240px; height:180px; object-fit:cover; border-radius:10px; border:1px solid var(--turquoise-light);">
+          <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
+            <h2 style="font-size:16px; font-weight:900; color:var(--turquoise-dark);">${escapeHtml(p.name)}</h2>
+            <div style="font-size:11px; color:#64748b;">Kategori: ${escapeHtml(p.category)} | Stok: ${p.stock}</div>
+            <div style="font-size:18px; font-weight:900; color:var(--turquoise);">${Number(p.price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL</div>
+            <p style="font-size:11px; color:var(--text-color);">${escapeHtml(p.description)}</p>
+            <button class="action-btn btn-primary" style="margin-top:6px;" onclick="addToCart('${p.id}'); goHome();">Sepete Ekle</button>
+          </div>
+        </div>
+        <div style="margin-top:16px; border-top:2px solid var(--turquoise-light); padding-top:12px;">
+          <h3 style="font-size:13px; font-weight:800; color:var(--turquoise-dark); margin-bottom:8px;">Değerlendirmeler</h3>
+          <div id="reviewsList" style="margin-bottom:14px;">${reviewsHtml}</div>
+          <div style="background:var(--bg); border:1.5px solid var(--turquoise-light); padding:12px; border-radius:10px;">
+            <h4 style="font-size:12px; font-weight:800; color:var(--turquoise-dark); margin-bottom:8px;">Yorum Yap</h4>
+            <form onsubmit="handleReviewSubmit(event, '${p.id}')">
+              <div class="form-group" style="margin-bottom:8px;"><label>Puan</label>
+                <select id="reviewRating" required><option value="5">5 Yıldız</option><option value="4">4 Yıldız</option><option value="3">3 Yıldız</option><option value="2">2 Yıldız</option><option value="1">1 Yıldız</option></select>
+              </div>
+              <div class="form-group" style="margin-bottom:8px;"><label>Yorum</label><textarea id="reviewComment" rows="2" required placeholder="Düşüncelerin..."></textarea></div>
+              <button type="submit" class="action-btn btn-primary" style="width:100%;">Gönder</button>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    async function handleReviewSubmit(e, productId) {
+      e.preventDefault();
+      const rating = parseInt($('reviewRating').value);
+      const comment = $('reviewComment').value;
+      const userName = currentUser ? (currentUser.full_name || currentUser.email.split('@')[0]) : prompt('Adın Soyadın:');
+      if (!userName) return;
+      await supabaseClient.from('reviews').insert([{ product_id: productId, user_name: userName, rating, comment }]);
+      alert('Yorum eklendi!');
+      openProductDetail(productId);
+    }
+
+    async function applyCoupon() {
+      const code = $('couponInput').value.trim().toUpperCase();
+      const subtotal = cart.reduce((sum, p) => sum + (Number(p.price) * p.quantity), 0);
+
+      try {
+        const { data, error } = await supabaseClient.from('coupons').select('*').eq('code', code).single();
+        if (error || !data) {
+          alert('Geçersiz kupon kodu.');
+          appliedDiscount = 0;
+          $('couponNotice').textContent = '';
+          renderCart();
+          return;
+        }
+
+        if (subtotal < data.min_cart_amount) {
+          alert(`Min sepet tutarı ${data.min_cart_amount} TL olmalıdır.`);
+          return;
+        }
+
+        if (data.discount_type === 'percent') {
+          appliedDiscount = subtotal * (data.discount_value / 100);
+          $('couponNotice').textContent = `✨ %${data.discount_value} İndirim Uygulandı!`;
+        } else {
+          appliedDiscount = Number(data.discount_value);
+          $('couponNotice').textContent = `✨ ${data.discount_value} TL İndirim Uygulandı!`;
+        }
+        renderCart();
+      } catch (err) { alert('Hata oluştu.'); }
+    }
+
+    function openAuthModal() {
+      hideAllViews();
+      $('authView').hidden = false;
+      isRegisterMode = false;
+      updateAuthUIState();
+    }
+
+    function toggleAuthMode() {
+      isRegisterMode = !isRegisterMode;
+      updateAuthUIState();
+    }
+
+    function updateAuthUIState() {
+      $('authTitle').textContent = isRegisterMode ? 'Yeni Üyelik' : 'Giriş Yap';
+      $('authSubmitBtn').textContent = isRegisterMode ? 'Kayıt Ol' : 'Giriş Yap';
+      $('nameGroup').hidden = !isRegisterMode;
+      $('authToggleText').textContent = isRegisterMode ? 'Zaten hesabın var mı?' : 'Hesabın yok mu?';
+      $('authToggleBtn').textContent = isRegisterMode ? 'Giriş Yap' : 'Üye Ol';
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const email = $('authEmail').value.trim();
+      const password = $('authPass').value;
+      const fullName = $('authName').value.trim();
+
+      try {
+        if (isRegisterMode) {
+          const { data, error } = await supabaseClient.from('profiles').insert([{ email, password, full_name: fullName }]).select().single();
+          if (error) throw error;
+          currentUser = data;
+          localStorage.setItem('bulzovik_user', JSON.stringify(currentUser));
+          alert('Kayıt başarılı!');
+        } else {
+          const { data, error } = await supabaseClient.from('profiles').select('*').eq('email', email).eq('password', password).single();
+          if (error || !data) throw new Error('Bilgiler hatalı.');
+          currentUser = data;
+          localStorage.setItem('bulzovik_user', JSON.stringify(currentUser));
+          alert('Giriş başarılı!');
+        }
+        goHome();
+      } catch (err) { alert('Hata: ' + err.message); }
+    }
+
+    function logoutUser() {
+      currentUser = null;
+      localStorage.removeItem('bulzovik_user');
+      updateUserNavUI();
+      goHome();
+      alert('Çıkış yapıldı.');
+    }
+
+    async function showProfileView() {
+      if (!currentUser) return openAuthModal();
+      hideAllViews();
+      $('profileView').hidden = false;
+      $('profileInfo').innerHTML = `<div><strong>Ad Soyad:</strong> ${escapeHtml(currentUser.full_name || 'Bilinmiyor')}</div><div><strong>E-posta:</strong> ${escapeHtml(currentUser.email)}</div>`;
+      const list = $('userOrdersList');
+      list.innerHTML = '<div class="empty-state">Yükleniyor...</div>';
+      try {
+        const { data } = await supabaseClient.from('orders').select('*').eq('phone', currentUser.phone || '000').order('created_at', { ascending: false });
+        if (!data || !data.length) { list.innerHTML = '<div class="empty-state">Sipariş yok.</div>'; return; }
+        list.innerHTML = data.map(o => `<div class="admin-order-card"><div class="admin-order-header"><span>#${o.order_no}</span><span>${o.status}</span></div><div>${o.total_amount} TL</div></div>`).join('');
+      } catch (err) { list.innerHTML = '<div class="empty-state">Yüklenemedi.</div>'; }
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => String(p.id) === String(id));
+      if (!product) return;
+      const stock = Number(product.stock ?? 100);
+      const item = cart.find(p => String(p.id) === String(id));
+      if (item) {
+        if (item.quantity >= stock) return alert('Stok sınırı.');
+        item.quantity++;
+      } else { cart.push({ ...product, quantity: 1 }); }
+      updateCartUI();
+      const badge = $(`badge-${id}`);
+      if (badge) badge.style.display = 'flex';
+    }
+
+    function updateCartUI() {
+      const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+      $('count').textContent = totalCount;
+    }
+
+    function renderCart() {
+      const list = $('cartItemsList');
+      if (!cart.length) {
+        list.innerHTML = '<div class="empty-state">Sepetiniz boş.</div>';
+        $('subTotalText').textContent = '0,00 TL';
+        $('shippingText').textContent = '0,00 TL';
+        $('cartTotalText').textContent = '0,00 TL';
+        $('startCheckoutBtn').style.display = 'none';
+        $('discountRow').hidden = true;
+        return;
+      }
+      $('startCheckoutBtn').style.display = 'inline-block';
+      list.innerHTML = cart.map(p => `
+        <div class="cart-item">
+          <div class="cart-item-left"><img src="${escapeHtml(p.image_url)}" class="cart-item-thumb"><div><div class="cart-item-title">${escapeHtml(p.name)}</div><div class="cart-item-price">${(p.price * p.quantity).toFixed(2)} TL</div></div></div>
+          <div class="cart-item-right"><div class="qty-box"><button class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button><span style="font-size:11px; font-weight:900;">${p.quantity}</span><button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button></div><button class="delete-btn" onclick="removeItem('${p.id}')"><i class="fa-solid fa-trash"></i></button></div>
+        </div>
+      `).join('');
+
+      const subtotal = cart.reduce((sum, p) => sum + (Number(p.price) * p.quantity), 0);
+      const shipping = subtotal >= 150 ? 0 : 29.90;
+      const grandTotal = Math.max(0, subtotal - appliedDiscount) + shipping;
+
+      $('subTotalText').textContent = subtotal.toFixed(2) + ' TL';
+      if (appliedDiscount > 0) {
+        $('discountRow').hidden = false;
+        $('discountText').textContent = '-' + appliedDiscount.toFixed(2) + ' TL';
+      } else { $('discountRow').hidden = true; }
+      $('shippingText').textContent = shipping === 0 ? 'ÜCRETSİZ' : shipping.toFixed(2) + ' TL';
+      $('freeShippingNotice').textContent = subtotal >= 150 ? '(Kargo Bedava!)' : '';
+      $('cartTotalText').textContent = grandTotal.toFixed(2) + ' TL';
+      $('finalCheckoutTotalText').textContent = grandTotal.toFixed(2) + ' TL';
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(p => String(p.id) === String(id));
+      if (!item) return;
+      item.quantity += delta;
+      if (item.quantity <= 0) { removeItem(id); return; }
+      updateCartUI();
+      renderCart();
+    }
+
+    function removeItem(id) {
+      cart = cart.filter(p => String(p.id) !== String(id));
+      const badge = $(`badge-${id}`);
+      if (badge) badge.style.display = 'none';
+      updateCartUI();
+      renderCart();
+    }
+
+    function checkoutWithWhatsApp() {
+      if (!cart.length) return alert('Sepet boş!');
+      const subtotal = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+      const shipping = subtotal >= 150 ? 0 : 29.90;
+      const grandTotal = Math.max(0, subtotal - appliedDiscount) + shipping;
+      let itemsText = cart.map(i => `• ${i.name} (${i.quantity} Adet)`).join('%0A');
+      window.open(`https://wa.me/905318105861?text=Sipariş:%0A${itemsText}%0AToplam:${grandTotal.toFixed(2)}TL`, '_blank');
+    }
+
+    function setPaymentMethod(method, el) {
+      currentPaymentMethod = method;
+      document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      $('cardPaymentArea').hidden = method !== 'card';
+      $('eftPaymentArea').hidden = method !== 'eft';
+      $('doorPaymentArea').hidden = method !== 'door';
+    }
+
+    function updateVirtualCard() {
+      let num = $('cardNum').value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+      $('cardNum').value = num;
+      $('vCardNum').textContent = num || '**** **** **** ****';
+      $('vCardName').textContent = ($('cardName').value || 'AD SOYAD').toUpperCase();
+      $('vCardExp').textContent = $('cardExp').value || 'MM/YY';
+    }
+
+    function hideAllViews() {
+      $('storeView').hidden = true;
+      $('categories').hidden = true;
+      $('heroSection').hidden = true;
+      $('cartView').hidden = true;
+      $('checkoutView').hidden = true;
+      $('orderSuccessView').hidden = true;
+      $('adminView').hidden = true;
+      $('trackingView').hidden = true;
+      $('productDetailView').hidden = true;
+      $('authView').hidden = true;
+      $('profileView').hidden = true;
+      $('favoritesView').hidden = true;
+    }
+
+    function showCartView() {
+      hideAllViews();
+      $('cartView').hidden = false;
+      renderCart();
+      $('cartButton').innerHTML = '<i class="fa-solid fa-store"></i>';
+    }
+
+    function showCheckoutForm() {
+      if (!cart.length) return alert('Sepet boş!');
+      hideAllViews();
+      $('checkoutView').hidden = false;
+    }
+
+    function showTrackingModal() {
+      hideAllViews();
+      $('trackingView').hidden = false;
+    }
+
+    async function searchOrderResult() {
+      const orderNo = $('trackOrderNo').value.trim();
+      const phone = $('trackPhone').value.trim();
+      const resArea = $('trackingResultArea');
+      if (!orderNo || !phone) return alert('Bilgileri girin.');
+      resArea.innerHTML = '<div style="text-align:center;">Aranıyor...</div>';
+
+      try {
+        const { data } = await supabaseClient.from('orders').select('*').eq('order_no', orderNo).eq('phone', phone).single();
+        if (!data) { resArea.innerHTML = '<div style="background:#fee2e2; color:#991b1b; padding:8px; text-align:center; font-size:11px;">Bulunamadı.</div>'; return; }
+        
+        let trackUrl = '#';
+        let comp = data.shipping_company || 'Kargo';
+        if (data.tracking_code) {
+          if (comp.includes('Aras')) trackUrl = `https://www.araskargo.com.tr/tr/eniro.aspx?kargo_takip_no=${data.tracking_code}`;
+          else trackUrl = `https://www.trendyol.com/kargotakip?trackingCode=${data.tracking_code}`;
+        }
+
+        resArea.innerHTML = `<div style="background:var(--bg); border:1px solid var(--turquoise-light); padding:10px; border-radius:6px; font-size:11px;"><strong>Sipariş:</strong> #${data.order_no} | <strong>Durum:</strong> ${data.status} ${data.tracking_code ? `<br><a href="${trackUrl}" target="_blank" style="color:var(--turquoise);">Kargo Takip: ${data.tracking_code}</a>` : ''}</div>`;
+      } catch (err) { resArea.innerHTML = 'Hata oluştu.'; }
+    }
+
+    async function handleOrderSubmit(e) {
+      e.preventDefault();
+      const submitBtn = $('submitOrderBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'İşleniyor...';
+
+      const orderNo = 'BZ-' + Math.floor(100000 + Math.random() * 900000);
+      const name = $('custName').value, phone = $('custPhone').value, city = $('custCity').value, addr = $('custAddress').value;
+      const subtotal = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+      const shipping = subtotal >= 150 ? 0 : 29.90;
+      const grandTotal = Math.max(0, subtotal - appliedDiscount) + shipping;
+      let method = currentPaymentMethod === 'eft' ? 'Havale / EFT' : (currentPaymentMethod === 'door' ? 'Kapıda Ödeme' : 'Kredi Kartı');
+
+      try {
+        await supabaseClient.from('orders').insert([{ order_no: orderNo, customer_name: name, phone, city, address: addr, payment_method: method, total_amount: grandTotal, items: cart, status: 'Bekliyor' }]);
+        $('orderReceipt').innerHTML = `<strong>Kod:</strong> #${orderNo}<br><strong>Tutar:</strong> ${grandTotal.toFixed(2)} TL`;
+        cart = []; appliedDiscount = 0; updateCartUI();
+        hideAllViews(); $('orderSuccessView').hidden = false;
+      } catch (err) { alert('Hata.'); }
+      finally { submitBtn.disabled = false; submitBtn.textContent = 'Siparişi Onayla'; }
+    }
+
+    // Yönetim Paneli
+    let logoClicks = 0, okClicks = 0;
+    $('logoClickArea').addEventListener('click', () => { logoClicks++; });
+    $('okClickTag').addEventListener('click', () => {
+      okClicks++;
+      if (logoClicks >= 3 && okClicks >= 2) {
+        logoClicks = 0; okClicks = 0;
+        if (prompt('1. Şifre:') === 'Onurkaya6103' && prompt('2. Şifre:') === 'AKD891') {
+          hideAllViews(); $('adminView').hidden = false; switchAdminTab('orders');
+        } else { alert('Hatalı şifre!'); }
+      }
+    });
+
+    function switchAdminTab(tab) {
+      $('tabOrdersBtn').classList.toggle('active', tab === 'orders');
+      $('tabProductsBtn').classList.toggle('active', tab === 'products');
+      $('tabCouponsBtn').classList.toggle('active', tab === 'coupons');
+      $('tabBannerBtn').classList.toggle('active', tab === 'banner');
+      $('adminOrdersTab').hidden = tab !== 'orders';
+      $('adminProductsTab').hidden = tab !== 'products';
+      $('adminCouponsTab').hidden = tab !== 'coupons';
+      $('adminBannerTab').hidden = tab !== 'banner';
+
+      if (tab === 'orders') loadAdminOrders();
+      if (tab === 'products') loadAdminProducts();
+      if (tab === 'coupons') loadAdminCoupons();
+    }
+
+    async function loadAdminOrders() {
+      const list = $('adminOrdersList');
+      const { data } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false });
+      let ciro = 0, pending = 0;
+      (data || []).forEach(o => { if (o.status !== 'İptal') ciro += Number(o.total_amount); if (o.status === 'Bekliyor') pending++; });
+      $('statCiro').textContent = ciro.toFixed(0) + ' TL';
+      $('statOrders').textContent = (data || []).length;
+      $('statPending').textContent = pending;
+
+      if (!data || !data.length) { list.innerHTML = '<div class="empty-state">Sipariş yok.</div>'; return; }
+      list.innerHTML = data.map(o => `
+        <div class="admin-order-card">
+          <div class="admin-order-header"><span>#${o.order_no} - ${o.customer_name}</span><span>${o.status}</span></div>
+          <div>${o.phone} | ${o.total_amount} TL</div>
+          <div style="display:flex; gap:5px; margin-top:4px;">
+            <button class="action-btn btn-primary" style="padding:3px 6px; font-size:9px;" onclick="updateOrderStatus('${o.id}', 'Onaylandı')">Onayla</button>
+            <button class="action-btn" style="background:#e0f2fe; color:#0369a1; padding:3px 6px; font-size:9px;" onclick="addTrackingCodeWithCompany('${o.id}')">Kargo</button>
+            <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:3px 6px; font-size:9px;" onclick="deleteOrder('${o.id}')">Sil</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function addTrackingCodeWithCompany(id) {
+      let comp = prompt('Kargo Firması (Aras, MNG, Yurtiçi):', 'Aras Kargo');
+      if (!comp) return;
+      let code = prompt('Takip Numarası:');
+      if (!code) return;
+      await supabaseClient.from('orders').update({ tracking_code: code, shipping_company: comp, status: 'Kargoda' }).eq('id', id);
+      loadAdminOrders();
+    }
+
+    async function updateOrderStatus(id, status) {
+      await supabaseClient.from('orders').update({ status }).eq('id', id);
+      loadAdminOrders();
+    }
+
+    async function deleteOrder(id) {
+      if (!confirm('Silinsin mi?')) return;
+      await supabaseClient.from('orders').delete().eq('id', id);
+      loadAdminOrders();
+    }
+
+    async function loadAdminProducts() {
+      const list = $('adminProductsList');
+      const { data } = await supabaseClient.from('products').select('*');
+      list.innerHTML = (data || []).map(p => `<div class="admin-prod-card" style="display:flex; justify-content:space-between; align-items:center;"><div>${p.name} (${p.price} TL)</div><button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:3px 6px; font-size:9px;" onclick="deleteProduct('${p.id}')">Sil</button></div>`).join('');
+    }
+
+    async function handleProductAdd(e) {
+      e.preventDefault();
+      await supabaseClient.from('products').insert([{ name: $('pName').value, price: parseFloat($('pPrice').value), category: $('pCategory').value, stock: parseInt($('pStock').value), image_url: $('pImg').value, description: $('pDesc').value }]);
+      alert('Ürün eklendi!'); $('addProductForm').reset(); loadAdminProducts(); loadProducts();
+    }
+
+    async function deleteProduct(id) {
+      await supabaseClient.from('products').delete().eq('id', id);
+      loadAdminProducts(); loadProducts();
+    }
+
+    async function loadAdminCoupons() {
+      const list = $('adminCouponsList');
+      const { data } = await supabaseClient.from('coupons').select('*');
+      if (!data || !data.length) { list.innerHTML = '<div class="empty-state">Kupon yok.</div>'; return; }
+      list.innerHTML = data.map(c => `
+        <div class="admin-prod-card" style="display:flex; justify-content:space-between; align-items:center;">
+          <div><strong>${c.code}</strong> (${c.discount_type === 'percent' ? '%' + c.discount_value : c.discount_value + ' TL'})</div>
+          <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:3px 6px; font-size:9px;" onclick="deleteCoupon('${c.id}')">Sil</button>
+        </div>
+      `).join('');
+    }
+
+    async function handleCouponAdd(e) {
+      e.preventDefault();
+      const code = $('cCode').value.trim().toUpperCase();
+      const discount_type = $('cType').value;
+      const discount_value = parseFloat($('cValue').value);
+      const min_cart_amount = parseFloat($('cMin').value) || 0;
+
+      try {
+        await supabaseClient.from('coupons').insert([{ code, discount_type, discount_value, min_cart_amount }]);
+        alert('Kupon eklendi!');
+        $('addCouponForm').reset();
+        loadAdminCoupons();
+      } catch (err) { alert('Hata.'); }
+    }
+
+    async function deleteCoupon(id) {
+      await supabaseClient.from('coupons').delete().eq('id', id);
+      loadAdminCoupons();
+    }
+
+    async function handleBannerUpdate(e) {
+      e.preventDefault();
+      const title = $('bannerTitleInput').value.trim();
+      const desc = $('bannerDescInput').value.trim();
+      const combined = title + '|' + desc;
+
+      try {
+        const { error } = await supabaseClient.from('settings').upsert({ key: 'hero_banner', value: combined });
+        if (error) throw error;
+        alert('Banner güncellendi!');
+        location.reload(); 
+      } catch (err) { alert('Banner güncellenemedi: ' + err.message); }
+    }
+
+    function goHome() {
+      hideAllViews(); $('storeView').hidden = false; $('categories').hidden = false; $('heroSection').hidden = false; $('searchInput').value = ''; selectedCategory = 'Tümü';
+      document.querySelectorAll('.cat-pill').forEach(b => b.classList.toggle('active', b.dataset.cat === 'Tümü'));
+      $('cartButton').innerHTML = `<i class="fa-solid fa-basket-shopping"></i> <span class="cart-badge" id="count">${cart.reduce((s, p) => s + p.quantity, 0)}</span>`;
+      renderProducts();
+    }
+
+    $('searchInput').addEventListener('input', renderProducts);
+    $('categories').addEventListener('click', e => {
+      const btn = e.target.closest('[data-cat]');
+      if (!btn) return;
+      selectedCategory = btn.dataset.cat;
+      document.querySelectorAll('.cat-pill').forEach(b => b.classList.toggle('active', b === btn));
+      renderProducts();
+    });
+
+    $('cartButton').addEventListener('click', () => { if (!$('cartView').hidden) goHome(); else showCartView(); });
+
+    loadProducts();
+  </script>
+</body>
+</html>
