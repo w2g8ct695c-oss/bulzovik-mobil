@@ -71,12 +71,12 @@
     .logo { font-size: 20px; font-weight: 900; color: var(--turquoise-dark); letter-spacing: 0.5px; }
     .tagline { font-size: 8px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
 
-    /* Trendyol Tarzı Genişleyen Arama Çubuğu */
+    /* 🌟 TRENDYOL TARZI GENİŞLEYEN ARAMA ÇUBUĞU */
     .search-box {
       flex: 1;
-      max-width: 320px;
+      max-width: 280px;
       position: relative;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .search-box input {
       width: 100%;
@@ -95,8 +95,8 @@
 
     @media (min-width: 768px) {
       .search-box:focus-within {
-        max-width: 550px;
-        flex: 1.5;
+        max-width: 500px;
+        flex: 1.8;
       }
     }
     .search-box input:focus {
@@ -574,7 +574,7 @@
         <div id="adminCouponsList"></div>
       </div>
 
-      <!-- Banner Yönetimi (Düzeltildi) -->
+      <!-- Banner Yönetimi -->
       <div id="adminBannerTab" class="cart-container" hidden>
         <h3 style="font-size:14px; font-weight:800; color:var(--turquoise-dark); margin-bottom:12px;">Ana Sayfa Kampanya Banner Düzenleme</h3>
         <form onsubmit="handleBannerUpdate(event)" class="form-grid">
@@ -1164,7 +1164,7 @@
       list.innerHTML = data.map(c => `
         <div class="admin-prod-card" style="display:flex; justify-content:space-between; align-items:center;">
           <div><strong>${c.code}</strong> (${c.discount_type === 'percent' ? '%' + c.discount_value + ' İndirim' : c.discount_value + ' TL İndirim'})</div>
-          <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:4px 8px; font-size:10px;" onclick="deleteCoupon('${c.id}')">Silفا</button>
+          <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:4px 8px; font-size:10px;" onclick="deleteCoupon('${c.id}')">Sil</button>
         </div>
       `).join('');
     }
@@ -1189,7 +1189,6 @@
       loadAdminCoupons();
     }
 
-    // Banner Güncelleme (Sayfa Yenileme Desteği ile)
     async function handleBannerUpdate(e) {
       e.preventDefault();
       const title = $('bannerTitleInput').value.trim();
