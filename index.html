@@ -47,6 +47,8 @@
       margin-left: 4px;
       border-left: 1px solid rgba(255,255,255,0.4);
       padding-left: 5px;
+      cursor: pointer;
+      user-select: none;
     }
 
     /* Header */
@@ -202,12 +204,12 @@
   <!-- Top Bar -->
   <div class="mini-top-bar">
     <span>✨ 150 TL Üzeri Ücretsiz Kargo & Hızlı Teslimat</span>
-    <div class="brand-ok-signature">BULZOVİK <span class="ok-tag">O.K</span></div>
+    <div class="brand-ok-signature">BULZOVİK <span class="ok-tag" id="okClickTag">O.K</span></div>
   </div>
 
   <!-- Header -->
   <header>
-    <div class="logo-area" id="logoClickArea" title="Yönetim paneli">
+    <div class="logo-area" id="logoClickArea">
       <div class="logo">BULZOVİK</div>
       <div class="tagline">İstediğin Burada!</div>
     </div>
@@ -535,8 +537,10 @@
       const list = $('cartItemsList');
       if (!cart.length) {
         list.innerHTML = '<div class="empty-state">Sepetiniz henüz boş. Alışverişe hemen başlayın!</div>';
-        $('subTotalText').textContent = '0,00 TL';$('shippingText').textContent = '0,00 TL';
-        $('cartTotalText').textContent = '0,00 TL';$('startCheckoutBtn').style.display = 'none';
+        $('subTotalText').textContent = '0,00 TL';
+        $('shippingText').textContent = '0,00 TL';
+        $('cartTotalText').textContent = '0,00 TL';
+        $('startCheckoutBtn').style.display = 'none';
         return;
       }
 
@@ -565,7 +569,8 @@
       const shipping = subtotal >= 150 ? 0 : 29.90;
       const grandTotal = subtotal + shipping;
 
-      $('subTotalText').textContent = subtotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';$('shippingText').textContent = shipping === 0 ? 'ÜCRETSİZ' : shipping.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
+      $('subTotalText').textContent = subtotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
+      $('shippingText').textContent = shipping === 0 ? 'ÜCRETSİZ' : shipping.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
       $('freeShippingNotice').textContent = subtotal >= 150 ? '(Kargo Bedava!)' : '';
       
       const formattedGrand = grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
@@ -595,14 +600,16 @@
       document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
       element.classList.add('active');
       $('cardPaymentArea').hidden = method !== 'card';
-      $('eftPaymentArea').hidden = method !== 'eft';$('doorPaymentArea').hidden = method !== 'door';
+      $('eftPaymentArea').hidden = method !== 'eft';
+      $('doorPaymentArea').hidden = method !== 'door';
     }
 
     function updateVirtualCard() {
-      let num = $('cardNum').value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();$('cardNum').value = num;
+      let num = $('cardNum').value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+      $('cardNum').value = num;
       $('vCardNum').textContent = num || '**** **** **** ****';
       $('vCardName').textContent = ($('cardName').value || 'AD SOYAD').toUpperCase();
-      $('vCardExp').textContent =$('cardExp').value || 'MM/YY';
+      $('vCardExp').textContent = $('cardExp').value || 'MM/YY';
     }
 
     function hideAllViews() {
@@ -683,19 +690,32 @@
       }
     }
 
-    // 👑 YÖNETİM PANELİ (6 Kere Tıklama & Onurkaya6103 Şifresi)
-    let logoClickCount = 0;
+    // 👑 ÖZEL ÇİFT KADEMELİ VE ÇİFT ŞİFRELİ YÖNETİM PANELİ KONTROLÜ
+    let logoClicks = 0;
+    let okClicks = 0;
+
     $('logoClickArea').addEventListener('click', () => {
-      logoClickCount++;
-      if (logoClickCount >= 6) {
-        logoClickCount = 0;
-        let pass = prompt('Yönetici Şifresini Giriniz:');
-        if (pass === 'Onurkaya6103') {
-          hideAllViews();
-          $('adminView').hidden = false;
-          loadAdminOrders();
-        } else if (pass !== null) {
-          alert('Şifre yanlış!');
+      logoClicks++;
+    });
+
+    $('okClickTag').addEventListener('click', () => {
+      okClicks++;
+      if (logoClicks >= 3 && okClicks >= 2) {
+        logoClicks = 0;
+        okClicks = 0;
+        
+        let pass1 = prompt('1. Yönetici Şifresini Giriniz:');
+        if (pass1 === 'Onurkaya6103') {
+          let pass2 = prompt('2. Güvenlik Şifresini Giriniz:');
+          if (pass2 === 'AKD891') {
+            hideAllViews();
+            $('adminView').hidden = false;
+            loadAdminOrders();
+          } else if (pass2 !== null) {
+            alert('2. Şifre yanlış! Erişim reddedildi.');
+          }
+        } else if (pass1 !== null) {
+          alert('1. Şifre yanlış! Erişim reddedildi.');
         }
       }
     });
@@ -742,7 +762,7 @@
         }).join('');
       } catch (err) {
         console.error(err);
-        list.innerHTML = '<div class="empty-state">Siparişler yüklenirken hata oluştu. Not: orders tablosunda status sütunu olmayabilir.</div>';
+        list.innerHTML = '<div class="empty-state">Siparişler yüklenirken hata oluştu.</div>';
       }
     }
 
