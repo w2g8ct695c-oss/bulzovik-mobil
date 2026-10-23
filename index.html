@@ -71,15 +71,38 @@
     .logo { font-size: 20px; font-weight: 900; color: var(--turquoise-dark); letter-spacing: 0.5px; }
     .tagline { font-size: 8px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
 
-    /* Search Bar */
-    .search-box { flex: 1; max-width: 320px; position: relative; }
+    /* Trendyol Tarzı Genişleyen Arama Çubuğu */
+    .search-box {
+      flex: 1;
+      max-width: 320px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
     .search-box input {
-      width: 100%; padding: 8px 12px 8px 34px; border-radius: 12px;
-      border: 2px solid var(--turquoise); background: var(--white); font-size: 12px;
-      font-weight: 600; outline: none; transition: all 0.2s; color: var(--text-color) !important;
+      width: 100%;
+      padding: 9px 12px 9px 36px;
+      border-radius: 12px;
+      border: 2px solid var(--turquoise);
+      background: var(--white);
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--text-color) !important;
     }
     .search-box input::placeholder { color: #64748b; font-weight: 400; }
-    .search-box i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--turquoise-dark); font-size: 13px; pointer-events: none; }
+    .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--turquoise-dark); font-size: 13px; pointer-events: none; }
+
+    @media (min-width: 768px) {
+      .search-box:focus-within {
+        max-width: 550px;
+        flex: 1.5;
+      }
+    }
+    .search-box input:focus {
+      box-shadow: 0 4px 20px rgba(13, 148, 136, 0.25);
+      border-color: var(--turquoise-dark);
+    }
 
     /* Nav Actions */
     .nav-actions { display: flex; gap: 5px; align-items: center; }
@@ -238,16 +261,17 @@
       <div class="tagline">İstediğin Burada!</div>
     </div>
 
+    <!-- Trendyol Tarzı Genişleyen Arama Çubuğu -->
     <div class="search-box">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" placeholder="Arayın...">
+      <input type="text" id="searchInput" placeholder="Aradığınız ürün veya kategoriyi yazın...">
     </div>
 
     <div class="nav-actions">
       <button class="nav-btn" onclick="toggleDarkMode()" title="Tema Değiştir"><i class="fa-solid fa-moon" id="themeIcon"></i></button>
-      <button class="nav-btn" onclick="showFavoritesView()"><i class="fa-solid fa-heart" style="color:var(--red);"></i></button>
-      <button class="nav-btn" onclick="showTrackingModal()"><i class="fa-solid fa-truck-fast"></i></button>
-      <button class="nav-btn" id="userAccountBtn" onclick="openAuthModal()"><i class="fa-solid fa-user"></i></button>
+      <button class="nav-btn" onclick="showFavoritesView()" title="Favorilerim"><i class="fa-solid fa-heart" style="color:var(--red);"></i></button>
+      <button class="nav-btn" onclick="showTrackingModal()" title="Sipariş Takip"><i class="fa-solid fa-truck-fast"></i></button>
+      <button class="nav-btn" id="userAccountBtn" onclick="openAuthModal()" title="Hesabım"><i class="fa-solid fa-user"></i></button>
       <button class="cart-btn" id="cartButton">
         <i class="fa-solid fa-basket-shopping"></i>
         <span class="cart-badge" id="count">0</span>
@@ -531,7 +555,7 @@
         <div id="adminProductsList"></div>
       </div>
 
-      <!-- 🎫 Kupon Yönetim Sekmesi -->
+      <!-- Kuponlar -->
       <div id="adminCouponsTab" class="cart-container" hidden>
         <h3 style="font-size:14px; font-weight:800; color:var(--turquoise-dark); margin-bottom:12px;">Yeni İndirim Kuponu Oluştur</h3>
         <form id="addCouponForm" onsubmit="handleCouponAdd(event)" class="form-grid" style="margin-bottom:20px;">
@@ -542,7 +566,7 @@
               <option value="fixed">Tutar (TL) İndirim</option>
             </select>
           </div>
-          <div class="form-group"><label>İndirim Değeri *</label><input type="number" step="0.01" id="cValue" required placeholder="10 (Yüzde için) veya 50 (TL için)"></div>
+          <div class="form-group"><label>İndirim Değeri *</label><input type="number" step="0.01" id="cValue" required placeholder="10 veya 50"></div>
           <div class="form-group"><label>Min. Sepet Tutarı (TL)</label><input type="number" step="0.01" id="cMin" value="0"></div>
           <div style="grid-column: 1 / -1;"><button type="submit" class="action-btn btn-primary" style="width:100%;"><i class="fa-solid fa-ticket"></i> Kuponu Ekle</button></div>
         </form>
@@ -550,7 +574,7 @@
         <div id="adminCouponsList"></div>
       </div>
 
-      <!-- Banner Yönetimi -->
+      <!-- Banner Yönetimi (Düzeltildi) -->
       <div id="adminBannerTab" class="cart-container" hidden>
         <h3 style="font-size:14px; font-weight:800; color:var(--turquoise-dark); margin-bottom:12px;">Ana Sayfa Kampanya Banner Düzenleme</h3>
         <form onsubmit="handleBannerUpdate(event)" class="form-grid">
@@ -588,7 +612,6 @@
       })[c]);
     }
 
-    // 🌙 4. Karanlık Mod (Dark Mode) Fonksiyonu
     function toggleDarkMode() {
       const body = document.body;
       const isDark = body.getAttribute('data-theme') === 'dark';
@@ -597,7 +620,6 @@
       localStorage.setItem('bulzovik_theme', isDark ? 'light' : 'dark');
     }
 
-    // Kaydedilmiş temayı yükle
     if (localStorage.getItem('bulzovik_theme') === 'dark') {
       document.body.setAttribute('data-theme', 'dark');
       $('themeIcon').className = 'fa-solid fa-sun';
@@ -777,7 +799,6 @@
       openProductDetail(productId);
     }
 
-    // 🎟️ 3. Dinamik Kupon Kontrolü
     async function applyCoupon() {
       const code = $('couponInput').value.trim().toUpperCase();
       const subtotal = cart.reduce((sum, p) => sum + (Number(p.price) * p.quantity), 0);
@@ -1136,7 +1157,6 @@
       loadAdminProducts(); loadProducts();
     }
 
-    // 🎫 Kupon Ekleme ve Listeleme Fonksiyonları
     async function loadAdminCoupons() {
       const list = $('adminCouponsList');
       const { data } = await supabaseClient.from('coupons').select('*');
@@ -1144,7 +1164,7 @@
       list.innerHTML = data.map(c => `
         <div class="admin-prod-card" style="display:flex; justify-content:space-between; align-items:center;">
           <div><strong>${c.code}</strong> (${c.discount_type === 'percent' ? '%' + c.discount_value + ' İndirim' : c.discount_value + ' TL İndirim'})</div>
-          <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:4px 8px; font-size:10px;" onclick="deleteCoupon('${c.id}')">Sil</button>
+          <button class="action-btn" style="background:#fee2e2; color:#ef4444; padding:4px 8px; font-size:10px;" onclick="deleteCoupon('${c.id}')">Silفا</button>
         </div>
       `).join('');
     }
@@ -1169,10 +1189,19 @@
       loadAdminCoupons();
     }
 
+    // Banner Güncelleme (Sayfa Yenileme Desteği ile)
     async function handleBannerUpdate(e) {
       e.preventDefault();
-      await supabaseClient.from('settings').upsert({ key: 'hero_banner', value: $('bannerTitleInput').value + '|' + $('bannerDescInput').value });
-      alert('Banner güncellendi!'); loadBannerSettings();
+      const title = $('bannerTitleInput').value.trim();
+      const desc = $('bannerDescInput').value.trim();
+      const combined = title + '|' + desc;
+
+      try {
+        const { error } = await supabaseClient.from('settings').upsert({ key: 'hero_banner', value: combined });
+        if (error) throw error;
+        alert('Banner başarıyla güncellendi!');
+        location.reload(); 
+      } catch (err) { alert('Banner güncellenemedi: ' + err.message); }
     }
 
     function goHome() {
