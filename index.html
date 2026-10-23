@@ -70,7 +70,7 @@
     .tagline { font-size: 9px; color: var(--turquoise); font-weight: 700; text-transform: uppercase; }
 
     /* Search Bar */
-    .search-box { flex: 1; max-width: 550px; position: relative; }
+    .search-box { flex: 1; max-width: 450px; position: relative; }
     .search-box input {
       width: 100%; padding: 9px 12px 9px 36px; border-radius: 12px;
       border: 2px solid var(--turquoise); background: var(--white); font-size: 13px;
@@ -79,13 +79,18 @@
     .search-box input::placeholder { color: #64748b; font-weight: 400; }
     .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--turquoise-dark); font-size: 14px; pointer-events: none; }
 
-    /* Cart Button */
-    .nav-actions { display: flex; gap: 8px; align-items: center; }
+    /* Nav Actions */
+    .nav-actions { display: flex; gap: 6px; align-items: center; }
+    .nav-btn {
+      background: var(--turquoise-light); color: var(--turquoise-dark); padding: 8px 12px;
+      border-radius: 12px; font-weight: 800; font-size: 12px; display: flex;
+      align-items: center; gap: 5px; white-space: nowrap; border: 1.5px solid var(--turquoise);
+    }
     .cart-btn {
       background: var(--yellow); color: var(--dark); padding: 8px 14px;
       border-radius: 12px; font-weight: 800; font-size: 13px; display: flex;
       align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
-      white-space: nowrap;
+      white-space: nowrap; border: none;
     }
     .cart-badge { background: var(--dark); color: white; font-size: 10px; padding: 2px 6px; border-radius: 20px; font-weight: 900; }
 
@@ -146,10 +151,11 @@
     .summary-line { display: flex; justify-content: space-between; font-size: 13px; color: #475569; }
     .summary-line.total { font-size: 17px; font-weight: 900; color: var(--turquoise-dark); border-top: 1px dashed var(--turquoise-light); padding-top: 8px; margin-top: 4px; }
 
-    .checkout-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 12px; }
+    .checkout-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
     .action-btn { padding: 10px 18px; border-radius: 10px; font-weight: 800; font-size: 12px; text-align: center; }
     .btn-primary { background: var(--turquoise); color: white; flex: 1; }
     .btn-secondary { background: var(--turquoise-light); color: var(--turquoise-dark); }
+    .btn-whatsapp { background: #25d366; color: white; display: flex; align-items: center; justify-content: center; gap: 6px; flex: 1; }
 
     .payment-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
     .payment-tab {
@@ -184,10 +190,15 @@
     }
     .copy-btn { background: var(--turquoise); color: white; font-size: 10px; padding: 4px 8px; border-radius: 6px; margin-left: auto; width: fit-content; }
 
-    /* Admin Tab Navigation */
-    .admin-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid var(--turquoise-light); padding-bottom: 8px; }
-    .admin-tab-btn { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 800; color: var(--turquoise-dark); background: var(--turquoise-light); }
+    /* Admin Tabs & Stats */
+    .admin-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid var(--turquoise-light); padding-bottom: 8px; flex-wrap: wrap; }
+    .admin-tab-btn { padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; color: var(--turquoise-dark); background: var(--turquoise-light); }
     .admin-tab-btn.active { background: var(--turquoise); color: white; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .stat-card { background: var(--bg); border: 1.5px solid var(--turquoise-light); border-radius: 10px; padding: 12px; text-align: center; }
+    .stat-card .val { font-size: 18px; font-weight: 900; color: var(--turquoise-dark); margin-top: 2px; }
+    .stat-card .lbl { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; }
 
     .admin-order-card, .admin-prod-card {
       background: var(--bg); border: 1px solid var(--turquoise-light); border-radius: 12px;
@@ -197,6 +208,7 @@
     .status-badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
     .status-bekliyor { background: #fef3c7; color: #b45309; }
     .status-onaylandi { background: #d1fae5; color: #065f46; }
+    .status-kargoda { background: #e0f2fe; color: #0369a1; }
     .status-iptal { background: #fee2e2; color: #991b1b; }
 
     .coupon-box { display: flex; gap: 8px; margin-top: 10px; }
@@ -227,6 +239,7 @@
     </div>
 
     <div class="nav-actions">
+      <button class="nav-btn" onclick="showTrackingModal()"><i class="fa-solid fa-truck-fast"></i> Sipariş Takip</button>
       <button class="cart-btn" id="cartButton">
         <i class="fa-solid fa-basket-shopping"></i> Sepet
         <span class="cart-badge" id="count">0</span>
@@ -264,6 +277,31 @@
       </div>
     </section>
 
+    <!-- Sipariş Takip Görünümü -->
+    <section id="trackingView" hidden>
+      <h2 class="section-title"><i class="fa-solid fa-magnifying-glass-location"></i> Sipariş Durumu Sorgulama</h2>
+      <div class="cart-container" style="max-width:550px;">
+        <p style="font-size:12px; color:#64748b; margin-bottom:15px;">Sipariş durumunuzu öğrenmek için sipariş kodunuzu ve telefon numaranızı giriniz.</p>
+        <div class="form-grid" style="margin-bottom:15px;">
+          <div class="form-group">
+            <label>Sipariş Kodu *</label>
+            <input type="text" id="trackOrderNo" placeholder="Örn: BZ-482910">
+          </div>
+          <div class="form-group">
+            <label>Telefon Numarası *</label>
+            <input type="tel" id="trackPhone" placeholder="05XX XXX XX XX">
+          </div>
+        </div>
+        <button class="action-btn btn-primary" style="width:100%; margin-bottom:15px;" onclick="searchOrderResult()">Sorgula</button>
+        
+        <div id="trackingResultArea" style="margin-top:15px;"></div>
+
+        <div style="text-align:center; margin-top:20px;">
+          <button class="action-btn btn-secondary" onclick="goHome()">← Mağazaya Dön</button>
+        </div>
+      </div>
+    </section>
+
     <!-- Sepet Görünümü -->
     <section id="cartView" hidden>
       <h2 class="section-title"><i class="fa-solid fa-shopping-cart"></i> Sepetim</h2>
@@ -297,6 +335,7 @@
 
         <div class="checkout-nav" style="margin-top:15px;">
           <button class="action-btn btn-secondary" id="backButton">← Mağazaya Dön</button>
+          <button class="action-btn btn-whatsapp" onclick="checkoutWithWhatsApp()"><i class="fa-brands fa-whatsapp"></i> WhatsApp ile Sipariş Ver</button>
           <button class="action-btn btn-primary" id="startCheckoutBtn" onclick="showCheckoutForm()">Adres & Ödemeye Geç →</button>
         </div>
       </div>
@@ -416,11 +455,27 @@
       </div>
     </section>
 
-    <!-- 👑 YÖNETİM PANELİ (GİZLİ & GELİŞMİŞ) -->
+    <!-- 👑 YÖNETİM PANELİ (GİZLİ & FİNANSAL ÖZETLİ) -->
     <section id="adminView" hidden>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
         <h2 class="section-title" style="margin:0;"><i class="fa-solid fa-user-shield"></i> Yönetici Kontrol Paneli</h2>
         <button class="action-btn btn-secondary" onclick="goHome()">Mağazaya Dön</button>
+      </div>
+
+      <!-- Finansal İstatistik Kartları -->
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <div class="lbl">Toplam Ciro</div>
+          <div class="val" id="statCiro">0,00 TL</div>
+        </div>
+        <div class="stat-card">
+          <div class="lbl">Toplam Sipariş</div>
+          <div class="val" id="statOrders">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="lbl">Bekleyen</div>
+          <div class="val" id="statPending">0</div>
+        </div>
       </div>
 
       <div class="admin-tabs">
@@ -690,6 +745,22 @@
       renderCart();
     }
 
+    // 📱 WhatsApp ile Sipariş Tamamlama (Numaran: 905318105861)
+    function checkoutWithWhatsApp() {
+      if (!cart.length) return alert('Sepetiniz boş!');
+      const subtotal = cart.reduce((sum, p) => sum + (Number(p.price) * p.quantity), 0);
+      const shipping = subtotal >= 150 ? 0 : 29.90;
+      const grandTotal = Math.max(0, subtotal - appliedDiscount) + shipping;
+
+      let itemsText = cart.map(i => `• ${i.name} (${i.quantity} Adet) - ${(i.price * i.quantity).toFixed(2)} TL`).join('%0A');
+      let message = `🛒 *BULZOVİK - YENİ WHATSAPP SİPARİŞİ*%0A%0A` +
+                    `📦 *Ürünler:*%0A${itemsText}%0A%0A` +
+                    `💰 *Toplam Tutar:* ${grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL%0A%0A` +
+                    `Lütfen siparişimi onaylar mısınız?`;
+
+      window.open(`https://wa.me/905318105861?text=${message}`, '_blank');
+    }
+
     function setPaymentMethod(method, element) {
       currentPaymentMethod = method;
       document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
@@ -716,6 +787,7 @@
       $('checkoutView').hidden = true;
       $('orderSuccessView').hidden = true;
       $('adminView').hidden = true;
+      $('trackingView').hidden = true;
     }
 
     function showCartView() {
@@ -729,6 +801,63 @@
       if (!cart.length) return alert('Sepetiniz boş!');
       hideAllViews();
       $('checkoutView').hidden = false;
+    }
+
+    function showTrackingModal() {
+      hideAllViews();
+      $('trackingView').hidden = false;
+      $('trackOrderNo').value = '';
+      $('trackPhone').value = '';
+      $('trackingResultArea').innerHTML = '';
+    }
+
+    // 🔍 Sipariş Takip Sorgulama
+    async function searchOrderResult() {
+      const orderNo = $('trackOrderNo').value.trim();
+      const phone = $('trackPhone').value.trim();
+      const resArea = $('trackingResultArea');
+
+      if (!orderNo || !phone) {
+        alert('Lütfen sipariş kodu ve telefon numaranızı giriniz.');
+        return;
+      }
+
+      resArea.innerHTML = '<div style="text-align:center; color:#64748b; font-weight:600;">Sipariş aranıyor...</div>';
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('orders')
+          .select('*')
+          .eq('order_no', orderNo)
+          .eq('phone', phone)
+          .single();
+
+        if (error || !data) {
+          resArea.innerHTML = '<div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:8px; text-align:center; font-weight:700;">Girdiğiniz bilgilere ait sipariş bulunamadı.</div>';
+          return;
+        }
+
+        let st = data.status || 'Bekliyor';
+        let stClass = st === 'Onaylandı' ? 'status-onaylandi' : (st === 'Kargoda' ? 'status-kargoda' : (st === 'İptal' ? 'status-iptal' : 'status-bekliyor'));
+        let tracking = data.tracking_code ? `<div style="margin-top:6px;"><strong>Kargo Takip No:</strong> ${escapeHtml(data.tracking_code)}</div>` : '';
+        let dateStr = new Date(data.created_at).toLocaleString('tr-TR');
+
+        resArea.innerHTML = `
+          <div style="background:var(--bg); border:1.5px solid var(--turquoise-light); border-radius:12px; padding:15px; font-size:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; font-weight:800; margin-bottom:8px;">
+              <span>#${escapeHtml(data.order_no)}</span>
+              <span class="status-badge ${stClass}">${st}</span>
+            </div>
+            <div><strong>Müşteri:</strong> ${escapeHtml(data.customer_name)}</div>
+            <div><strong>Teslimat Adresi:</strong> ${escapeHtml(data.address)} / ${escapeHtml(data.city)}</div>
+            <div><strong>Ödeme:</strong> ${escapeHtml(data.payment_method)} (${Number(data.total_amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL)</div>
+            <div><strong>Tarih:</strong> ${dateStr}</div>
+            ${tracking}
+          </div>
+        `;
+      } catch (err) {
+        resArea.innerHTML = '<div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:8px; text-align:center; font-weight:700;">Sipariş sorgulanırken hata oluştu.</div>';
+      }
     }
 
     async function handleOrderSubmit(e) {
@@ -786,7 +915,7 @@
       }
     }
 
-    // 👑 YÖNETİM PANELİ VE ÇİFT ŞİFRELEME
+    // 👑 YÖNETİM PANELİ VE ÇİFT ŞİFRELEME (3 Logo + 2 O.K Tıklaması)
     let logoClicks = 0;
     let okClicks = 0;
 
@@ -827,14 +956,32 @@
           .order('created_at', { ascending: false });
 
         if (error) throw error;
-        if (!data || !data.length) {
+        
+        let totalCiro = 0;
+        let totalOrdersCount = data.length;
+        let pendingCount = 0;
+
+        data.forEach(o => {
+          if (o.status !== 'İptal') {
+            totalCiro += Number(o.total_amount || 0);
+          }
+          if (!o.status || o.status === 'Bekliyor') {
+            pendingCount++;
+          }
+        });
+
+        $('statCiro').textContent = totalCiro.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' TL';
+        $('statOrders').textContent = totalOrdersCount;
+        $('statPending').textContent = pendingCount;
+
+        if (!data.length) {
           list.innerHTML = '<div class="empty-state">Henüz hiç sipariş yok.</div>';
           return;
         }
 
         list.innerHTML = data.map(o => {
           let st = o.status || 'Bekliyor';
-          let stClass = st === 'Onaylandı' ? 'status-onaylandi' : (st === 'İptal' ? 'status-iptal' : 'status-bekliyor');
+          let stClass = st === 'Onaylandı' ? 'status-onaylandi' : (st === 'Kargoda' ? 'status-kargoda' : (st === 'İptal' ? 'status-iptal' : 'status-bekliyor'));
           let itemsHtml = (o.items || []).map(i => `<div>• ${escapeHtml(i.name)} (${i.quantity} Adet)</div>`).join('');
           let dateStr = new Date(o.created_at).toLocaleString('tr-TR');
           let tracking = o.tracking_code ? `<strong>Kargo Takip:</strong> ${escapeHtml(o.tracking_code)}` : '';
